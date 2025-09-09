@@ -219,12 +219,31 @@ function softResetDraft() {
   currentStep = 0;
   timeLeft = parseInt(timerInput.value) || 20;
 
+  // Supprime les images des slots
   document.querySelectorAll(".slots .slot img").forEach(img => img.remove());
-  allImages.forEach(img => { img.classList.remove("used"); img.style.display = "block"; });
+
+  // Remet les slots de picks et bans à leur texte par défaut
+  document.querySelectorAll(".slots .slot").forEach(slot => {
+    if (slot.closest(".picks")) {
+      slot.textContent = "Pick";
+    } else if (slot.closest(".bans")) {
+      slot.textContent = "Ban";
+    } else {
+      slot.textContent = "";
+    }
+  });
+
+  allImages.forEach(img => { 
+    img.classList.remove("used"); 
+    img.style.display = "block"; 
+  });
+
   currentDraftOrder = selectedMode ? [...draftOrders[selectedMode]] : [];
 
   bubbleTimer.textContent = currentLangData.waiting;
   bubbleTimer.style.display = "block";
+
+  document.querySelectorAll('.slot').forEach(slot => slot.classList.remove('current-pick'));
 
   startBtn.style.display = 'inline-block';
   resetBtn.style.display = 'none';
@@ -249,6 +268,7 @@ function softResetDraft() {
 
   loadLang(currentLang);
 }
+
 
 // -------------------- Timer --------------------
 function startTimer() {
