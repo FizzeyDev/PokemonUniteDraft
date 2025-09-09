@@ -10,23 +10,41 @@ const filtersDiv = document.getElementById('filters');
 const gallerySection = document.getElementById('gallery');
 const modeTitle = document.getElementById('mode-title');
 const modeText = document.getElementById('mode-text');
+const roleButtons = document.querySelectorAll('.filter-btn');
 
 function loadLang(lang) {
   fetch(`lang/${lang}.json`)
     .then(res => res.json())
     .then(data => {
       currentLangData = data;
+
       document.getElementById('title').textContent = data.title;
       document.querySelector('.mode-btn[data-mode="classic"]').textContent = data.mode_classic;
       document.querySelector('.mode-btn[data-mode="swap-ban"]').textContent = data.mode_swap;
       document.querySelector('.mode-btn[data-mode="reban"]').textContent = data.mode_reban;
+
       document.getElementById('teamA-name').textContent = data.teamA;
       document.getElementById('teamB-name').textContent = data.teamB;
-      document.getElementById('footer-signature').textContent = currentLangData.footer_signature;
-      document.getElementById('footer-legal').textContent = currentLangData.footer_legal;
 
       modeTitle.textContent = data.select_mode_title;
       modeText.textContent = data.select_mode_text;
+
+      bubbleTimer.textContent = data.waiting;
+
+      roleButtons.forEach(btn => {
+        const role = btn.dataset.role;
+        switch(role) {
+          case 'def': btn.textContent = data.role_def; break;
+          case 'atk': btn.textContent = data.role_atk; break;
+          case 'sup': btn.textContent = data.role_sup; break;
+          case 'spe': btn.textContent = data.role_spe; break;
+          case 'all': btn.textContent = data.role_all; break;
+          case 'unknown': btn.textContent = data.role_unknown; break;
+        }
+      });
+
+      document.getElementById('footer-signature').textContent = data.footer_signature;
+      document.getElementById('footer-legal').textContent = data.footer_legal;
     });
 }
 
@@ -134,7 +152,6 @@ startBtn.addEventListener('click', () => {
   highlightCurrentSlot();
 });
 
-
 // -------------------- Timer --------------------
 function startTimer() {
   clearInterval(timerInterval);
@@ -159,7 +176,7 @@ function resetDraft() {
   document.querySelectorAll(".slots .slot img").forEach(img => img.remove());
   allImages.forEach(img => img.classList.remove("used"));
   currentDraftOrder = selectedMode ? [...draftOrders[selectedMode]] : [];
-  bubbleTimer.textContent = 'Waiting...';
+  bubbleTimer.textContent = currentLangData.waiting;
   startBtn.style.display = 'inline-block';
   resetBtn.style.display = 'none';
   filtersDiv.style.display = 'none';
@@ -171,7 +188,7 @@ function resetDraft() {
   });
 }
 
-// -------------------- Highlight --------------------
+// -------------------- Highlight Current Slot --------------------
 function highlightCurrentSlot() {
   document.querySelectorAll('.slot').forEach(slot => slot.classList.remove('current-pick'));
   if (currentStep < currentDraftOrder.length) {
@@ -224,7 +241,7 @@ function getRoleFromName(filename) {
   return "unknown";
 }
 
-// -------------------- Filter by role --------------------
+// -------------------- Filter by Role --------------------
 document.querySelectorAll(".filter-btn").forEach(btn => {
   btn.addEventListener("click", () => {
     const role = btn.dataset.role;

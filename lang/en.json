@@ -11,6 +11,13 @@
   "tooltip_reban": "After the first bans and picks, each team gets an extra ban before the final picks.",
   "teamA": "Purple Team",
   "teamB": "Orange Team",
+  "role_def": "Defenders",
+  "role_atk": "Attackers",
+  "role_sup": "Supports",
+  "role_spe": "Speedsters",
+  "role_all": "All-Rounders",
+  "role_unknown": "All",
+  "waiting": "Waiting...",
   "footer_signature": "Made by Fizzey — Contact for any suggestions: Twitter: @FizzeyS | Discord: fizzeys",
   "footer_legal": "Pokémon™ is a trademark of Nintendo, Game Freak, and The Pokémon Company. This simulator is fan-made and not affiliated with Pokémon."
 }
