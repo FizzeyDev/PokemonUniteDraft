@@ -63,10 +63,27 @@
 
     <!-- Middle bubble -->
     <div class="middle-bubble" id="middle-bubble">
-      <input type="number" id="timer-value" value="20" min="5" max="120" style="width:60px; margin-bottom:5px;" />
+      <label class="switch">
+        <input type="checkbox" id="enable-timer">
+        <span class="slider"></span>
+        <span id="timer-label" class="switch-label"></span>
+      </label>
+
+      
+      <div id="timer-settings" style="display:none; flex-direction:column; align-items:center; gap:5px;">
+        <input type="number" id="timer-value" value="20" min="5" max="120" />
+      </div>
+
+      <!-- Timer affiché pendant la draft -->
       <div id="bubble-timer" style="color:#f1c40f; font-weight:bold; font-size:1.2rem;">Waiting...</div>
     </div>
-  
+
+    <!-- Résumé final -->
+    <div id="draft-summary" style="display:none; margin-top:30px; text-align:center;">
+      <h2 style="margin-bottom:15px;">Draft Recap</h2>
+      <div id="summary-teams" style="display:flex; justify-content:space-around; gap:20px; flex-wrap:wrap;"></div>
+    </div>
+
     <div class="team" id="teamB">
       <h2 id="teamB-name" style="color: #ffa500;">Orange Team</h2>
       <div class="slots bans">
@@ -92,6 +109,12 @@
 
   <!-- Gallery -->
   <section id="gallery" class="gallery" style="display:none;"></section>
+
+  <!-- Final Draft Result -->
+  <div id="final-draft" style="display:none; margin-top:30px; text-align:center;">
+    <h2 id="final-draft-title" style="margin-bottom:15px;"></h2>
+    <div id="final-draft-teams" style="display:flex; justify-content:center; gap:40px; flex-wrap:wrap;"></div>
+  </div>
 
   <!-- Footer -->
   <footer style="text-align:center; margin-top:40px; font-size:0.85rem; color:#aaa;">
