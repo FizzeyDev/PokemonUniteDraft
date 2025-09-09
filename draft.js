@@ -16,58 +16,7 @@ const timerSettings = document.getElementById('timer-settings');
 const draftSummary = document.getElementById('draft-summary');
 const summaryTeams = document.getElementById('summary-teams');
 
-// -------------------- Reset Draft Button --------------------
-resetBtn.addEventListener('click', softResetDraft);
-
-
-function loadLang(lang) {
-  fetch(`lang/${lang}.json`)
-    .then(res => res.json())
-    .then(data => {
-      currentLangData = data;
-
-      document.getElementById('title').textContent = data.title;
-      document.querySelector('.mode-btn[data-mode="classic"]').textContent = data.mode_classic;
-      document.querySelector('.mode-btn[data-mode="swap-ban"]').textContent = data.mode_swap;
-      document.querySelector('.mode-btn[data-mode="reban"]').textContent = data.mode_reban;
-
-      document.getElementById('teamA-name').textContent = data.teamA;
-      document.getElementById('teamB-name').textContent = data.teamB;
-      document.getElementById('timer-label').textContent = data.timer_label;
-
-      modeTitle.textContent = data.select_mode_title;
-      modeText.textContent = data.select_mode_text;
-
-      bubbleTimer.textContent = data.waiting;
-
-      roleButtons.forEach(btn => {
-        const role = btn.dataset.role;
-        switch(role) {
-          case 'def': btn.textContent = data.role_def; break;
-          case 'atk': btn.textContent = data.role_atk; break;
-          case 'sup': btn.textContent = data.role_sup; break;
-          case 'spe': btn.textContent = data.role_spe; break;
-          case 'all': btn.textContent = data.role_all; break;
-          case 'unknown': btn.textContent = data.role_unknown; break;
-        }
-      });
-
-      document.getElementById('footer-signature').textContent = data.footer_signature;
-      document.getElementById('footer-legal').textContent = data.footer_legal;
-      draftSummary.querySelector("h2").textContent = data.draft_recap || "Draft Recap";
-    });
-}
-
-langBtn.addEventListener('click', () => {
-  currentLang = currentLang === 'en' ? 'fr' : 'en';
-  langBtn.dataset.lang = currentLang;
-  langBtn.textContent = currentLang === 'en' ? 'EN' : 'FR';
-  loadLang(currentLang);
-});
-
-loadLang(currentLang);
-
-// -------------------- Draft Logic --------------------
+// -------------------- Timer Variables --------------------
 let currentStep = 0;
 let selectedMode = null;
 let currentDraftOrder = [];
@@ -75,6 +24,7 @@ let allImages = [];
 let timerInterval;
 let timeLeft = parseInt(timerInput.value) || 20;
 
+// -------------------- Draft Orders --------------------
 const draftOrders = {
   classic: [
     { team: "teamA", type: "ban" }, { team: "teamB", type: "ban" },
@@ -108,8 +58,58 @@ const draftOrders = {
   ]
 };
 
+// -------------------- Buttons Initial State --------------------
 startBtn.disabled = true;
 startBtn.style.opacity = "0.5";
+resetBtn.addEventListener('click', softResetDraft);
+
+// -------------------- Language Loader --------------------
+function loadLang(lang) {
+  fetch(`lang/${lang}.json`)
+    .then(res => res.json())
+    .then(data => {
+      currentLangData = data;
+
+      document.getElementById('title').textContent = data.title;
+      document.querySelector('.mode-btn[data-mode="classic"]').textContent = data.mode_classic;
+      document.querySelector('.mode-btn[data-mode="swap-ban"]').textContent = data.mode_swap;
+      document.querySelector('.mode-btn[data-mode="reban"]').textContent = data.mode_reban;
+
+      document.getElementById('teamA-name').textContent = data.teamA;
+      document.getElementById('teamB-name').textContent = data.teamB;
+      document.getElementById('timer-label').textContent = data.enable_timer;
+
+      modeTitle.textContent = data.select_mode_title;
+      modeText.textContent = data.select_mode_text;
+
+      bubbleTimer.textContent = data.waiting;
+
+      roleButtons.forEach(btn => {
+        const role = btn.dataset.role;
+        switch(role) {
+          case 'def': btn.textContent = data.role_def; break;
+          case 'atk': btn.textContent = data.role_atk; break;
+          case 'sup': btn.textContent = data.role_sup; break;
+          case 'spe': btn.textContent = data.role_spe; break;
+          case 'all': btn.textContent = data.role_all; break;
+          case 'unknown': btn.textContent = data.role_unknown; break;
+        }
+      });
+
+      document.getElementById('footer-signature').textContent = data.footer_signature;
+      document.getElementById('footer-legal').textContent = data.footer_legal;
+      draftSummary.querySelector("h2").textContent = data.draft_recap || "Draft Recap";
+    });
+}
+
+langBtn.addEventListener('click', () => {
+  currentLang = currentLang === 'en' ? 'fr' : 'en';
+  langBtn.dataset.lang = currentLang;
+  langBtn.textContent = currentLang === 'en' ? 'EN' : 'FR';
+  loadLang(currentLang);
+});
+
+loadLang(currentLang);
 
 // -------------------- Mode Buttons --------------------
 document.querySelectorAll('.mode-btn').forEach(btn => {
@@ -123,8 +123,7 @@ document.querySelectorAll('.mode-btn').forEach(btn => {
     startBtn.disabled = false;
     startBtn.style.opacity = "1";
 
-    let title = "";
-    let description = "";
+    let title = "", description = "";
     if (selectedMode === "classic") {
       title = currentLangData.mode_classic;
       description = currentLangData.tooltip_classic;
@@ -155,11 +154,10 @@ startBtn.addEventListener('click', () => {
   timerSettings.style.display = "none";
   timerInput.style.display = 'none';
 
-  document.querySelectorAll('.mode-btn').forEach(btn => {
-    btn.classList.add('disabled');
-  });
+  document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.add('disabled'));
 
-  if (enableTimerCheckbox.checked) {
+  const timerEnabled = enableTimerCheckbox.checked;
+  if (timerEnabled) {
     timeLeft = parseInt(timerInput.value) || 20;
     bubbleTimer.textContent = `${timeLeft}s`;
     bubbleTimer.style.display = "block";
@@ -172,7 +170,7 @@ startBtn.addEventListener('click', () => {
   highlightCurrentSlot();
 });
 
-// -------------------- Reset Draft --------------------
+// -------------------- Reset Functions --------------------
 function resetDraft() {
   clearInterval(timerInterval);
   currentStep = 0;
@@ -181,11 +179,7 @@ function resetDraft() {
     slot.classList.remove('current-pick');
     const img = slot.querySelector('img');
     if (img) img.remove();
-    if (slot.closest('.picks')) {
-      slot.textContent = 'Pick';
-    } else {
-      slot.textContent = '';
-    }
+    slot.textContent = slot.closest('.picks') ? 'Pick' : '';
   });
 
   allImages.forEach(img => {
@@ -194,7 +188,6 @@ function resetDraft() {
   });
 
   currentDraftOrder = selectedMode ? [...draftOrders[selectedMode]] : [];
-
   bubbleTimer.textContent = currentLangData.waiting || '';
   bubbleTimer.style.display = enableTimerCheckbox.checked ? "block" : "none";
 
@@ -202,7 +195,6 @@ function resetDraft() {
   resetBtn.style.display = 'none';
   filtersDiv.style.display = 'none';
   gallerySection.style.display = 'none';
-
   if (draftSummary) draftSummary.style.display = 'none';
 
   const finalDiv = document.getElementById('final-draft');
@@ -213,11 +205,11 @@ function resetDraft() {
   }
 
   enableTimerCheckbox.style.display = "inline-block";
-  timerInput.style.display = 'inline-block';
+  timerInput.style.display = "inline-block";
   timerSettings.style.display = enableTimerCheckbox.checked ? "flex" : "none";
 
   document.querySelectorAll('.mode-btn').forEach(btn => {
-    btn.classList.remove('disabled');
+    btn.classList.remove('disabled', 'active');
     btn.classList.add('enabled');
   });
 }
@@ -225,11 +217,10 @@ function resetDraft() {
 function softResetDraft() {
   clearInterval(timerInterval);
   currentStep = 0;
+  timeLeft = parseInt(timerInput.value) || 20;
 
   document.querySelectorAll(".slots .slot img").forEach(img => img.remove());
-
-  allImages.forEach(img => img.classList.remove("used"));
-  
+  allImages.forEach(img => { img.classList.remove("used"); img.style.display = "block"; });
   currentDraftOrder = selectedMode ? [...draftOrders[selectedMode]] : [];
 
   bubbleTimer.textContent = currentLangData.waiting;
@@ -242,7 +233,9 @@ function softResetDraft() {
   draftSummary.style.display = 'none';
   startBtn.disabled = true;
   startBtn.style.opacity = "0.5";
-  document.getElementById('final-draft').style.display = 'none';
+
+  const finalDiv = document.getElementById('final-draft');
+  if (finalDiv) finalDiv.style.display = 'none';
   document.getElementById('final-draft-teams').innerHTML = '';
 
   document.querySelectorAll('.mode-btn').forEach(btn => {
@@ -255,8 +248,6 @@ function softResetDraft() {
   timerSettings.style.display = enableTimerCheckbox.checked ? "flex" : "none";
 
   loadLang(currentLang);
-
-  allImages.forEach(img => img.style.display = "block");
 }
 
 // -------------------- Timer --------------------
@@ -281,7 +272,7 @@ function startTimer() {
 // -------------------- Highlight Current Slot --------------------
 function highlightCurrentSlot() {
   document.querySelectorAll('.slot').forEach(slot => slot.classList.remove('current-pick'));
-  
+
   if (currentStep < currentDraftOrder.length) {
     const step = currentDraftOrder[currentStep];
     const team = document.getElementById(step.team);
@@ -332,7 +323,6 @@ function endDraft() {
   });
 }
 
-
 // -------------------- Gallery & Picks --------------------
 fetch("mons.json")
   .then(res => res.json())
@@ -342,6 +332,7 @@ fetch("mons.json")
       img.src = `images/${file}`;
       img.alt = file.split(".")[0];
       img.dataset.role = getRoleFromName(file);
+
       img.addEventListener("click", () => {
         if (currentStep >= currentDraftOrder.length || img.classList.contains("used")) return;
         const step = currentDraftOrder[currentStep];
@@ -366,6 +357,7 @@ fetch("mons.json")
           highlightCurrentSlot();
         }
       });
+
       gallerySection.appendChild(img);
       allImages.push(img);
     });
@@ -394,9 +386,11 @@ document.querySelectorAll(".filter-btn").forEach(btn => {
 enableTimerCheckbox.addEventListener("change", () => {
   if (enableTimerCheckbox.checked) {
     timerSettings.style.display = "flex";
+    if (currentStep < currentDraftOrder.length) startTimer();
     bubbleTimer.style.display = "block";
   } else {
     timerSettings.style.display = "none";
     bubbleTimer.style.display = "none";
+    clearInterval(timerInterval);
   }
 });
