@@ -1,0 +1,303 @@
+body {
+  font-family: 'Roboto', sans-serif;
+  background: #1c2526;
+  color: #d9e6e8;
+  max-width: 1400px;
+  margin: auto;
+  padding: 2rem;
+}
+
+h1 {
+  text-align: center;
+  color: white;
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
+}
+
+/* --- Zone Draft --- */
+.draft-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.middle-bubble {
+  background: #2a3435;
+  border: 2px solid #000;
+  border-radius: 12px;
+  padding: 15px 25px;
+  text-align: center;
+  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+  font-weight: bold;
+  color: #fff;
+  min-width: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.mode-btn.active {
+  background: rgba(74, 144, 226, 0.7);
+  box-shadow: 0 0 15px rgba(74,144,226,0.5);
+}
+
+.draft-container > .middle-bubble {
+  margin: 0 auto;
+}
+
+.team {
+  flex: 1;
+  background: #2a3435;
+  border: 2px solid #000;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+  position: relative;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* --- Styles spécifiques aux teams --- */
+#teamA {
+  background: rgba(159, 83, 236, 0.15); /* violet clair transparent */
+  border: 2px solid rgba(159, 83, 236, 0.5);
+}
+
+#teamB {
+  background: rgba(255, 165, 0, 0.15); /* orange clair transparent */
+  border: 2px solid rgba(255, 165, 0, 0.5);
+}
+
+/* Slots personnalisés par team */
+#teamA .slot {
+  border: 2px double rgba(159, 83, 236, 0.8);
+  color: rgba(159, 83, 236, 0.9);
+}
+
+#teamB .slot {
+  border: 2px double rgba(255, 165, 0, 0.8);
+  color: rgba(255, 165, 0, 0.9);
+}
+
+/* Slots Ban en rouge */
+.slot.ban {
+  border: 2px solid #e74c3c;
+  color: #e74c3c;
+  font-weight: bold;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Quand un Pokémon est placé dans un ban */
+.slot.ban img {
+  opacity: 0.6; /* on assombrit un peu */
+}
+
+/* Ajout du logo "interdit" */
+.slot.ban::after {
+  content: "🚫";
+  font-size: 2rem;
+  color: #e74c3c;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none; /* pas de clic sur l'icône */
+}
+
+
+
+.slots {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.slot {
+  width: 80px;
+  height: 80px;
+  background: #1c2526;
+  border: 2px double #4a90e2;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4a90e2;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.slot img {
+  width: 100%;
+  height: 100%;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 2px solid transparent;
+  transition: border 0.2s, transform 0.2s;
+}
+
+.slot img.selected-slot {
+  border: 2px solid #f1c40f;
+  border-radius: 8px;
+}
+
+.slot.ban {
+  border-color: #e74c3c;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.slot.current-pick {
+  box-shadow: 0 0 15px 3px #f1c40f;
+  border-color: #f1c40f;
+}
+
+/* --- Galerie Pokémon --- */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+  justify-items: center;
+}
+
+.gallery img.used {
+  filter: grayscale(100%);
+  opacity: 0.5;
+  cursor: not-allowed;
+  border: 2px solid #e74c3c;
+}
+
+.gallery img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  cursor: pointer;
+  border: 2px solid #4a90e2;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  transition: transform 0.2s, border 0.2s;
+}
+
+.gallery img:hover {
+  transform: scale(1.05);
+  border-color: #fff;
+}
+
+/* Language toggle button */
+.lang-btn {
+  padding: 8px 16px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  border: 2px solid #000;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.95rem;
+  transition: all 0.2s ease-in-out;
+  background: #1c2526;
+  color: #fff;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.lang-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.35);
+}
+
+/* --- Base pour tous les boutons --- */
+button {
+  padding: 10px 20px;
+  margin: 5px;
+  border-radius: 12px;
+  border: 2px solid #000;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.2s ease-in-out;
+  background: #1c2526;
+  color: #fff;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  text-transform: uppercase;
+}
+
+button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+}
+
+/* --- Draft Reset & Mode Buttons --- */
+#reset-draft {
+  background: #1c2526;
+}
+
+.mode-btn {
+  background: #1c2526;
+}
+
+.mode-btn.disabled {
+  background: rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.5);
+  cursor: not-allowed;
+  box-shadow: none;
+  pointer-events: none;
+}
+
+
+/* --- Boutons de rôle --- */
+.filter-btn {
+  border: 2px solid #000;
+  font-weight: 500;
+  padding: 10px 16px;
+  min-width: 110px;
+  text-align: center;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.25);
+  background: rgba(255,255,255,0.05);
+  color: #fff;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Couleurs des rôles avec opacité faible */
+.filter-btn[data-role="def"] { background: rgba(39,174,96,0.2); }
+.filter-btn[data-role="atk"] { background: rgba(231,76,60,0.2); }
+.filter-btn[data-role="sup"] { background: rgba(184,184,20,0.2); }
+.filter-btn[data-role="spe"] { background: rgba(93,173,226,0.2); }
+.filter-btn[data-role="all"] { background: rgba(155,89,182,0.2); }
+.filter-btn[data-role="unknown"] { background: rgba(52,73,94,0.2); }
+
+/* Hover effect plus visible pour les rôles */
+.filter-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(0,0,0,0.35);
+  background: rgba(255,255,255,0.1);
+}
+
+/* Filtres des rôles */
+#filters {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  gap: 10px;
+}
+
+#mode-tooltip {
+  position: absolute;
+  left: -220px;
+  top: 0;
+  width: 200px;
+  background: #2a3435;
+  color: #d9e6e8;
+  border: 1px solid #4a90e2;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}

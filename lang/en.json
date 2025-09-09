@@ -1,0 +1,16 @@
+{
+  "title": "Pokémon Unite Draft Simulator",
+  "reset": "Reset Draft",
+  "select_mode_title": "Select a draft mode",
+  "select_mode_text": "Select a draft mode above to see its description.",
+  "mode_classic": "Ranked Mode",
+  "mode_swap": "Swap Ban Mode",
+  "mode_reban": "Reban Mode",
+  "tooltip_classic": "Each team bans 3 Pokémon, then alternates picks until all slots are filled.",
+  "tooltip_swap": "Teams swap the order of their 2nd and 3rd bans, then continue with normal picks.",
+  "tooltip_reban": "After the first bans and picks, each team gets an extra ban before the final picks.",
+  "teamA": "Purple Team",
+  "teamB": "Orange Team",
+  "footer_signature": "Made by Fizzey — Contact for any suggestions: Twitter: @FizzeyS | Discord: fizzeys",
+  "footer_legal": "Pokémon™ is a trademark of Nintendo, Game Freak, and The Pokémon Company. This simulator is fan-made and not affiliated with Pokémon."
+}
