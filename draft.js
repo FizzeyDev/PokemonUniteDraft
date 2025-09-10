@@ -227,7 +227,7 @@ function softResetDraft() {
     if (slot.closest(".picks")) {
       slot.textContent = "Pick";
     } else if (slot.closest(".bans")) {
-      slot.textContent = "Ban";
+      slot.textContent = "";
     } else {
       slot.textContent = "";
     }
