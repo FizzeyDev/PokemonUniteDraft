@@ -265,8 +265,60 @@ function undoLastPick() {
 }
 
 // -------------------- Soft Reset Draft --------------------
+
 function softResetDraft() {
-  resetDraft(false);
+  clearInterval(timerInterval);
+  currentStep = 0;
+  timeLeft = parseInt(timerInput.value) || 20;
+
+  document.querySelectorAll(".slots .slot img").forEach(img => img.remove());
+  document.getElementById("sort-options").style.display = "none";
+  backBtn.style.display = "none";
+
+  document.querySelectorAll(".slots .slot").forEach(slot => {
+    if (slot.closest(".picks")) {
+      slot.textContent = "Pick";
+    } else if (slot.closest(".bans")) {
+      slot.textContent = "";
+    } else {
+      slot.textContent = "";
+    }
+  });
+
+  allImages.forEach(img => { 
+    img.classList.remove("used"); 
+    img.style.display = "block"; 
+  });
+
+  currentDraftOrder = selectedMode ? [...draftOrders[selectedMode]] : [];
+
+  bubbleTimer.textContent = currentLangData.waiting;
+  bubbleTimer.style.display = "block";
+
+  document.querySelectorAll('.slot').forEach(slot => slot.classList.remove('current-pick'));
+
+  startBtn.style.display = 'inline-block';
+  resetBtn.style.display = 'none';
+  filtersDiv.style.display = 'none';
+  gallerySection.style.display = 'none';
+  draftSummary.style.display = 'none';
+  startBtn.disabled = true;
+  startBtn.style.opacity = "0.5";
+
+  const finalDiv = document.getElementById('final-draft');
+  if (finalDiv) finalDiv.style.display = 'none';
+  document.getElementById('final-draft-teams').innerHTML = '';
+
+  document.querySelectorAll('.mode-btn').forEach(btn => {
+    btn.classList.remove('active', 'disabled');
+    btn.classList.add('enabled');
+  });
+
+  enableTimerCheckbox.style.display = "inline-block";
+  timerInput.style.display = "inline-block";
+  timerSettings.style.display = enableTimerCheckbox.checked ? "flex" : "none";
+
+  loadLang(currentLang);
 }
 
 // -------------------- Timer --------------------
