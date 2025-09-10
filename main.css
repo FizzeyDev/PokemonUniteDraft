@@ -373,3 +373,42 @@ button:hover {
   color: #fff;
   font-weight: 500;
 }
+
+#sort-options {
+  display: none;
+  text-align: center;
+  margin: 15px 0;
+  font-family: 'Poppins', sans-serif; /* ou la police de ton site */
+}
+
+#sort-options label {
+  margin-right: 10px;
+  font-size: 16px;
+  color: #fff; /* Texte blanc pour matcher ton thème */
+}
+
+#sort-select {
+  background-color: #2c2f33; /* gris foncé comme tes zones */
+  color: #fff;
+  border: 2px solid #7289da; /* violet/bleu style Discord */
+  border-radius: 12px;
+  padding: 6px 12px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+#sort-select:hover {
+  background-color: #3a3d42;
+  border-color: #99aaff;
+}
+
+#sort-select:focus {
+  outline: none;
+  border-color: #ffd700; /* petit accent or à la sélection */
+}
+
+#backBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

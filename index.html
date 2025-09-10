@@ -47,6 +47,8 @@
     <button id="reset-draft" class="draft-btn" style="display:none;">Reset Draft</button>
   </div>
 
+  <button id="backBtn" style="display:none;">⏪ Cancel</button>
+
   <!-- Draft Container -->
   <div class="draft-container">
     <div class="team" id="teamA">
@@ -105,6 +107,15 @@
     <button data-role="spe" class="filter-btn"></button>
     <button data-role="all" class="filter-btn"></button>
     <button data-role="unknown" class="filter-btn"></button>
+  </div>
+  
+  <!-- Sort Options -->
+  <div id="sort-options" style="display:none; text-align:center; margin:15px 0;">
+    <label for="sort-select" style="margin-right:8px;">Sort by:</label>
+    <select id="sort-select">
+      <option value="dex">Pokédex Number</option>
+      <option value="name">Name</option>
+    </select>
   </div>
 
   <!-- Gallery -->

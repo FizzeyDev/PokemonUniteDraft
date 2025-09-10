@@ -15,6 +15,7 @@ const enableTimerCheckbox = document.getElementById('enable-timer');
 const timerSettings = document.getElementById('timer-settings');
 const draftSummary = document.getElementById('draft-summary');
 const summaryTeams = document.getElementById('summary-teams');
+const backBtn = document.getElementById('backBtn');
 
 // -------------------- Timer Variables --------------------
 let currentStep = 0;
@@ -118,7 +119,7 @@ document.querySelectorAll('.mode-btn').forEach(btn => {
     btn.classList.add('active');
     selectedMode = btn.dataset.mode;
     currentDraftOrder = [...draftOrders[selectedMode]];
-    resetDraft();
+    resetDraft(true); // true = mode choisi, Start peut s’activer
 
     startBtn.disabled = false;
     startBtn.style.opacity = "1";
@@ -149,6 +150,7 @@ startBtn.addEventListener('click', () => {
   filtersDiv.style.display = 'flex';
   gallerySection.style.display = 'grid';
   draftSummary.style.display = 'none';
+  document.getElementById("sort-options").style.display = "block";
 
   enableTimerCheckbox.style.display = "none";
   timerSettings.style.display = "none";
@@ -168,10 +170,11 @@ startBtn.addEventListener('click', () => {
   }
 
   highlightCurrentSlot();
+  backBtn.style.display = "none"; // Back caché au début
 });
 
 // -------------------- Reset Functions --------------------
-function resetDraft() {
+function resetDraft(modeChosen = false) {
   clearInterval(timerInterval);
   currentStep = 0;
 
@@ -208,67 +211,63 @@ function resetDraft() {
   timerInput.style.display = "inline-block";
   timerSettings.style.display = enableTimerCheckbox.checked ? "flex" : "none";
 
-  document.querySelectorAll('.mode-btn').forEach(btn => {
-    btn.classList.remove('disabled', 'active');
-    btn.classList.add('enabled');
-  });
+  // ⚠️ Activation du Start seulement si un mode est choisi
+  if (modeChosen) {
+    startBtn.disabled = false;
+    startBtn.style.opacity = "1";
+  } else {
+    startBtn.disabled = true;
+    startBtn.style.opacity = "0.5";
+  }
+
+  backBtn.style.display = "none"; // Back caché tant qu’aucun pick
 }
 
+// -------------------- Undo Last Pick --------------------
+if (backBtn) {
+  backBtn.addEventListener('click', undoLastPick);
+}
+
+function undoLastPick() {
+  if (currentStep <= 0) {
+    if (backBtn) backBtn.style.display = 'none';
+    return;
+  }
+
+  const lastIndex = currentStep - 1;
+  const step = currentDraftOrder[lastIndex];
+  if (!step) return;
+
+  const teamElem = document.getElementById(step.team);
+  if (!teamElem) return;
+
+  const slotSelector = `.slots.${step.type}s .slot`;
+  const slots = Array.from(teamElem.querySelectorAll(slotSelector));
+  const filledSlots = slots.filter(s => s.querySelector('img'));
+  if (filledSlots.length === 0) return;
+
+  const lastSlot = filledSlots[filledSlots.length - 1];
+  const img = lastSlot.querySelector('img');
+  if (!img) return;
+
+  const srcFilename = img.src.split('/').pop();
+  const galleryImg = allImages.find(g => g.src.split('/').pop() === srcFilename);
+  if (galleryImg) galleryImg.classList.remove('used');
+
+  lastSlot.removeChild(img);
+  if (lastSlot.closest('.picks')) lastSlot.textContent = 'Pick';
+  else if (lastSlot.closest('.bans')) lastSlot.textContent = '';
+
+  currentStep = lastIndex;
+  highlightCurrentSlot();
+
+  backBtn.style.display = currentStep > 0 ? 'inline-block' : 'none';
+}
+
+// -------------------- Soft Reset Draft --------------------
 function softResetDraft() {
-  clearInterval(timerInterval);
-  currentStep = 0;
-  timeLeft = parseInt(timerInput.value) || 20;
-
-  // Supprime les images des slots
-  document.querySelectorAll(".slots .slot img").forEach(img => img.remove());
-
-  // Remet les slots de picks et bans à leur texte par défaut
-  document.querySelectorAll(".slots .slot").forEach(slot => {
-    if (slot.closest(".picks")) {
-      slot.textContent = "Pick";
-    } else if (slot.closest(".bans")) {
-      slot.textContent = "";
-    } else {
-      slot.textContent = "";
-    }
-  });
-
-  allImages.forEach(img => { 
-    img.classList.remove("used"); 
-    img.style.display = "block"; 
-  });
-
-  currentDraftOrder = selectedMode ? [...draftOrders[selectedMode]] : [];
-
-  bubbleTimer.textContent = currentLangData.waiting;
-  bubbleTimer.style.display = "block";
-
-  document.querySelectorAll('.slot').forEach(slot => slot.classList.remove('current-pick'));
-
-  startBtn.style.display = 'inline-block';
-  resetBtn.style.display = 'none';
-  filtersDiv.style.display = 'none';
-  gallerySection.style.display = 'none';
-  draftSummary.style.display = 'none';
-  startBtn.disabled = true;
-  startBtn.style.opacity = "0.5";
-
-  const finalDiv = document.getElementById('final-draft');
-  if (finalDiv) finalDiv.style.display = 'none';
-  document.getElementById('final-draft-teams').innerHTML = '';
-
-  document.querySelectorAll('.mode-btn').forEach(btn => {
-    btn.classList.remove('active', 'disabled');
-    btn.classList.add('enabled');
-  });
-
-  enableTimerCheckbox.style.display = "inline-block";
-  timerInput.style.display = "inline-block";
-  timerSettings.style.display = enableTimerCheckbox.checked ? "flex" : "none";
-
-  loadLang(currentLang);
+  resetDraft(false);
 }
-
 
 // -------------------- Timer --------------------
 function startTimer() {
@@ -292,7 +291,6 @@ function startTimer() {
 // -------------------- Highlight Current Slot --------------------
 function highlightCurrentSlot() {
   document.querySelectorAll('.slot').forEach(slot => slot.classList.remove('current-pick'));
-
   if (currentStep < currentDraftOrder.length) {
     const step = currentDraftOrder[currentStep];
     const team = document.getElementById(step.team);
@@ -308,6 +306,7 @@ function highlightCurrentSlot() {
 function endDraft() {
   clearInterval(timerInterval);
 
+  backBtn.style.display = 'none';
   filtersDiv.style.display = 'none';
   gallerySection.style.display = 'none';
   document.querySelectorAll('.slot').forEach(slot => slot.classList.remove('current-pick'));
@@ -344,55 +343,71 @@ function endDraft() {
 }
 
 // -------------------- Gallery & Picks --------------------
+let monsData = [];
+let currentSort = "dex";
+
 fetch("mons.json")
   .then(res => res.json())
-  .then(images => {
-    images.forEach(file => {
-      const img = document.createElement("img");
-      img.src = `images/${file}`;
-      img.alt = file.split(".")[0];
-      img.dataset.role = getRoleFromName(file);
-
-      img.addEventListener("click", () => {
-        if (currentStep >= currentDraftOrder.length || img.classList.contains("used")) return;
-        const step = currentDraftOrder[currentStep];
-        const team = document.getElementById(step.team);
-        const slot = Array.from(team.querySelectorAll(`.slots.${step.type}s .slot`))
-          .find(s => !s.querySelector("img"));
-        if (slot) {
-          const chosen = img.cloneNode(true);
-          chosen.classList.add('selected-slot');
-          slot.innerHTML = "";
-          slot.appendChild(chosen);
-          img.classList.add("used");
-          currentStep++;
-          if (currentStep >= currentDraftOrder.length) {
-            endDraft();
-            return;
-          }
-          if (enableTimerCheckbox.checked) {
-            timeLeft = parseInt(timerInput.value) || 20;
-            bubbleTimer.textContent = `${timeLeft}s`;
-          }
-          highlightCurrentSlot();
-        }
-      });
-
-      gallerySection.appendChild(img);
-      allImages.push(img);
-    });
+  .then(data => {
+    monsData = data;
+    renderGallery();
   });
 
-function getRoleFromName(filename) {
-  if (filename.includes("_def")) return "def";
-  if (filename.includes("_atk")) return "atk";
-  if (filename.includes("_sup")) return "sup";
-  if (filename.includes("_spe")) return "spe";
-  if (filename.includes("_all")) return "all";
-  return "unknown";
+function renderGallery() {
+  gallerySection.innerHTML = "";
+  allImages = [];
+
+  let sorted = [...monsData];
+  if (currentSort === "name") sorted.sort((a, b) => a.name.localeCompare(b.name));
+  else if (currentSort === "dex") sorted.sort((a, b) => a.dex - b.dex);
+
+  sorted.forEach(mon => {
+    const img = document.createElement("img");
+    img.src = `images/${mon.file}`;
+    img.alt = mon.name;
+    img.dataset.role = mon.role;
+    img.dataset.dex = mon.dex;
+    img.dataset.name = mon.name;
+
+    img.addEventListener("click", () => {
+      if (currentStep >= currentDraftOrder.length || img.classList.contains("used")) return;
+      const step = currentDraftOrder[currentStep];
+      const team = document.getElementById(step.team);
+      const slot = Array.from(team.querySelectorAll(`.slots.${step.type}s .slot`))
+        .find(s => !s.querySelector("img"));
+      if (slot) {
+        const chosen = img.cloneNode(true);
+        chosen.classList.add('selected-slot');
+        slot.innerHTML = "";
+        slot.appendChild(chosen);
+        img.classList.add("used");
+        currentStep++;
+        backBtn.style.display = currentStep > 0 ? 'inline-block' : 'none';
+        if (currentStep >= currentDraftOrder.length) {
+          endDraft();
+          return;
+        }
+        if (enableTimerCheckbox.checked) {
+          timeLeft = parseInt(timerInput.value) || 20;
+          bubbleTimer.textContent = `${timeLeft}s`;
+        }
+        highlightCurrentSlot();
+      }
+    });
+
+    gallerySection.appendChild(img);
+    allImages.push(img);
+  });
 }
 
-// -------------------- Filter by Role --------------------
+// -------------------- Sorting --------------------
+const sortSelect = document.getElementById("sort-select");
+sortSelect.addEventListener("change", (e) => {
+  currentSort = e.target.value;
+  renderGallery();
+});
+
+// -------------------- Role Filtering --------------------
 document.querySelectorAll(".filter-btn").forEach(btn => {
   btn.addEventListener("click", () => {
     const role = btn.dataset.role;
