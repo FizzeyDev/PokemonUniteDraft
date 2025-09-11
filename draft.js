@@ -80,6 +80,10 @@ function loadLang(lang) {
       document.getElementById('teamB-name').textContent = data.teamB;
       document.getElementById('timer-label').textContent = data.enable_timer;
 
+      document.getElementById('sort-label').textContent = data.sort_by;
+      document.getElementById('sort-dex').textContent = data.pokedex_nb;
+      document.getElementById('sort-name').textContent = data.pkmn_name;
+
       modeTitle.textContent = data.select_mode_title;
       modeText.textContent = data.select_mode_text;
 
@@ -410,16 +414,25 @@ function renderGallery() {
   allImages = [];
 
   let sorted = [...monsData];
-  if (currentSort === "name") sorted.sort((a, b) => a.name.localeCompare(b.name));
-  else if (currentSort === "dex") sorted.sort((a, b) => a.dex - b.dex);
+
+  if (currentSort === "name") {
+    if (currentLang === "fr") {
+      sorted.sort((a, b) => a.name_fr.localeCompare(b.name_fr));
+    } else {
+      sorted.sort((a, b) => a.name.localeCompare(b.name));
+    }
+  } else if (currentSort === "dex") {
+    sorted.sort((a, b) => a.dex - b.dex);
+  }
 
   sorted.forEach(mon => {
     const img = document.createElement("img");
     img.src = `images/${mon.file}`;
-    img.alt = mon.name;
+    img.alt = currentLang === "fr" ? mon.name_fr : mon.name;
     img.dataset.role = mon.role;
     img.dataset.dex = mon.dex;
     img.dataset.name = mon.name;
+    img.dataset.nameFr = mon.name_fr;
 
     img.addEventListener("click", () => {
       if (currentStep >= currentDraftOrder.length || img.classList.contains("used")) return;
@@ -429,12 +442,12 @@ function renderGallery() {
         .find(s => !s.querySelector("img"));
       if (slot) {
         const chosen = img.cloneNode(true);
-        chosen.classList.add('selected-slot');
+        chosen.classList.add("selected-slot");
         slot.innerHTML = "";
         slot.appendChild(chosen);
         img.classList.add("used");
         currentStep++;
-        backBtn.style.display = currentStep > 0 ? 'inline-block' : 'none';
+        backBtn.style.display = currentStep > 0 ? "inline-block" : "none";
         if (currentStep >= currentDraftOrder.length) {
           endDraft();
           return;

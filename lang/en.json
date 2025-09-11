@@ -19,6 +19,9 @@
   "role_unknown": "All",
   "waiting": "Waiting...",
   "enable_timer": "Enable Timer",
+  "sort_by": "Sort by:",
+  "pokedex_nb": "Pokedex Number",
+  "pkmn_name": "Pokemon Name",
   "footer_signature": "Made by Fizzey — Contact for any suggestions: Twitter: @FizzeyS | Discord: fizzeys",
   "footer_legal": "Pokémon™ is a trademark of Nintendo, Game Freak, and The Pokémon Company. This simulator is fan-made and not affiliated with Pokémon."
 }
