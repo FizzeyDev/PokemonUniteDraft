@@ -434,6 +434,14 @@ function renderGallery() {
     img.dataset.name = mon.name;
     img.dataset.nameFr = mon.name_fr;
 
+    // ✅ Vérifie si ce Pokémon est déjà placé dans une équipe
+    const alreadyPicked = document.querySelector(
+      `.slots img[data-dex="${mon.dex}"]`
+    );
+    if (alreadyPicked) {
+      img.classList.add("used");
+    }
+
     img.addEventListener("click", () => {
       if (currentStep >= currentDraftOrder.length || img.classList.contains("used")) return;
       const step = currentDraftOrder[currentStep];
