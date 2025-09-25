@@ -56,6 +56,15 @@ const draftOrders = {
     { team: "teamA", type: "ban" }, { team: "teamB", type: "ban" },
     { team: "teamB", type: "pick" }, { team: "teamA", type: "pick" },
     { team: "teamA", type: "pick" }, { team: "teamB", type: "pick" }
+  ],
+  tournament: [
+    { team: "teamA", type: "ban" }, { team: "teamB", type: "ban" },
+    { team: "teamA", type: "ban" }, { team: "teamB", type: "ban" },
+    { team: "teamA", type: "pick" }, { team: "teamB", type: "pick" },
+    { team: "teamB", type: "pick" }, { team: "teamA", type: "pick" },
+    { team: "teamA", type: "pick" }, { team: "teamB", type: "pick" },
+    { team: "teamB", type: "pick" }, { team: "teamA", type: "pick" },
+    { team: "teamA", type: "pick" }, { team: "teamB", type: "pick" }
   ]
 };
 
@@ -75,6 +84,7 @@ function loadLang(lang) {
       document.querySelector('.mode-btn[data-mode="classic"]').textContent = data.mode_classic;
       document.querySelector('.mode-btn[data-mode="swap-ban"]').textContent = data.mode_swap;
       document.querySelector('.mode-btn[data-mode="reban"]').textContent = data.mode_reban;
+      document.querySelector('.mode-btn[data-mode="tournament"]').textContent = data.mode_tournament;
 
       document.getElementById('teamA-name').textContent = data.teamA;
       document.getElementById('teamB-name').textContent = data.teamB;
@@ -138,6 +148,14 @@ document.querySelectorAll('.mode-btn').forEach(btn => {
     } else if (selectedMode === "reban") {
       title = currentLangData.mode_reban;
       description = currentLangData.tooltip_reban;
+    } else if (selectedMode === "tournament") {
+      title = currentLangData.mode_tournament;
+      description = currentLangData.tooltip_tournament;
+      const banSlotsA = document.querySelectorAll("#teamA .slots.bans .slot");
+      const banSlotsB = document.querySelectorAll("#teamB .slots.bans .slot");
+
+      if (banSlotsA.length > 0) banSlotsA[banSlotsA.length - 1].style.display = "none";
+      if (banSlotsB.length > 0) banSlotsB[banSlotsB.length - 1].style.display = "none";
     }
 
     modeTitle.innerHTML = `<strong>${title}</strong>`;
