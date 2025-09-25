@@ -1,7 +1,7 @@
 # Pokemon Unite Draft Simulator
 
 Made by Fizzey, Pokemon Unite Player, this repository hosts the Pokémon Unite Draft Simulator website :  
-👉 [Direct Link](https://alexis-arduca.github.io/Portfolio/)
+👉 [Direct Link](https://fizzeydev.github.io/PokemonUniteDraft/)
 
 ---
 

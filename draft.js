@@ -158,6 +158,14 @@ document.querySelectorAll('.mode-btn').forEach(btn => {
       if (banSlotsB.length > 0) banSlotsB[banSlotsB.length - 1].style.display = "none";
     }
 
+    if (selectedMode != "tournament") {
+      const banSlotsA = document.querySelectorAll("#teamA .slots.bans .slot");
+      const banSlotsB = document.querySelectorAll("#teamB .slots.bans .slot");
+
+      banSlotsA[banSlotsA.length - 1].style.display = "block";
+      banSlotsB[banSlotsB.length - 1].style.display = "block";
+    }
+
     modeTitle.innerHTML = `<strong>${title}</strong>`;
     modeText.textContent = description;
   });
