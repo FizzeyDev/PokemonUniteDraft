@@ -72,6 +72,7 @@
   { "name": "Greedent", "name_fr": "Rongrigou", "file": "greedent_def.png", "role": "def", "dex": 820 },
   { "name": "Inteleon", "name_fr": "Lézargus", "file": "inteleon_atk.png", "role": "atk", "dex": 818 },
   { "name": "Lucario", "name_fr": "Lucario", "file": "lucario_all.png", "role": "all", "dex": 448 },
+  { "name": "Lucario", "name_fr": "Lucario", "file": "mlucario_all.png", "role": "all", "dex": 448 },
   { "name": "Mew", "name_fr": "Mew", "file": "mew_atk.png", "role": "atk", "dex": 151 },
   { "name": "Mr. Mime", "name_fr": "M. Mime", "file": "mr.mime_sup.png", "role": "sup", "dex": 122 },
   { "name": "Raichu", "name_fr": "Raichu", "file": "raichu_atk.png", "role": "atk", "dex": 26 },
