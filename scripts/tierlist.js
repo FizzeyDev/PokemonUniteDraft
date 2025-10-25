@@ -1,4 +1,3 @@
-// tierlist.js
 let drafts = [{
     id: 1,
     tiers: [
@@ -19,16 +18,31 @@ let battleItemData = [];
 
 async function loadData() {
     try {
+        const basePath = window.location.pathname.includes('PokemonUniteDraft')
+            ? '/PokemonUniteDraft/'
+            : './';
+        console.log('Fetching JSON files with basePath:', basePath);
         const [pokemonResponse, itemResponse, battleItemResponse] = await Promise.all([
-            fetch('./../mons.json'),
-            fetch('./../items.json'),
-            fetch('./../battle_items.json')
+            fetch(`${basePath}mons.json`).then(res => {
+                if (!res.ok) throw new Error(`Failed to fetch mons.json: ${res.status}`);
+                return res;
+            }),
+            fetch(`${basePath}items.json`).then(res => {
+                if (!res.ok) throw new Error(`Failed to fetch items.json: ${res.status}`);
+                return res;
+            }),
+            fetch(`${basePath}battle_items.json`).then(res => {
+                if (!res.ok) throw new Error(`Failed to fetch battle_items.json: ${res.status}`);
+                return res;
+            })
         ]);
         pokemonData = await pokemonResponse.json();
         itemData = await itemResponse.json();
         battleItemData = await battleItemResponse.json();
+        console.log('JSON data loaded successfully:', { pokemonData, itemData, battleItemData });
     } catch (error) {
         console.error('Error loading JSON data:', error);
+        document.getElementById('gallery').innerHTML = '<p>Error: Could not load data. Please check JSON files.</p>';
     }
 }
 
@@ -50,6 +64,9 @@ function loadTabs() {
 }
 
 function loadTierList(draftId) {
+    const basePath = window.location.pathname.includes('PokemonUniteDraft')
+        ? '/PokemonUniteDraft/'
+        : './';
     const container = document.createElement('div');
     container.className = `tierlist-container ${draftId === currentDraft ? 'active' : ''}`;
     container.id = `tierlist-${draftId}`;
@@ -71,9 +88,7 @@ function loadTierList(draftId) {
             <div class="tier-items"></div>
             <div class="tier-actions">
                 <button class="settings-tier" aria-label="Tier Settings" data-lang="edit_tier">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.06-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.49.49 0 0 0-.48-.41h-3.84a.49.49 0 0 0-.48.41l-.36 2.54c-.59.24-1.13.56-1.62.94l-2.39-.96a.49.49 0 0 0-.59.22L2.8 9.45a.49.49 0 0 0 .12.61l2.03 1.58c-.04.3-.06.61-.06.94s.02.64.06.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32a.49.49 0 0 0 .59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54a.49.49 0 0 0 .48.41h3.84a.49.49 0 0 0 .48-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96a.49.49 0 0 0 .59-.22l1.92-3.32a.49.49 0 0 0-.12-.61l-2.03-1.58zM12 15.6c-1.99 0-3.6-1.61-3.6-3.6s1.61-3.6 3.6-3.6 3.6 1.61 3.6 3.6-1.61 3.6-3.6 3.6z"/>
-                    </svg>
+                    <img src="${basePath}assets/settings.svg" alt="Settings" style="width: 24px; height: 24px;">
                 </button>
             </div>
         `;
@@ -84,7 +99,7 @@ function loadTierList(draftId) {
             tierItem.dataset.category = item.category;
             tierItem.draggable = true;
             tierItem.innerHTML = `
-                <img src="../assets/${item.category}/${item.file}" alt="${item.name}">
+                <img src="${basePath}assets/${item.category}/${item.file}" alt="${item.name}">
                 ${item.category === 'pokemon' && item.moves ? `<div class="moves">${item.moves.join(', ')}</div>` : ''}
             `;
             tierRow.querySelector('.tier-items').appendChild(tierItem);
@@ -163,6 +178,9 @@ function clearDraft(draftId) {
 
 function loadGallery(category) {
     currentCategory = category;
+    const basePath = window.location.pathname.includes('PokemonUniteDraft')
+        ? '/PokemonUniteDraft/'
+        : './';
     const gallery = document.getElementById('gallery');
     gallery.innerHTML = '';
     let data = [];
@@ -176,7 +194,7 @@ function loadGallery(category) {
         if (category === 'pokemon' && count >= 4) return;
         if (category !== 'pokemon' && count >= 1) return;
         const img = document.createElement('img');
-        img.src = `../assets/${category}/${item.file}`;
+        img.src = `${basePath}assets/${category}/${item.file}`;
         img.alt = item.name;
         img.dataset.name = item.name;
         img.dataset.category = category;
@@ -220,87 +238,114 @@ function setupEventListeners() {
 
     document.addEventListener('dragstart', e => {
         if (e.target.tagName === 'IMG' || e.target.classList.contains('tier-item')) {
+            const target = e.target.tagName === 'IMG' ? e.target : e.target.querySelector('img');
             e.dataTransfer.setData('text/plain', JSON.stringify({
-                name: e.target.dataset.name || e.target.querySelector('img').alt,
-                category: e.target.dataset.category,
+                name: target.dataset.name || target.alt,
+                category: target.dataset.category,
                 fromTier: e.target.classList.contains('tier-item') ? parseInt(e.target.closest('.tier-row').dataset.tierIndex) : null,
-                moves: e.target.classList.contains('tier-item') && e.target.dataset.category === 'pokemon' ? 
+                moves: e.target.classList.contains('tier-item') && target.dataset.category === 'pokemon' ? 
                     (drafts.find(d => d.id === currentDraft).tiers[parseInt(e.target.closest('.tier-row').dataset.tierIndex)]
-                        .items.find(item => item.name === (e.target.dataset.name || e.target.querySelector('img').alt))?.moves || []) 
+                        .items.find(item => item.name === (target.dataset.name || target.alt))?.moves || []) 
                     : null
             }));
         }
     });
 
-    document.addEventListener('dragover', e => e.preventDefault());
+    document.addEventListener('dragover', e => {
+        e.preventDefault();
+        const tierItems = e.target.closest('.tier-items');
+        if (tierItems) {
+            tierItems.classList.add('drag-over');
+        }
+    });
+
+    document.addEventListener('dragleave', e => {
+        const tierItems = e.target.closest('.tier-items');
+        if (tierItems) {
+            tierItems.classList.remove('drag-over');
+        }
+    });
+
+    document.querySelectorAll('.tier-items').forEach(tier => {
+        tier.addEventListener('dragover', e => e.preventDefault());
+        tier.addEventListener('drop', e => e.preventDefault());
+    });
 
     document.addEventListener('drop', e => {
         e.preventDefault();
+        const tierItems = e.target.closest('.tier-items');
+        if (tierItems) {
+            tierItems.classList.remove('drag-over');
+        }
         const data = JSON.parse(e.dataTransfer.getData('text/plain'));
         const draft = drafts.find(d => d.id === currentDraft);
 
-        if (e.target.closest('.tier-items')) {
-            const tierIndex = parseInt(e.target.closest('.tier-row').dataset.tierIndex);
+        if (tierItems) {
+            const tierIndex = parseInt(tierItems.closest('.tier-row').dataset.tierIndex);
+            console.log('Dropping item:', data.name, 'to tier:', tierIndex);
 
-            // Vérifier si l'item existe déjà dans le tier cible (éviter les doublons)
             if (draft.tiers[tierIndex].items.some(item => item.name === data.name)) {
-                return; // Ne pas ajouter si l'item est déjà dans le tier
+                console.log('Item already exists in tier:', data.name);
+                return;
             }
 
-            // Supprimer l'item de son tier d'origine si nécessaire
             if (data.fromTier !== null) {
                 draft.tiers[data.fromTier].items = draft.tiers[data.fromTier].items.filter(item => item.name !== data.name);
+                console.log('Removed item from original tier:', data.name, 'tier:', data.fromTier);
             }
 
-            // Vérifier la limite d'utilisation
             const usageMap = data.category === 'pokemon' ? pokemonUsage : itemUsage;
             const maxUsage = data.category === 'pokemon' ? 4 : 1;
             const count = usageMap.get(data.name) || 0;
 
-            // Si l'item vient de la galerie (fromTier === null), vérifier la limite
             if (data.fromTier === null && count >= maxUsage) {
-                return; // Ne pas ajouter si la limite est atteinte
+                console.log('Max usage reached for item:', data.name, 'count:', count);
+                return;
             }
 
-            // Ajouter l'item au nouveau tier
             const itemDataSource = data.category === 'pokemon' ? pokemonData : (data.category === 'items' ? itemData : battleItemData);
             const item = {
                 name: data.name,
                 category: data.category,
-                file: itemDataSource.find(i => i.name === data.name).file
+                file: itemDataSource.find(i => i.name === data.name)?.file
             };
 
-            // Si c'est un Pokémon, inclure les mouvements (existants ou nouveaux)
+            if (!item.file) {
+                console.error('File not found for item:', data.name);
+                return;
+            }
+
             if (data.category === 'pokemon') {
                 if (data.fromTier !== null && data.moves && data.moves.length > 0) {
-                    // Conserver les mouvements existants si l'item vient d'un autre tier
                     item.moves = data.moves;
                     draft.tiers[tierIndex].items.push(item);
+                    console.log('Moved Pokémon with existing moves:', data.name, 'to tier:', tierIndex);
                     loadTierList(currentDraft);
                     loadGallery(currentCategory);
                 } else {
-                    // Afficher la modale pour sélectionner les mouvements si l'item vient de la galerie
+                    console.log('Showing move modal for Pokémon:', data.name);
                     showMoveModal(data.name, data.category, tierIndex);
                 }
             } else {
-                // Pour les items ou objets de combat, ajouter directement
                 draft.tiers[tierIndex].items.push(item);
                 if (data.fromTier === null) {
-                    // Mettre à jour le compteur uniquement si l'item vient de la galerie
                     usageMap.set(data.name, count + 1);
+                    console.log('Added item to tier:', data.name, 'new count:', count + 1);
                 }
                 loadTierList(currentDraft);
                 loadGallery(currentCategory);
             }
         } else if (!e.target.closest('.tierlist-container') && !e.target.closest('.gallery')) {
-            // Si droppé en dehors, supprimer de la tier list et remettre dans la galerie
             if (data.fromTier !== null) {
                 draft.tiers[data.fromTier].items = draft.tiers[data.fromTier].items.filter(item => item.name !== data.name);
                 const usageMap = data.category === 'pokemon' ? pokemonUsage : itemUsage;
                 usageMap.set(data.name, (usageMap.get(data.name) || 0) - 1);
+                console.log('Removed item from tier:', data.name, 'new count:', usageMap.get(data.name));
                 loadTierList(currentDraft);
                 loadGallery(currentCategory);
             }
+        } else {
+            console.log('Drop ignored: not a valid target');
         }
     });
 }
@@ -308,6 +353,7 @@ function setupEventListeners() {
 function setupTierEventListeners(draftId) {
     document.querySelectorAll(`#tierlist-${draftId} .settings-tier`).forEach(btn => {
         btn.addEventListener('click', () => {
+            console.log('Settings button clicked for draft:', draftId);
             const tierIndex = parseInt(btn.closest('.tier-row').dataset.tierIndex);
             const draft = drafts.find(d => d.id === draftId);
             const tier = draft.tiers[tierIndex];
@@ -345,7 +391,7 @@ function saveMoves() {
         name,
         category,
         file: pokemonData.find(p => p.name === name).file,
-        moves: [move1, move2]
+        moves: [move1, move2].filter(move => move.trim() !== '')
     });
     pokemonUsage.set(name, (pokemonUsage.get(name) || 0) + 1);
     loadTierList(currentDraft);

@@ -1,7 +1,12 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const navbarPath = window.location.pathname.includes("/pages/")
-    ? "../components/navbar.html"
-    : "components/navbar.html";
+  // ✅ Détection automatique de l'environnement
+  const isLocal = ["localhost", "127.0.0.1"].includes(window.location.hostname);
+  const basePath = isLocal ? "./" : "/PokemonUniteDraft/";
+
+  // ✅ Détermine le chemin vers la navbar selon la page actuelle
+  const currentDepth = window.location.pathname.split("/").length;
+  const isDeepPage = window.location.pathname.includes("/pages/") || currentDepth > 3;
+  const navbarPath = isDeepPage ? `${basePath}components/navbar.html` : `${basePath}components/navbar.html`;
 
   fetch(navbarPath)
     .then(response => {
@@ -10,12 +15,12 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .then(data => {
       document.getElementById("navbar-container").innerHTML = data;
-      initNavbar();
+      initNavbar(basePath);
     })
     .catch(err => console.error("Erreur navbar:", err));
 });
 
-function initNavbar() {
+function initNavbar(basePath) {
   const toggle = document.getElementById("toggle-sidebar");
   const sidebar = document.getElementById("sidebar");
   if (toggle && sidebar) {
@@ -24,23 +29,41 @@ function initNavbar() {
     });
   }
 
+  // ✅ Corrige dynamiquement les liens de la navbar (Draft, Tierlist, etc.)
+  document.querySelectorAll("#sidebar a").forEach(link => {
+    const href = link.getAttribute("href");
+    // Si href est vide ou commence par /PokemonUniteDraft, on le normalise
+    if (!href || href.startsWith("/") || href.startsWith("../")) {
+      const path = link.dataset.path || href.replace(/^\/?PokemonUniteDraft\/?/, "");
+      link.href = basePath + path;
+    }
+  });
+
+  // ✅ Corrige les drapeaux de langue (assets)
+  document.querySelectorAll("#sidebar img").forEach(img => {
+    const src = img.getAttribute("src");
+    if (src && src.startsWith("/PokemonUniteDraft")) {
+      img.src = basePath + src.replace(/^\/?PokemonUniteDraft\/?/, "");
+    }
+  });
+
+  // ✅ Gestion de la langue
   let currentLang = localStorage.getItem("lang") || "en";
-  loadLang(currentLang);
+  loadLang(currentLang, basePath);
 
   const langButtons = document.querySelectorAll(".lang-btn");
   langButtons.forEach(btn => {
     btn.addEventListener("click", () => {
       const lang = btn.dataset.lang;
-      loadLang(lang);
+      loadLang(lang, basePath);
       localStorage.setItem("lang", lang);
       updateDynamicContent();
     });
   });
 }
 
-function loadLang(lang) {
-  const isInPages = window.location.pathname.includes('/pages/');
-  const langPath = isInPages ? `./../lang/${lang}.json` : `lang/${lang}.json`;
+function loadLang(lang, basePath) {
+  const langPath = `${basePath}lang/${lang}.json`;
 
   fetch(langPath)
     .then(res => {
@@ -66,6 +89,8 @@ function loadLang(lang) {
 }
 
 function updateDynamicContent() {
+  if (!window.currentLangData) return;
+
   if (!selectedMode) {
     document.getElementById('mode-title').innerHTML = `<strong>${currentLangData.select_mode_title || "Select a draft mode"}</strong>`;
     document.getElementById('mode-text').textContent = currentLangData.select_mode_text || "Select a draft mode above to see its description.";
@@ -88,14 +113,16 @@ function updateDynamicContent() {
     document.getElementById('mode-text').textContent = currentLangData[descriptionKey] || descriptionKey;
   }
 
-  document.getElementById('bubble-timer').textContent = currentLangData.waiting || "Waiting...";
+  const timer = document.getElementById('bubble-timer');
+  if (timer) timer.textContent = currentLangData.waiting || "Waiting...";
 
   const finalDiv = document.getElementById('final-draft');
   if (finalDiv && finalDiv.style.display !== 'none') {
-    document.getElementById('final-draft-title').textContent = currentLangData.final_draft_title || "Final Draft Result";
-    const teamAName = document.getElementById('teamA').querySelector('h2');
-    const teamBName = document.getElementById('teamB').querySelector('h2');
-    teamAName.textContent = currentLangData.team_purple || "Purple Team";
-    teamBName.textContent = currentLangData.team_orange || "Orange Team";
+    const title = document.getElementById('final-draft-title');
+    const teamAName = document.getElementById('teamA')?.querySelector('h2');
+    const teamBName = document.getElementById('teamB')?.querySelector('h2');
+    if (title) title.textContent = currentLangData.final_draft_title || "Final Draft Result";
+    if (teamAName) teamAName.textContent = currentLangData.team_purple || "Purple Team";
+    if (teamBName) teamBName.textContent = currentLangData.team_orange || "Orange Team";
   }
 }

@@ -3,6 +3,6 @@ components/navbar.html
 
 # Anything Else
 css/map.css
-pages/map.html
+map.html
 scripts/map.js
 assets/moves
