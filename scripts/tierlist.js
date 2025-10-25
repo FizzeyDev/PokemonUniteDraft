@@ -273,79 +273,74 @@ function setupEventListeners() {
 
     document.addEventListener('drop', e => {
         e.preventDefault();
+
         const tierItems = e.target.closest('.tier-items');
-        if (tierItems) {
-            tierItems.classList.remove('drag-over');
-        }
         const data = JSON.parse(e.dataTransfer.getData('text/plain'));
         const draft = drafts.find(d => d.id === currentDraft);
 
+        // 🔸 Si l’item est lâché sur un tier : on le déplace ou l’ajoute
         if (tierItems) {
+            tierItems.classList.remove('drag-over');
             const tierIndex = parseInt(tierItems.closest('.tier-row').dataset.tierIndex);
-            console.log('Dropping item:', data.name, 'to tier:', tierIndex);
-
-            if (draft.tiers[tierIndex].items.some(item => item.name === data.name)) {
-                console.log('Item already exists in tier:', data.name);
-                return;
-            }
-
-            if (data.fromTier !== null) {
-                draft.tiers[data.fromTier].items = draft.tiers[data.fromTier].items.filter(item => item.name !== data.name);
-                console.log('Removed item from original tier:', data.name, 'tier:', data.fromTier);
-            }
-
             const usageMap = data.category === 'pokemon' ? pokemonUsage : itemUsage;
             const maxUsage = data.category === 'pokemon' ? 4 : 1;
             const count = usageMap.get(data.name) || 0;
 
-            if (data.fromTier === null && count >= maxUsage) {
-                console.log('Max usage reached for item:', data.name, 'count:', count);
-                return;
+            // Empêcher les doublons
+            if (draft.tiers[tierIndex].items.some(i => i.name === data.name)) return;
+
+            // Supprimer de l’ancien tier si besoin
+            if (data.fromTier !== null) {
+                draft.tiers[data.fromTier].items = draft.tiers[data.fromTier].items.filter(i => i.name !== data.name);
             }
 
+            // Vérifier la limite d’utilisation
+            if (data.fromTier === null && count >= maxUsage) return;
+
+            // Récupérer l’item
             const itemDataSource = data.category === 'pokemon' ? pokemonData : (data.category === 'items' ? itemData : battleItemData);
+            const itemFile = itemDataSource.find(i => i.name === data.name)?.file;
+            if (!itemFile) return;
+
             const item = {
                 name: data.name,
                 category: data.category,
-                file: itemDataSource.find(i => i.name === data.name)?.file
+                file: itemFile,
+                moves: data.moves || []
             };
 
-            if (!item.file) {
-                console.error('File not found for item:', data.name);
-                return;
-            }
+            // Ajouter dans le nouveau tier
+            draft.tiers[tierIndex].items.push(item);
 
-            if (data.category === 'pokemon') {
-                if (data.fromTier !== null && data.moves && data.moves.length > 0) {
-                    item.moves = data.moves;
-                    draft.tiers[tierIndex].items.push(item);
-                    console.log('Moved Pokémon with existing moves:', data.name, 'to tier:', tierIndex);
-                    loadTierList(currentDraft);
-                    loadGallery(currentCategory);
-                } else {
-                    console.log('Showing move modal for Pokémon:', data.name);
-                    showMoveModal(data.name, data.category, tierIndex);
-                }
-            } else {
-                draft.tiers[tierIndex].items.push(item);
-                if (data.fromTier === null) {
-                    usageMap.set(data.name, count + 1);
-                    console.log('Added item to tier:', data.name, 'new count:', count + 1);
-                }
-                loadTierList(currentDraft);
-                loadGallery(currentCategory);
-            }
-        } else if (!e.target.closest('.tierlist-container') && !e.target.closest('.gallery')) {
-            if (data.fromTier !== null) {
-                draft.tiers[data.fromTier].items = draft.tiers[data.fromTier].items.filter(item => item.name !== data.name);
-                const usageMap = data.category === 'pokemon' ? pokemonUsage : itemUsage;
-                usageMap.set(data.name, (usageMap.get(data.name) || 0) - 1);
-                console.log('Removed item from tier:', data.name, 'new count:', usageMap.get(data.name));
-                loadTierList(currentDraft);
-                loadGallery(currentCategory);
-            }
-        } else {
-            console.log('Drop ignored: not a valid target');
+            // Mettre à jour le compteur d’utilisation
+            if (data.fromTier === null) usageMap.set(data.name, count + 1);
+
+            loadTierList(currentDraft);
+            loadGallery(currentCategory);
+            return;
+        }
+
+        // 🔹 Si l’item est lâché *en dehors* des tiers et de la galerie → suppression
+        const isOutsideAll =
+            !e.target.closest('.tierlist-container') &&
+            !e.target.closest('#gallery') &&
+            !e.target.closest('.pokemon-filters');
+
+        if (isOutsideAll && data.fromTier !== null) {
+            const usageMap = data.category === 'pokemon' ? pokemonUsage : itemUsage;
+            const tier = draft.tiers[data.fromTier];
+
+            // Retirer du tier
+            tier.items = tier.items.filter(i => i.name !== data.name);
+
+            // Décrémenter le compteur
+            const newCount = Math.max((usageMap.get(data.name) || 1) - 1, 0);
+            usageMap.set(data.name, newCount);
+
+            console.log(`🗑️ ${data.name} retiré du tier ${data.fromTier}, nouveau count: ${newCount}`);
+
+            loadTierList(currentDraft);
+            loadGallery(currentCategory);
         }
     });
 }
