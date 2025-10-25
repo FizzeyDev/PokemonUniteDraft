@@ -20,9 +20,9 @@ let battleItemData = [];
 async function loadData() {
     try {
         const [pokemonResponse, itemResponse, battleItemResponse] = await Promise.all([
-            fetch('../PokemonUniteDraft/mons.json'),
-            fetch('../PokemonUniteDraft/items.json'),
-            fetch('../PokemonUniteDraft/battle_items.json')
+            fetch('../mons.json'),
+            fetch('../items.json'),
+            fetch('../battle_items.json')
         ]);
         pokemonData = await pokemonResponse.json();
         itemData = await itemResponse.json();
@@ -84,7 +84,7 @@ function loadTierList(draftId) {
             tierItem.dataset.category = item.category;
             tierItem.draggable = true;
             tierItem.innerHTML = `
-                <img src="assets/${item.category}/${item.file}" alt="${item.name}">
+                <img src="../assets/${item.category}/${item.file}" alt="${item.name}">
                 ${item.category === 'pokemon' && item.moves ? `<div class="moves">${item.moves.join(', ')}</div>` : ''}
             `;
             tierRow.querySelector('.tier-items').appendChild(tierItem);
@@ -176,7 +176,7 @@ function loadGallery(category) {
         if (category === 'pokemon' && count >= 4) return;
         if (category !== 'pokemon' && count >= 1) return;
         const img = document.createElement('img');
-        img.src = `assets/${category}/${item.file}`;
+        img.src = `../assets/${category}/${item.file}`;
         img.alt = item.name;
         img.dataset.name = item.name;
         img.dataset.category = category;
