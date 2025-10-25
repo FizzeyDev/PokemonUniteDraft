@@ -19,14 +19,25 @@ let battleItemData = [];
 
 async function loadData() {
     try {
+        console.log('Fetching JSON files...');
         const [pokemonResponse, itemResponse, battleItemResponse] = await Promise.all([
-            fetch('mons.json'),
-            fetch('items.json'),
-            fetch('battle_items.json')
+            fetch('mons.json').then(res => {
+                if (!res.ok) throw new Error(`Failed to fetch mons.json: ${res.status}`);
+                return res;
+            }),
+            fetch('items.json').then(res => {
+                if (!res.ok) throw new Error(`Failed to fetch items.json: ${res.status}`);
+                return res;
+            }),
+            fetch('battle_items.json').then(res => {
+                if (!res.ok) throw new Error(`Failed to fetch battle_items.json: ${res.status}`);
+                return res;
+            })
         ]);
         pokemonData = await pokemonResponse.json();
         itemData = await itemResponse.json();
         battleItemData = await battleItemResponse.json();
+        console.log('JSON data loaded successfully:', { pokemonData, itemData, battleItemData });
     } catch (error) {
         console.error('Error loading JSON data:', error);
     }
