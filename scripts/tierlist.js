@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 function loadTabs() {
     const tabList = document.querySelector('.tab-list');
-    tabList.innerHTML = '<button class="tab active" data-tab-id="1" data-lang="nav_draft_simulator">Tierlist 1</button><button id="add-tab" data-lang="add_draft">+ Add Tierlist</button>';
+    tabList.innerHTML = '<button class="tab active" data-tab-id="1" data-lang="nav_tierlist_simulator">Tierlist 1</button><button id="add-tab" data-lang="add_draft">+ Add Tierlist</button>';
     document.querySelectorAll('.tab').forEach(tab => {
         tab.addEventListener('click', () => switchTab(parseInt(tab.dataset.tabId)));
     });
@@ -88,7 +88,7 @@ function loadTierList(draftId) {
             <div class="tier-items"></div>
             <div class="tier-actions">
                 <button class="settings-tier" aria-label="Tier Settings" data-lang="edit_tier">
-                    <img src="${basePath}assets/settings.svg" alt="Settings" style="width: 24px; height: 24px;">
+                    <img src="../${basePath}assets/settings.svg" alt="Settings" style="width: 24px; height: 24px;">
                 </button>
             </div>
         `;
@@ -148,7 +148,7 @@ function addTab() {
     const newTab = document.createElement('button');
     newTab.className = 'tab';
     newTab.dataset.tabId = newId;
-    newTab.dataset.lang = 'nav_draft_simulator';
+    newTab.dataset.lang = 'nav_tierlist_simulator';
     newTab.textContent = `Tierlist ${newId}`;
     tabList.insertBefore(newTab, document.getElementById('add-tab'));
     newTab.addEventListener('click', () => switchTab(newId));

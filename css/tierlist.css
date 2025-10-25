@@ -6,7 +6,7 @@ body {
     max-width: 1400px;
     margin: auto;
     padding: 2rem;
-    margin-left: 270px;
+    margin-left: 270px; 
 }
 
 @media (max-width: 768px) {

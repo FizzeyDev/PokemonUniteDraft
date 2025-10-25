@@ -1,13 +1,20 @@
-# Pokemon Unite Draft Simulator
+# Pokemon Unite Tools by Fizzey
 
-Made by Fizzey, Pokemon Unite Player, this repository hosts the Pokémon Unite Draft Simulator website :  
+Made by Fizzey, Pokemon Unite Player, this repository hosts the Pokémon Unite Tools website :  
 👉 [Direct Link](https://fizzeydev.github.io/PokemonUniteDraft/)
 
 ---
 
+## Features
+
+This website, Unite Tools, as many use:
+- Pokemon Unite Draft Simulator
+- Pokemon Unite Tierlist Creator [BETA]
+- Pokemon Unite Dynamic Map [SOON]
+
 ## About
 
-This website was created by a player, for players, with the goal of helping anyone who wants to practice and improve their drafting skills in Pokémon Unite.
+This website was created by a player, for players, with the goal of helping anyone who wants to practice and improve their differents skills in Pokémon Unite.
 
 Built with HTML/CSS and enhanced with a custom JavaScript script, the site is hosted on GitHub Pages.
 
