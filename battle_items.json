@@ -1,0 +1,12 @@
+[
+    { "name": "Eject Button", "file": "eject_button.png" },
+    { "name": "Fluffy Tail", "file": "fluffy_tail.png" },
+    { "name": "Full Heal", "file": "full_heal.png" },
+    { "name": "Goal Getter", "file": "goal_getter.png" },
+    { "name": "Goal Hacker", "file": "goal_hacker.png" },
+    { "name": "Potion", "file": "potion.png" },
+    { "name": "Shedinja Doll", "file": "shedinja_doll.png" },
+    { "name": "Slow Smoke", "file": "slow_smoke.png" },
+    { "name": "X Attack", "file": "x_attack.png" },
+    { "name": "X Speed", "file": "x_speed.png" }
+]

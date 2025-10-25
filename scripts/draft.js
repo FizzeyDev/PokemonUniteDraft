@@ -410,14 +410,14 @@ function renderGallery() {
 
   sorted.forEach(mon => {
     const img = document.createElement("img");
-    img.src = `images/${mon.file}`;
+    img.src = `assets/pokemon/${mon.file}`;
     img.alt = currentLang === "fr" ? mon.name_fr :
               currentLang === "es" ? mon.name_es :
               currentLang === "de" ? mon.name_de :
               currentLang === "it" ? mon.name_it : mon.name;
     img.dataset.role = mon.role;
     img.dataset.dex = mon.dex;
-    img.dataset.name = mon.name;
+    img.dataset.name = mon.name;  
     img.dataset.nameFr = mon.name_fr;
     img.dataset.nameEs = mon.name_es;
     img.dataset.nameDe = mon.name_de;
@@ -474,7 +474,7 @@ roleButtons.forEach(btn => {
   btn.addEventListener("click", () => {
     const role = btn.dataset.role;
     allImages.forEach(img => {
-      img.style.display = (role === "all" || img.dataset.role === role) ? "block" : "none";
+      img.style.display = (role === "unknown" || img.dataset.role === role) ? "block" : "none";
     });
   });
 });
