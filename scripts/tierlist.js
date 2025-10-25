@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 function loadTabs() {
     const tabList = document.querySelector('.tab-list');
-    tabList.innerHTML = '<button class="tab active" data-tab-id="1" data-lang="nav_draft_simulator">Draft 1</button><button id="add-tab" data-lang="add_draft">+ Add Draft</button>';
+    tabList.innerHTML = '<button class="tab active" data-tab-id="1" data-lang="nav_draft_simulator">Tierlist 1</button><button id="add-tab" data-lang="add_draft">+ Add Tierlist</button>';
     document.querySelectorAll('.tab').forEach(tab => {
         tab.addEventListener('click', () => switchTab(parseInt(tab.dataset.tabId)));
     });
@@ -84,7 +84,7 @@ function loadTierList(draftId) {
             tierItem.dataset.category = item.category;
             tierItem.draggable = true;
             tierItem.innerHTML = `
-                <img src="../assets/${item.category}/${item.file}" alt="${item.name}">
+                <img src="/assets/${item.category}/${item.file}" alt="${item.name}">
                 ${item.category === 'pokemon' && item.moves ? `<div class="moves">${item.moves.join(', ')}</div>` : ''}
             `;
             tierRow.querySelector('.tier-items').appendChild(tierItem);
@@ -134,7 +134,7 @@ function addTab() {
     newTab.className = 'tab';
     newTab.dataset.tabId = newId;
     newTab.dataset.lang = 'nav_draft_simulator';
-    newTab.textContent = `Draft ${newId}`;
+    newTab.textContent = `Tierlist ${newId}`;
     tabList.insertBefore(newTab, document.getElementById('add-tab'));
     newTab.addEventListener('click', () => switchTab(newId));
     loadTierList(newId);
@@ -176,7 +176,7 @@ function loadGallery(category) {
         if (category === 'pokemon' && count >= 4) return;
         if (category !== 'pokemon' && count >= 1) return;
         const img = document.createElement('img');
-        img.src = `../assets/${category}/${item.file}`;
+        img.src = `/assets/${category}/${item.file}`;
         img.alt = item.name;
         img.dataset.name = item.name;
         img.dataset.category = category;

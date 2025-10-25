@@ -6,13 +6,13 @@ body {
     max-width: 1400px;
     margin: auto;
     padding: 2rem;
+    margin-left: 270px;
 }
 
-h1 {
-    text-align: center;
-    color: white;
-    margin-bottom: 2rem;
-    font-size: 2.5rem;
+@media (max-width: 768px) {
+    body {
+        margin-left: 0;
+    }
 }
 
 .tabs {
