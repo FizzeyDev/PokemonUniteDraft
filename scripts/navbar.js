@@ -39,7 +39,10 @@ function initNavbar() {
 }
 
 function loadLang(lang) {
-  fetch(`./../lang/${lang}.json`)
+  const isInPages = window.location.pathname.includes('/pages/');
+  const langPath = isInPages ? `./../lang/${lang}.json` : `lang/${lang}.json`;
+
+  fetch(langPath)
     .then(res => {
       if (!res.ok) throw new Error(`Lang file not found: ${lang}`);
       return res.json();
