@@ -13,6 +13,8 @@ Built with HTML/CSS and enhanced with a custom JavaScript script, the site is ho
 
 This is a personal passion project, maintained for fun, but it will be kept up to date with the latest additions and balance changes in Pokémon Unite — covering both casual and competitive formats.
 
+Supported languages: French, English, German, Spanish, Italian
+
 ---
 
 ## Disclaimer

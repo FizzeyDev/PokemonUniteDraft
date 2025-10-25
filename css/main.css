@@ -86,16 +86,15 @@ h1 {
 
 /* --- Styles spécifiques aux teams --- */
 #teamA {
-  background: rgba(159, 83, 236, 0.15); /* violet clair transparent */
+  background: rgba(159, 83, 236, 0.15);
   border: 2px solid rgba(159, 83, 236, 0.5);
 }
 
 #teamB {
-  background: rgba(255, 165, 0, 0.15); /* orange clair transparent */
+  background: rgba(255, 165, 0, 0.15);
   border: 2px solid rgba(255, 165, 0, 0.5);
 }
 
-/* Slots personnalisés par team */
 #teamA .slot {
   border: 2px double rgba(159, 83, 236, 0.8);
   color: rgba(159, 83, 236, 0.9);
@@ -106,7 +105,6 @@ h1 {
   color: rgba(255, 165, 0, 0.9);
 }
 
-/* Slots Ban en rouge */
 .slot.ban {
   border: 2px solid #e74c3c;
   color: #e74c3c;
@@ -115,12 +113,10 @@ h1 {
   overflow: hidden;
 }
 
-/* Quand un Pokémon est placé dans un ban */
 .slot.ban img {
-  opacity: 0.6; /* on assombrit un peu */
+  opacity: 0.6;
 }
 
-/* Ajout du logo "interdit" */
 .slot.ban::after {
   content: "🚫";
   font-size: 2rem;
@@ -129,7 +125,7 @@ h1 {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  pointer-events: none; /* pas de clic sur l'icône */
+  pointer-events: none;
 }
 
 
@@ -181,7 +177,6 @@ h1 {
   border-color: #f1c40f;
 }
 
-/* --- Galerie Pokémon --- */
 .gallery {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
@@ -212,27 +207,6 @@ h1 {
   border-color: #fff;
 }
 
-/* Language toggle button */
-.lang-btn {
-  padding: 8px 16px;
-  margin-bottom: 20px;
-  border-radius: 12px;
-  border: 2px solid #000;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 0.95rem;
-  transition: all 0.2s ease-in-out;
-  background: #1c2526;
-  color: #fff;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-}
-
-.lang-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0,0,0,0.35);
-}
-
-/* --- Base pour tous les boutons --- */
 button {
   padding: 10px 20px;
   margin: 5px;
@@ -253,7 +227,6 @@ button:hover {
   box-shadow: 0 6px 12px rgba(0,0,0,0.4);
 }
 
-/* --- Draft Reset & Mode Buttons --- */
 #reset-draft {
   background: #1c2526;
 }
@@ -271,7 +244,6 @@ button:hover {
 }
 
 
-/* --- Boutons de rôle --- */
 .filter-btn {
   border: 2px solid #000;
   font-weight: 500;
@@ -285,7 +257,6 @@ button:hover {
   transition: all 0.2s ease-in-out;
 }
 
-/* Couleurs des rôles avec opacité faible */
 .filter-btn[data-role="def"] { background: rgba(39,174,96,0.2); }
 .filter-btn[data-role="atk"] { background: rgba(231,76,60,0.2); }
 .filter-btn[data-role="sup"] { background: rgba(184,184,20,0.2); }
@@ -293,14 +264,12 @@ button:hover {
 .filter-btn[data-role="all"] { background: rgba(155,89,182,0.2); }
 .filter-btn[data-role="unknown"] { background: rgba(52,73,94,0.2); }
 
-/* Hover effect plus visible pour les rôles */
 .filter-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 5px 10px rgba(0,0,0,0.35);
   background: rgba(255,255,255,0.1);
 }
 
-/* Filtres des rôles */
 #filters {
   display: flex;
   justify-content: center;
@@ -323,7 +292,6 @@ button:hover {
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
-/* --- Switch Toggle --- */
 .switch {
   position: relative;
   display: inline-flex;
@@ -378,19 +346,19 @@ button:hover {
   display: none;
   text-align: center;
   margin: 15px 0;
-  font-family: 'Poppins', sans-serif; /* ou la police de ton site */
+  font-family: 'Poppins', sans-serif;
 }
 
 #sort-options label {
   margin-right: 10px;
   font-size: 16px;
-  color: #fff; /* Texte blanc pour matcher ton thème */
+  color: #fff;
 }
 
 #sort-select {
-  background-color: #2c2f33; /* gris foncé comme tes zones */
+  background-color: #2c2f33;
   color: #fff;
-  border: 2px solid #7289da; /* violet/bleu style Discord */
+  border: 2px solid #7289da;
   border-radius: 12px;
   padding: 6px 12px;
   font-size: 15px;
@@ -405,7 +373,7 @@ button:hover {
 
 #sort-select:focus {
   outline: none;
-  border-color: #ffd700; /* petit accent or à la sélection */
+  border-color: #ffd700;
 }
 
 #backBtn:disabled {

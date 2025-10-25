@@ -1,29 +1,34 @@
-// -------------------- Language Handling --------------------
-let currentLang = 'en';
+// -------------------- Variables Globales --------------------
+let currentLang = localStorage.getItem("lang") || 'en';
 let currentLangData = {};
-const langBtn = document.getElementById('lang-toggle');
+const langButtons = document.querySelectorAll('.lang-btn');
 const startBtn = document.getElementById('start-draft');
 const resetBtn = document.getElementById('reset-draft');
-const timerInput = document.getElementById('timer-value');
-const bubbleTimer = document.getElementById('bubble-timer');
-const filtersDiv = document.getElementById('filters');
-const gallerySection = document.getElementById('gallery');
+const backBtn = document.getElementById('backBtn');
 const modeTitle = document.getElementById('mode-title');
 const modeText = document.getElementById('mode-text');
-const roleButtons = document.querySelectorAll('.filter-btn');
+const bubbleTimer = document.getElementById('bubble-timer');
 const enableTimerCheckbox = document.getElementById('enable-timer');
 const timerSettings = document.getElementById('timer-settings');
+const timerInput = document.getElementById('timer-value');
+const filtersDiv = document.getElementById('filters');
+const gallerySection = document.getElementById('gallery');
 const draftSummary = document.getElementById('draft-summary');
-const summaryTeams = document.getElementById('summary-teams');
-const backBtn = document.getElementById('backBtn');
-
-// -------------------- Timer Variables --------------------
+const roleButtons = document.querySelectorAll('.filter-btn');
 let currentStep = 0;
 let selectedMode = null;
 let currentDraftOrder = [];
 let allImages = [];
 let timerInterval;
 let timeLeft = parseInt(timerInput.value) || 20;
+
+// Charger les données de langue au démarrage
+fetch(`lang/${currentLang}.json`)
+  .then(res => res.json())
+  .then(data => {
+    currentLangData = data;
+    updateDynamicContent();
+  });
 
 // -------------------- Draft Orders --------------------
 const draftOrders = {
@@ -73,59 +78,6 @@ startBtn.disabled = true;
 startBtn.style.opacity = "0.5";
 resetBtn.addEventListener('click', softResetDraft);
 
-// -------------------- Language Loader --------------------
-function loadLang(lang) {
-  fetch(`lang/${lang}.json`)
-    .then(res => res.json())
-    .then(data => {
-      currentLangData = data;
-
-      document.getElementById('title').textContent = data.title;
-      document.querySelector('.mode-btn[data-mode="classic"]').textContent = data.mode_classic;
-      document.querySelector('.mode-btn[data-mode="swap-ban"]').textContent = data.mode_swap;
-      document.querySelector('.mode-btn[data-mode="reban"]').textContent = data.mode_reban;
-      document.querySelector('.mode-btn[data-mode="tournament"]').textContent = data.mode_tournament;
-
-      document.getElementById('teamA-name').textContent = data.teamA;
-      document.getElementById('teamB-name').textContent = data.teamB;
-      document.getElementById('timer-label').textContent = data.enable_timer;
-
-      document.getElementById('sort-label').textContent = data.sort_by;
-      document.getElementById('sort-dex').textContent = data.pokedex_nb;
-      document.getElementById('sort-name').textContent = data.pkmn_name;
-
-      modeTitle.textContent = data.select_mode_title;
-      modeText.textContent = data.select_mode_text;
-
-      bubbleTimer.textContent = data.waiting;
-
-      roleButtons.forEach(btn => {
-        const role = btn.dataset.role;
-        switch(role) {
-          case 'def': btn.textContent = data.role_def; break;
-          case 'atk': btn.textContent = data.role_atk; break;
-          case 'sup': btn.textContent = data.role_sup; break;
-          case 'spe': btn.textContent = data.role_spe; break;
-          case 'all': btn.textContent = data.role_all; break;
-          case 'unknown': btn.textContent = data.role_unknown; break;
-        }
-      });
-
-      document.getElementById('footer-signature').textContent = data.footer_signature;
-      document.getElementById('footer-legal').textContent = data.footer_legal;
-      draftSummary.querySelector("h2").textContent = data.draft_recap || "Draft Recap";
-    });
-}
-
-langBtn.addEventListener('click', () => {
-  currentLang = currentLang === 'en' ? 'fr' : 'en';
-  langBtn.dataset.lang = currentLang;
-  langBtn.textContent = currentLang === 'en' ? 'EN' : 'FR';
-  loadLang(currentLang);
-});
-
-loadLang(currentLang);
-
 // -------------------- Mode Buttons --------------------
 document.querySelectorAll('.mode-btn').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -133,24 +85,24 @@ document.querySelectorAll('.mode-btn').forEach(btn => {
     btn.classList.add('active');
     selectedMode = btn.dataset.mode;
     currentDraftOrder = [...draftOrders[selectedMode]];
-    resetDraft(true); // true = mode choisi, Start peut s’activer
+    resetDraft(true);
 
     startBtn.disabled = false;
     startBtn.style.opacity = "1";
 
-    let title = "", description = "";
+    let titleKey = "", descriptionKey = "";
     if (selectedMode === "classic") {
-      title = currentLangData.mode_classic;
-      description = currentLangData.tooltip_classic;
+      titleKey = "mode_classic";
+      descriptionKey = "tooltip_classic";
     } else if (selectedMode === "swap-ban") {
-      title = currentLangData.mode_swap;
-      description = currentLangData.tooltip_swap;
+      titleKey = "mode_swap";
+      descriptionKey = "tooltip_swap";
     } else if (selectedMode === "reban") {
-      title = currentLangData.mode_reban;
-      description = currentLangData.tooltip_reban;
+      titleKey = "mode_reban";
+      descriptionKey = "tooltip_reban";
     } else if (selectedMode === "tournament") {
-      title = currentLangData.mode_tournament;
-      description = currentLangData.tooltip_tournament;
+      titleKey = "mode_tournament";
+      descriptionKey = "tooltip_tournament";
       const banSlotsA = document.querySelectorAll("#teamA .slots.bans .slot");
       const banSlotsB = document.querySelectorAll("#teamB .slots.bans .slot");
 
@@ -158,7 +110,7 @@ document.querySelectorAll('.mode-btn').forEach(btn => {
       if (banSlotsB.length > 0) banSlotsB[banSlotsB.length - 1].style.display = "none";
     }
 
-    if (selectedMode != "tournament") {
+    if (selectedMode !== "tournament") {
       const banSlotsA = document.querySelectorAll("#teamA .slots.bans .slot");
       const banSlotsB = document.querySelectorAll("#teamB .slots.bans .slot");
 
@@ -166,8 +118,8 @@ document.querySelectorAll('.mode-btn').forEach(btn => {
       banSlotsB[banSlotsB.length - 1].style.display = "block";
     }
 
-    modeTitle.innerHTML = `<strong>${title}</strong>`;
-    modeText.textContent = description;
+    modeTitle.innerHTML = `<strong>${currentLangData[titleKey] || titleKey}</strong>`;
+    modeText.textContent = currentLangData[descriptionKey] || descriptionKey;
   });
 });
 
@@ -195,12 +147,12 @@ startBtn.addEventListener('click', () => {
     bubbleTimer.style.display = "block";
     startTimer();
   } else {
-    bubbleTimer.textContent = "";
+    bubbleTimer.textContent = currentLangData.waiting || "Waiting...";
     bubbleTimer.style.display = "none";
   }
 
   highlightCurrentSlot();
-  backBtn.style.display = "none"; // Back caché au début
+  backBtn.style.display = "none";
 });
 
 // -------------------- Reset Functions --------------------
@@ -212,7 +164,7 @@ function resetDraft(modeChosen = false) {
     slot.classList.remove('current-pick');
     const img = slot.querySelector('img');
     if (img) img.remove();
-    slot.textContent = slot.closest('.picks') ? 'Pick' : '';
+    slot.textContent = slot.closest('.picks') ? currentLangData.pick || 'Pick' : '';
   });
 
   allImages.forEach(img => {
@@ -221,7 +173,7 @@ function resetDraft(modeChosen = false) {
   });
 
   currentDraftOrder = selectedMode ? [...draftOrders[selectedMode]] : [];
-  bubbleTimer.textContent = currentLangData.waiting || '';
+  bubbleTimer.textContent = currentLangData.waiting || 'Waiting...';
   bubbleTimer.style.display = enableTimerCheckbox.checked ? "block" : "none";
 
   startBtn.style.display = 'inline-block';
@@ -241,7 +193,6 @@ function resetDraft(modeChosen = false) {
   timerInput.style.display = "inline-block";
   timerSettings.style.display = enableTimerCheckbox.checked ? "flex" : "none";
 
-  // ⚠️ Activation du Start seulement si un mode est choisi
   if (modeChosen) {
     startBtn.disabled = false;
     startBtn.style.opacity = "1";
@@ -250,17 +201,18 @@ function resetDraft(modeChosen = false) {
     startBtn.style.opacity = "0.5";
   }
 
-  backBtn.style.display = "none"; // Back caché tant qu’aucun pick
+  backBtn.style.display = "none";
+
+  // Mettre à jour les textes dynamiques
+  updateDynamicContent();
 }
 
 // -------------------- Undo Last Pick --------------------
-if (backBtn) {
-  backBtn.addEventListener('click', undoLastPick);
-}
+backBtn.addEventListener('click', undoLastPick);
 
 function undoLastPick() {
   if (currentStep <= 0) {
-    if (backBtn) backBtn.style.display = 'none';
+    backBtn.style.display = 'none';
     return;
   }
 
@@ -285,7 +237,7 @@ function undoLastPick() {
   if (galleryImg) galleryImg.classList.remove('used');
 
   lastSlot.removeChild(img);
-  if (lastSlot.closest('.picks')) lastSlot.textContent = 'Pick';
+  if (lastSlot.closest('.picks')) lastSlot.textContent = currentLangData.pick || 'Pick';
   else if (lastSlot.closest('.bans')) lastSlot.textContent = '';
 
   currentStep = lastIndex;
@@ -295,7 +247,6 @@ function undoLastPick() {
 }
 
 // -------------------- Soft Reset Draft --------------------
-
 function softResetDraft() {
   clearInterval(timerInterval);
   currentStep = 0;
@@ -307,7 +258,7 @@ function softResetDraft() {
 
   document.querySelectorAll(".slots .slot").forEach(slot => {
     if (slot.closest(".picks")) {
-      slot.textContent = "Pick";
+      slot.textContent = currentLangData.pick || "Pick";
     } else if (slot.closest(".bans")) {
       slot.textContent = "";
     } else {
@@ -315,14 +266,14 @@ function softResetDraft() {
     }
   });
 
-  allImages.forEach(img => { 
-    img.classList.remove("used"); 
-    img.style.display = "block"; 
+  allImages.forEach(img => {
+    img.classList.remove("used");
+    img.style.display = "block";
   });
 
   currentDraftOrder = selectedMode ? [...draftOrders[selectedMode]] : [];
 
-  bubbleTimer.textContent = currentLangData.waiting;
+  bubbleTimer.textContent = currentLangData.waiting || "Waiting...";
   bubbleTimer.style.display = "block";
 
   document.querySelectorAll('.slot').forEach(slot => slot.classList.remove('current-pick'));
@@ -348,7 +299,7 @@ function softResetDraft() {
   timerInput.style.display = "inline-block";
   timerSettings.style.display = enableTimerCheckbox.checked ? "flex" : "none";
 
-  loadLang(currentLang);
+  updateDynamicContent();
 }
 
 // -------------------- Timer --------------------
@@ -392,20 +343,19 @@ function endDraft() {
   filtersDiv.style.display = 'none';
   gallerySection.style.display = 'none';
   document.querySelectorAll('.slot').forEach(slot => slot.classList.remove('current-pick'));
-  document.getElementById('timer-options').style.display = 'none';
-  bubbleTimer.textContent = currentLangData.waiting;
+  document.getElementById('sort-options').style.display = 'none';
+  bubbleTimer.textContent = currentLangData.waiting || "Waiting...";
 
   const finalDiv = document.getElementById('final-draft');
   const finalTeamsDiv = document.getElementById('final-draft-teams');
   finalDiv.style.display = 'block';
   finalTeamsDiv.innerHTML = '';
 
-  document.getElementById('final-draft-title').textContent =
-    currentLang === 'en' ? "Final Draft Result" : "Résultat de la Draft";
+  document.getElementById('final-draft-title').textContent = currentLangData.final_draft_title || "Final Draft Result";
 
   ["teamA", "teamB"].forEach(teamId => {
     const teamElem = document.getElementById(teamId);
-    const teamName = teamElem.querySelector("h2").textContent;
+    const teamName = currentLangData[teamId === "teamA" ? "team_purple" : "team_orange"] || teamElem.querySelector("h2").textContent;
 
     const teamContainer = document.createElement("div");
     teamContainer.style.textAlign = "center";
@@ -435,6 +385,7 @@ fetch("mons.json")
     renderGallery();
   });
 
+// Dans la fonction renderGallery
 function renderGallery() {
   gallerySection.innerHTML = "";
   allImages = [];
@@ -444,6 +395,12 @@ function renderGallery() {
   if (currentSort === "name") {
     if (currentLang === "fr") {
       sorted.sort((a, b) => a.name_fr.localeCompare(b.name_fr));
+    } else if (currentLang === "es") {
+      sorted.sort((a, b) => a.name_es.localeCompare(b.name_es));
+    } else if (currentLang === "de") {
+      sorted.sort((a, b) => a.name_de.localeCompare(b.name_de));
+    } else if (currentLang === "it") {
+      sorted.sort((a, b) => a.name_it.localeCompare(b.name_it));
     } else {
       sorted.sort((a, b) => a.name.localeCompare(b.name));
     }
@@ -454,15 +411,20 @@ function renderGallery() {
   sorted.forEach(mon => {
     const img = document.createElement("img");
     img.src = `images/${mon.file}`;
-    img.alt = currentLang === "fr" ? mon.name_fr : mon.name;
+    img.alt = currentLang === "fr" ? mon.name_fr :
+              currentLang === "es" ? mon.name_es :
+              currentLang === "de" ? mon.name_de :
+              currentLang === "it" ? mon.name_it : mon.name;
     img.dataset.role = mon.role;
     img.dataset.dex = mon.dex;
     img.dataset.name = mon.name;
     img.dataset.nameFr = mon.name_fr;
+    img.dataset.nameEs = mon.name_es;
+    img.dataset.nameDe = mon.name_de;
+    img.dataset.nameIt = mon.name_it;
 
-    // ✅ Vérifie si ce Pokémon est déjà placé dans une équipe
     const alreadyPicked = document.querySelector(
-      `.slots img[data-dex="${mon.dex}"]`
+      `.slots img[data-dex="${mon.dex}"][data-file="${mon.file}"]`
     );
     if (alreadyPicked) {
       img.classList.add("used");
@@ -477,6 +439,7 @@ function renderGallery() {
       if (slot) {
         const chosen = img.cloneNode(true);
         chosen.classList.add("selected-slot");
+        chosen.dataset.file = mon.file; // Ajouter pour identifier les formes multiples
         slot.innerHTML = "";
         slot.appendChild(chosen);
         img.classList.add("used");
@@ -507,11 +470,11 @@ sortSelect.addEventListener("change", (e) => {
 });
 
 // -------------------- Role Filtering --------------------
-document.querySelectorAll(".filter-btn").forEach(btn => {
+roleButtons.forEach(btn => {
   btn.addEventListener("click", () => {
     const role = btn.dataset.role;
     allImages.forEach(img => {
-      img.style.display = (role === "unknown" || img.dataset.role === role) ? "block" : "none";
+      img.style.display = (role === "all" || img.dataset.role === role) ? "block" : "none";
     });
   });
 });
