@@ -1,3 +1,5 @@
+// tierlist.js - version complète corrigée
+
 let drafts = [{
     id: 1,
     tiers: [
@@ -8,6 +10,7 @@ let drafts = [{
         { name: 'D', color: '#9b59b6', items: [] }
     ]
 }];
+
 let currentDraft = 1;
 let currentCategory = 'pokemon';
 let pokemonUsage = new Map();
@@ -16,60 +19,73 @@ let pokemonData = [];
 let itemData = [];
 let battleItemData = [];
 
+// Temp storage used when adding a pokemon from gallery: wait moves selection before final add
+let pendingAdd = null;
+
+function getBasePath() {
+    return window.location.pathname.includes('PokemonUniteDraft') ? '/PokemonUniteDraft/' : './';
+}
+
 async function loadData() {
     try {
-        const basePath = window.location.pathname.includes('PokemonUniteDraft')
-            ? '/PokemonUniteDraft/'
-            : './';
-        console.log('Fetching JSON files with basePath:', basePath);
-        const [pokemonResponse, itemResponse, battleItemResponse] = await Promise.all([
-            fetch(`${basePath}mons.json`).then(res => {
-                if (!res.ok) throw new Error(`Failed to fetch mons.json: ${res.status}`);
-                return res;
-            }),
-            fetch(`${basePath}items.json`).then(res => {
-                if (!res.ok) throw new Error(`Failed to fetch items.json: ${res.status}`);
-                return res;
-            }),
-            fetch(`${basePath}battle_items.json`).then(res => {
-                if (!res.ok) throw new Error(`Failed to fetch battle_items.json: ${res.status}`);
-                return res;
-            })
+        const basePath = getBasePath();
+        const [pResp, iResp, bResp] = await Promise.all([
+            fetch(`${basePath}mons.json`),
+            fetch(`${basePath}items.json`),
+            fetch(`${basePath}battle_items.json`)
         ]);
-        pokemonData = await pokemonResponse.json();
-        itemData = await itemResponse.json();
-        battleItemData = await battleItemResponse.json();
-        console.log('JSON data loaded successfully:', { pokemonData, itemData, battleItemData });
-    } catch (error) {
-        console.error('Error loading JSON data:', error);
-        document.getElementById('gallery').innerHTML = '<p>Error: Could not load data. Please check JSON files.</p>';
+        if (!pResp.ok || !iResp.ok || !bResp.ok) throw new Error('Failed to fetch data files');
+        pokemonData = await pResp.json();
+        itemData = await iResp.json();
+        battleItemData = await bResp.json();
+    } catch (err) {
+        console.error('Error loading JSON data:', err);
+        const g = document.getElementById('gallery');
+        if (g) g.innerHTML = '<p>Error: Could not load data. Check JSON files and paths.</p>';
     }
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
     await loadData();
     loadTabs();
-    loadTierList(1);
+    loadTierList(currentDraft);
     loadGallery('pokemon');
     setupEventListeners();
+    // Accessibility: allow escape to close modals
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') {
+            hideMoveModal();
+            hideTierModal();
+        }
+    });
 });
+
+/* -------------------------
+   Rendering / UI functions
+   ------------------------- */
 
 function loadTabs() {
     const tabList = document.querySelector('.tab-list');
-    tabList.innerHTML = '<button class="tab active" data-tab-id="1" data-lang="nav_tierlist_simulator">Tierlist 1</button><button id="add-tab" data-lang="add_draft">+ Add Tierlist</button>';
-    document.querySelectorAll('.tab').forEach(tab => {
+    if (!tabList) return;
+    tabList.innerHTML = `
+        <button class="tab active" data-tab-id="1" data-lang="nav_tierlist_simulator">Tierlist 1</button>
+        <button id="add-tab" data-lang="add_draft">+ Add Tierlist</button>
+    `;
+    tabList.querySelectorAll('.tab').forEach(tab => {
         tab.addEventListener('click', () => switchTab(parseInt(tab.dataset.tabId)));
     });
     document.getElementById('add-tab').addEventListener('click', addTab);
 }
 
 function loadTierList(draftId) {
-    const basePath = window.location.pathname.includes('PokemonUniteDraft')
-        ? '/PokemonUniteDraft/'
-        : './';
+    const basePath = getBasePath();
+    const draft = drafts.find(d => d.id === draftId);
+    if (!draft) return;
+
     const container = document.createElement('div');
     container.className = `tierlist-container ${draftId === currentDraft ? 'active' : ''}`;
     container.id = `tierlist-${draftId}`;
+
     const controls = document.createElement('div');
     controls.className = 'tier-controls';
     controls.innerHTML = `
@@ -78,48 +94,59 @@ function loadTierList(draftId) {
     `;
     container.appendChild(controls);
 
-    const draft = drafts.find(d => d.id === draftId);
     draft.tiers.forEach((tier, index) => {
         const tierRow = document.createElement('div');
         tierRow.className = 'tier-row';
         tierRow.dataset.tierIndex = index;
         tierRow.innerHTML = `
             <div class="tier-header" style="background: ${tier.color}">${tier.name}</div>
-            <div class="tier-items"></div>
+            <div class="tier-items" data-tier-index="${index}"></div>
             <div class="tier-actions">
                 <button class="settings-tier" aria-label="Tier Settings" data-lang="edit_tier">
-                    <img src="../${basePath}assets/settings.svg" alt="Settings" style="width: 24px; height: 24px;">
+                    <img src="${basePath}assets/settings.svg" alt="Settings" style="width:24px;height:24px;">
                 </button>
             </div>
         `;
+        const itemsContainer = tierRow.querySelector('.tier-items');
+
+        // If tier empty, show a small placeholder to make it a valid drop target
+        if (tier.items.length === 0) {
+            // nothing to append but keep the container present
+        }
+
         tier.items.forEach(item => {
-            const tierItem = document.createElement('div');
-            tierItem.className = 'tier-item';
-            tierItem.dataset.name = item.name;
-            tierItem.dataset.category = item.category;
-            tierItem.draggable = true;
-            tierItem.innerHTML = `
-                <img src="${basePath}assets/${item.category}/${item.file}" alt="${item.name}">
-                ${item.category === 'pokemon' && item.moves ? `<div class="moves">${item.moves.join(', ')}</div>` : ''}
-            `;
-            tierRow.querySelector('.tier-items').appendChild(tierItem);
+            const tierItem = createTierItemElement(item, basePath);
+            itemsContainer.appendChild(tierItem);
         });
+
         container.appendChild(tierRow);
     });
 
     const wrapper = document.getElementById('tierlist-wrapper');
-    const existingContainer = document.getElementById(`tierlist-${draftId}`);
-    if (existingContainer) {
-        existingContainer.replaceWith(container);
-    } else {
-        wrapper.appendChild(container);
-    }
+    if (!wrapper) return;
+    const existing = document.getElementById(`tierlist-${draftId}`);
+    if (existing) existing.replaceWith(container); else wrapper.appendChild(container);
+
+    // After DOM injected, (re)attach settings listeners for this draft
     setupTierEventListeners(draftId);
 }
 
+function createTierItemElement(item, basePath) {
+    const tierItem = document.createElement('div');
+    tierItem.className = 'tier-item';
+    tierItem.dataset.name = item.name;
+    tierItem.dataset.category = item.category;
+    tierItem.draggable = true;
+    tierItem.innerHTML = `
+        <img src="${basePath}assets/${item.category}/${item.file}" alt="${item.name}">
+        ${item.category === 'pokemon' && item.moves ? `<div class="moves">${item.moves.join(', ')}</div>` : ''}
+    `;
+    return tierItem;
+}
+
 function switchTab(tabId) {
-    document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-    document.querySelectorAll('.tierlist-container').forEach(container => container.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tierlist-container').forEach(c => c.classList.remove('active'));
     const newTab = document.querySelector(`.tab[data-tab-id="${tabId}"]`);
     const newContainer = document.getElementById(`tierlist-${tabId}`);
     if (newTab && newContainer) {
@@ -128,9 +155,566 @@ function switchTab(tabId) {
         currentDraft = tabId;
         loadTierList(tabId);
     } else {
-        console.error(`Tab or container for draft ${tabId} not found`);
+        console.warn('Tab or container not found for', tabId);
     }
 }
+
+function loadGallery(category) {
+    currentCategory = category;
+    const basePath = getBasePath();
+    const gallery = document.getElementById('gallery');
+    if (!gallery) return;
+    gallery.innerHTML = '';
+
+    let data = [];
+    if (category === 'pokemon') data = pokemonData;
+    else if (category === 'items') data = itemData;
+    else if (category === 'battle_items') data = battleItemData;
+
+    data.forEach(item => {
+        const activeRole = document.querySelector('.filter-btn.active')?.dataset.role;
+        if (category === 'pokemon' && activeRole && activeRole !== 'unknown' && item.role !== activeRole) return;
+
+        const usageMap = category === 'pokemon' ? pokemonUsage : itemUsage;
+        const count = usageMap.get(item.name) || 0;
+        const maxUsage = category === 'pokemon' ? 4 : 1;
+        if (count >= maxUsage) return;
+
+        const img = document.createElement('img');
+        img.src = `${basePath}assets/${category}/${item.file}`;
+        img.alt = item.name;
+        img.dataset.name = item.name;
+        img.dataset.category = category;
+        img.draggable = true;
+        img.className = 'gallery-item';
+        gallery.appendChild(img);
+    });
+}
+
+/* -------------------------
+   Drag & Drop logic
+   ------------------------- */
+
+function setupEventListeners() {
+    // category tabs
+    document.querySelectorAll('.category-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            document.querySelector('.pokemon-filters').style.display =
+                tab.dataset.category === 'pokemon' ? 'flex' : 'none';
+            loadGallery(tab.dataset.category);
+        });
+    });
+
+    // filters
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            loadGallery('pokemon');
+        });
+    });
+
+    // tier buttons (delegated)
+    document.addEventListener('click', e => {
+        if (e.target.id === 'add-tier') addTier(currentDraft);
+        if (e.target.id === 'clear-draft') clearDraft(currentDraft);
+    });
+
+    // modal buttons (these elements exist in part 2 modal code - ensure present)
+    const moveSave = document.getElementById('move-save');
+    const moveCancel = document.getElementById('move-cancel');
+    if (moveSave) moveSave.addEventListener('click', onMoveSave);
+    if (moveCancel) moveCancel.addEventListener('click', hideMoveModal);
+
+    const tierSave = document.getElementById('tier-save');
+    const tierDelete = document.getElementById('tier-delete');
+    const tierCancel = document.getElementById('tier-cancel');
+    if (tierSave) tierSave.addEventListener('click', onTierSave);
+    if (tierDelete) tierDelete.addEventListener('click', onTierDelete);
+    if (tierCancel) tierCancel.addEventListener('click', hideTierModal);
+
+    // DRAG START - delegate
+    document.addEventListener('dragstart', e => {
+        const galleryImg = e.target.closest('.gallery img, .gallery-item');
+        const tierItem = e.target.closest('.tier-item');
+
+        if (galleryImg) {
+            // dragging from gallery
+            const img = galleryImg.tagName === 'IMG' ? galleryImg : galleryImg.querySelector('img');
+            const data = {
+                name: img.dataset.name || img.alt,
+                category: img.dataset.category || img.getAttribute('data-category') || currentCategory,
+                fromTier: null
+            };
+            e.dataTransfer.setData('text/plain', JSON.stringify(data));
+            e.dataTransfer.effectAllowed = 'copy';
+            document.body.classList.add('dragging');
+        } else if (tierItem) {
+            // dragging from a tier
+            const img = tierItem.querySelector('img');
+            const fromTier = parseInt(tierItem.closest('.tier-row').dataset.tierIndex);
+            const data = {
+                name: tierItem.dataset.name || img.alt,
+                category: tierItem.dataset.category || img.dataset.category,
+                fromTier: fromTier,
+                moves: (() => {
+                    const draft = drafts.find(d => d.id === currentDraft);
+                    const t = draft.tiers[fromTier];
+                    if (!t) return [];
+                    const it = t.items.find(i => i.name === (tierItem.dataset.name || img.alt));
+                    return it?.moves || [];
+                })()
+            };
+            e.dataTransfer.setData('text/plain', JSON.stringify(data));
+            e.dataTransfer.effectAllowed = 'move';
+            document.body.classList.add('dragging');
+        } else {
+            // not a draggable element
+        }
+    });
+
+    // DRAG OVER - visual preview and allow drop on tier-items and gallery
+    document.addEventListener('dragover', e => {
+        e.preventDefault();
+        const tier = e.target.closest('.tier-items');
+        const gallery = e.target.closest('#gallery');
+        // remove preview from others
+        document.querySelectorAll('.tier-items').forEach(t => {
+            if (t !== tier) t.classList.remove('drag-over');
+        });
+        if (tier) {
+            tier.classList.add('drag-over');
+            // show placeholder if empty or to indicate position
+            ensurePreviewPlaceholder(tier);
+        }
+        if (gallery) {
+            gallery.classList.add('gallery-drag-over');
+        } else {
+            document.querySelectorAll('#gallery').forEach(g => g.classList.remove('gallery-drag-over'));
+        }
+    });
+
+    document.addEventListener('dragleave', e => {
+        const tier = e.target.closest('.tier-items');
+        if (tier) {
+            // if leaving the whole tier-items area, remove preview
+            const related = e.relatedTarget;
+            // small tolerance: only remove if relatedTarget is not inside same tier
+            if (!related || !related.closest || !related.closest('.tier-items') || related.closest('.tier-items') !== tier) {
+                removePreviewPlaceholder(tier);
+                tier.classList.remove('drag-over');
+            }
+        }
+        const gallery = e.target.closest('#gallery');
+        if (gallery) gallery.classList.remove('gallery-drag-over');
+    });
+
+    // DROP
+    document.addEventListener('drop', e => {
+        e.preventDefault();
+        document.body.classList.remove('dragging');
+
+        // remove all previews
+        document.querySelectorAll('.tier-items').forEach(t => {
+            t.classList.remove('drag-over');
+            removePreviewPlaceholder(t);
+        });
+        document.querySelectorAll('#gallery').forEach(g => g.classList.remove('gallery-drag-over'));
+
+        let dataStr = null;
+        try {
+            dataStr = e.dataTransfer.getData('text/plain');
+        } catch (err) {
+            console.error('No dataTransfer data:', err);
+            return;
+        }
+        if (!dataStr) return;
+        let data;
+        try {
+            data = JSON.parse(dataStr);
+        } catch (err) {
+            console.error('Failed to parse drag data', err);
+            return;
+        }
+
+        const tierItems = e.target.closest('.tier-items');
+        const gallery = e.target.closest('#gallery');
+        const draft = drafts.find(d => d.id === currentDraft);
+        const usageMap = data.category === 'pokemon' ? pokemonUsage : itemUsage;
+        const maxUsage = data.category === 'pokemon' ? 4 : 1;
+
+        // DROP ON TIER
+        if (tierItems) {
+            const tierIndex = parseInt(tierItems.dataset.tierIndex);
+
+            // prevent duplicate
+            if (draft.tiers[tierIndex].items.some(i => i.name === data.name)) return;
+
+            // moving from another tier -> remove from origin tier but don't change usage counts
+            if (data.fromTier !== null && data.fromTier !== tierIndex) {
+                const origin = draft.tiers[data.fromTier];
+                origin.items = origin.items.filter(i => i.name !== data.name);
+                // find the full item data (file/moves) from stored lists or origin
+                // we'll try to find in origin removed item via prior cached moves, but simplest is:
+                // look up in pokemonData/itemData etc when re-adding below
+            }
+
+            // dragging from gallery (fromTier === null)
+            if (data.fromTier === null) {
+                const count = usageMap.get(data.name) || 0;
+                if (count >= maxUsage) return;
+                // when pokemon added from gallery, we must prompt moves selection BEFORE finalizing add
+                if (data.category === 'pokemon') {
+                    // set pending add and open modal; modal save will finalize addition
+                    pendingAdd = { name: data.name, category: data.category, tierIndex: tierIndex };
+                    showMoveModalForAdd(data.name, tierIndex);
+                    // do not add now
+                    return;
+                } else {
+                    // items: immediate add and increment usage
+                    usageMap.set(data.name, (usageMap.get(data.name) || 0) + 1);
+                    const src = data.category === 'pokemon' ? pokemonData : (data.category === 'items' ? itemData : battleItemData);
+                    const itemFile = src.find(i => i.name === data.name)?.file;
+                    if (!itemFile) return;
+                    draft.tiers[tierIndex].items.push({ name: data.name, category: data.category, file: itemFile });
+                    loadTierList(currentDraft);
+                    loadGallery(currentCategory);
+                    return;
+                }
+            } else {
+                // moving from a tier into this tier (data.fromTier !== null)
+                // we need to find the file/moves for the item: if it came from another tier, it should exist there before we removed it.
+                // We'll try to search in all tiers or fallback to data sources
+                let itemObj = null;
+                for (const t of draft.tiers) {
+                    const found = t.items.find(i => i.name === data.name);
+                    if (found) { itemObj = found; break; }
+                }
+                // if not found (because we removed it from origin above), fallback to source lists
+                if (!itemObj) {
+                    const src = data.category === 'pokemon' ? pokemonData : (data.category === 'items' ? itemData : battleItemData);
+                    const file = src.find(i => i.name === data.name)?.file;
+                    itemObj = { name: data.name, category: data.category, file: file, moves: data.moves || [] };
+                }
+                // push a shallow clone
+                draft.tiers[tierIndex].items.push(Object.assign({}, itemObj));
+                loadTierList(currentDraft);
+                loadGallery(currentCategory);
+                return;
+            }
+        }
+
+        // DROP ON GALLERY => interpret as "remove back to gallery" if from tier
+        if (gallery) {
+            if (data.fromTier !== null) {
+                const origin = draft.tiers[data.fromTier];
+                origin.items = origin.items.filter(i => i.name !== data.name);
+                const usageMapLocal = data.category === 'pokemon' ? pokemonUsage : itemUsage;
+                usageMapLocal.set(data.name, Math.max((usageMapLocal.get(data.name) || 1) - 1, 0));
+                loadTierList(currentDraft);
+                loadGallery(currentCategory);
+            }
+            return;
+        }
+
+        // DROP OUTSIDE any relevant container => removal if fromTier !== null
+        const droppedOutside =
+            !e.target.closest('.tierlist-container') &&
+            !e.target.closest('#gallery') &&
+            !e.target.closest('.pokemon-filters') &&
+            !e.target.closest('.tab-list');
+
+        if (droppedOutside && data.fromTier !== null) {
+            const origin = draft.tiers[data.fromTier];
+            origin.items = origin.items.filter(i => i.name !== data.name);
+            const usageMapLocal = data.category === 'pokemon' ? pokemonUsage : itemUsage;
+            usageMapLocal.set(data.name, Math.max((usageMapLocal.get(data.name) || 1) - 1, 0));
+            loadTierList(currentDraft);
+            loadGallery(currentCategory);
+            return;
+        }
+
+        // otherwise ignore
+    });
+}
+
+/* Preview placeholder helpers */
+function ensurePreviewPlaceholder(tierElement) {
+    if (!tierElement) return;
+    if (!tierElement.querySelector('.preview-placeholder')) {
+        const ph = document.createElement('div');
+        ph.className = 'preview-placeholder';
+        ph.style.width = '70px';
+        ph.style.height = '70px';
+        ph.style.border = '2px dashed rgba(255,255,255,0.2)';
+        ph.style.borderRadius = '8px';
+        ph.style.margin = '4px';
+        ph.style.boxSizing = 'border-box';
+        tierElement.appendChild(ph);
+    }
+}
+
+function removePreviewPlaceholder(tierElement) {
+    if (!tierElement) return;
+    const ph = tierElement.querySelector('.preview-placeholder');
+    if (ph) ph.remove();
+}
+
+/* -------------------------
+   Modals & tier controls (move selection + tier edit)
+   ------------------------- */
+
+// show move modal when user drops a pokemon from gallery into a tier
+function showMoveModalForAdd(pokemonName, tierIndex) {
+    const modal = document.getElementById('move-modal');
+    const movesContainer = document.getElementById('move-options');
+    if (!modal || !movesContainer) return;
+
+    movesContainer.innerHTML = '';
+    const p = pokemonData.find(pp => pp.name === pokemonName);
+    // if there's a "moves" array in mons.json, use it; otherwise fallback to two empty inputs
+    if (p && Array.isArray(p.moves) && p.moves.length > 0) {
+        p.moves.forEach((mv, idx) => {
+            // allow checking/choosing — using checkboxes so user chooses from available moves
+            const id = `move-${pokemonName}-${idx}`;
+            const wrapper = document.createElement('div');
+            wrapper.className = 'move-option';
+            wrapper.innerHTML = `<label><input type="checkbox" id="${id}" value="${mv}"> ${mv}</label>`;
+            movesContainer.appendChild(wrapper);
+        });
+    } else {
+        // fallback: 2 inputs
+        movesContainer.innerHTML = `
+            <label>Move 1: <input type="text" id="move-input-1" placeholder="Move 1"></label>
+            <label>Move 2: <input type="text" id="move-input-2" placeholder="Move 2"></label>
+        `;
+    }
+
+    modal.dataset.pokemon = pokemonName;
+    modal.dataset.tierIndex = tierIndex;
+    modal.style.display = 'flex';
+}
+
+// hide modal helpers
+function hideMoveModal() {
+    const modal = document.getElementById('move-modal');
+    if (modal) modal.style.display = 'none';
+    pendingAdd = null;
+}
+
+function hideTierModal() {
+    const modal = document.getElementById('tier-modal');
+    if (modal) modal.style.display = 'none';
+}
+
+/* Called when pressing Save in move modal */
+function onMoveSave() {
+    const modal = document.getElementById('move-modal');
+    if (!modal) return;
+    const pokemonName = modal.dataset.pokemon;
+    const tierIndex = parseInt(modal.dataset.tierIndex);
+
+    // gather moves
+    let moves = [];
+    const movesContainer = document.getElementById('move-options');
+    if (!movesContainer) movesContainer = null;
+    if (movesContainer) {
+        // check for checkboxes
+        const checked = Array.from(movesContainer.querySelectorAll('input[type=checkbox]:checked'))
+            .map(i => i.value);
+        if (checked.length > 0) moves = checked;
+        else {
+            // try text inputs fallback
+            const textVals = Array.from(movesContainer.querySelectorAll('input[type=text]'))
+                .map(i => i.value.trim())
+                .filter(v => v);
+            moves = textVals;
+        }
+    }
+
+    // finalize pending add
+    if (pendingAdd && pendingAdd.name === pokemonName && pendingAdd.tierIndex === tierIndex) {
+        const draft = drafts.find(d => d.id === currentDraft);
+        const usageCount = pokemonUsage.get(pokemonName) || 0;
+        if (usageCount >= 4) {
+            // can't add
+            pendingAdd = null;
+            hideMoveModal();
+            return;
+        }
+        pokemonUsage.set(pokemonName, usageCount + 1);
+        const file = pokemonData.find(p => p.name === pokemonName)?.file;
+        draft.tiers[tierIndex].items.push({ name: pokemonName, category: 'pokemon', file: file, moves: moves });
+        pendingAdd = null;
+        hideMoveModal();
+        loadTierList(currentDraft);
+        loadGallery(currentCategory);
+    } else {
+        // Possibly editing moves of an existing pokemon already in a tier (not from gallery)
+        // find the pokemon in tiers by name and current modal dataset (if any)
+        const draft = drafts.find(d => d.id === currentDraft);
+        for (const tier of draft.tiers) {
+            const it = tier.items.find(i => i.name === pokemonName && i.category === 'pokemon');
+            if (it) {
+                it.moves = moves;
+                break;
+            }
+        }
+        hideMoveModal();
+        loadTierList(currentDraft);
+    }
+}
+
+/* Tier modal open/save/delete handlers */
+
+// we attach settings buttons in loadTierList via setupTierEventListeners
+function setupTierEventListeners(draftId) {
+    const container = document.getElementById(`tierlist-${draftId}`);
+    if (!container) return;
+    container.querySelectorAll('.settings-tier').forEach(btn => {
+        btn.removeEventListener('click', onSettingsClick); // safe remove
+        btn.addEventListener('click', onSettingsClick);
+    });
+
+    function onSettingsClick(e) {
+        const tierRow = e.target.closest('.tier-row');
+        if (!tierRow) return;
+        const tierIndex = parseInt(tierRow.dataset.tierIndex);
+        openTierModal(draftId, tierIndex);
+    }
+}
+
+function openTierModal(draftId, tierIndex) {
+    const draft = drafts.find(d => d.id === draftId);
+    if (!draft) return;
+    const tier = draft.tiers[tierIndex];
+    const modal = document.getElementById('tier-modal');
+    if (!modal) return;
+
+    document.getElementById('tier-name').value = tier.name;
+    document.getElementById('tier-color').value = tier.color || '#ffffff';
+    modal.dataset.draftId = draftId;
+    modal.dataset.tierIndex = tierIndex;
+    modal.style.display = 'flex';
+}
+
+function onTierSave() {
+    const modal = document.getElementById('tier-modal');
+    if (!modal) return;
+    const draftId = parseInt(modal.dataset.draftId);
+    const tierIndex = parseInt(modal.dataset.tierIndex);
+    const draft = drafts.find(d => d.id === draftId);
+    if (!draft) return;
+    const newName = document.getElementById('tier-name').value.trim() || `Tier ${tierIndex + 1}`;
+    const newColor = document.getElementById('tier-color').value || draft.tiers[tierIndex].color;
+    draft.tiers[tierIndex].name = newName;
+    draft.tiers[tierIndex].color = newColor;
+    modal.style.display = 'none';
+    loadTierList(draftId);
+}
+
+function onTierDelete() {
+    const modal = document.getElementById('tier-modal');
+    if (!modal) return;
+    const draftId = parseInt(modal.dataset.draftId);
+    const tierIndex = parseInt(modal.dataset.tierIndex);
+    deleteTier(draftId, tierIndex);
+    modal.style.display = 'none';
+}
+
+/* -------------------------
+   Tier management helpers
+   ------------------------- */
+
+function addTier(draftId) {
+    const draft = drafts.find(d => d.id === draftId);
+    if (!draft) return;
+    draft.tiers.push({ name: `Tier ${draft.tiers.length + 1}`, color: '#95a5a6', items: [] });
+    loadTierList(draftId);
+}
+
+function deleteTier(draftId, tierIndex) {
+    const draft = drafts.find(d => d.id === draftId);
+    if (!draft) return;
+    const tier = draft.tiers[tierIndex];
+    if (!tier) return;
+    // decrement usages for items in this tier
+    tier.items.forEach(item => {
+        const map = item.category === 'pokemon' ? pokemonUsage : itemUsage;
+        map.set(item.name, Math.max((map.get(item.name) || 1) - 1, 0));
+    });
+    draft.tiers.splice(tierIndex, 1);
+    loadTierList(draftId);
+    loadGallery(currentCategory);
+}
+
+function clearDraft(draftId) {
+    const draft = drafts.find(d => d.id === draftId);
+    if (!draft) return;
+    draft.tiers.forEach(tier => {
+        tier.items.forEach(item => {
+            const map = item.category === 'pokemon' ? pokemonUsage : itemUsage;
+            map.set(item.name, Math.max((map.get(item.name) || 1) - 1, 0));
+        });
+        tier.items = [];
+    });
+    loadTierList(draftId);
+    loadGallery(currentCategory);
+}
+
+/* -------------------------
+   Move-edit (editing moves of an already-placed Pokemon)
+   ------------------------- */
+
+// If user double-clicks a tier-item pokemon, open its moves modal for editing
+document.addEventListener('dblclick', e => {
+    const tierItem = e.target.closest('.tier-item');
+    if (!tierItem) return;
+    const category = tierItem.dataset.category;
+    if (category !== 'pokemon') return;
+    // find which tier it belongs to
+    const tierRow = tierItem.closest('.tier-row');
+    const tierIndex = parseInt(tierRow.dataset.tierIndex);
+    const name = tierItem.dataset.name;
+    // populate modal with current moves
+    const modal = document.getElementById('move-modal');
+    const movesContainer = document.getElementById('move-options');
+    if (!modal || !movesContainer) return;
+    movesContainer.innerHTML = '';
+    // try to get available moves from mons.json
+    const pDef = pokemonData.find(p => p.name === name);
+    // if pokemon is already in tier, grab its moves to pre-check
+    const draft = drafts.find(d => d.id === currentDraft);
+    const placed = draft.tiers[tierIndex].items.find(i => i.name === name);
+    const currentMoves = placed?.moves || [];
+
+    if (pDef && Array.isArray(pDef.moves) && pDef.moves.length > 0) {
+        pDef.moves.forEach((mv, idx) => {
+            const id = `move-edit-${name}-${idx}`;
+            const checked = currentMoves.includes(mv) ? 'checked' : '';
+            const wrapper = document.createElement('div');
+            wrapper.className = 'move-option';
+            wrapper.innerHTML = `<label><input type="checkbox" id="${id}" value="${mv}" ${checked}> ${mv}</label>`;
+            movesContainer.appendChild(wrapper);
+        });
+    } else {
+        // fallback text inputs filled with current moves if any
+        movesContainer.innerHTML = `
+            <label>Move 1: <input type="text" id="move-input-1" value="${currentMoves[0] || ''}"></label>
+            <label>Move 2: <input type="text" id="move-input-2" value="${currentMoves[1] || ''}"></label>
+        `;
+    }
+
+    modal.dataset.pokemon = name;
+    modal.dataset.tierIndex = tierIndex;
+    modal.style.display = 'flex';
+});
+
+/* -------------------------
+   Utility: add tab function (for multiple drafts)  
+   ------------------------- */
 
 function addTab() {
     const newId = drafts.length + 1;
@@ -144,276 +728,12 @@ function addTab() {
             { name: 'D', color: '#9b59b6', items: [] }
         ]
     });
-    const tabList = document.querySelector('.tab-list');
-    const newTab = document.createElement('button');
-    newTab.className = 'tab';
-    newTab.dataset.tabId = newId;
-    newTab.dataset.lang = 'nav_tierlist_simulator';
-    newTab.textContent = `Tierlist ${newId}`;
-    tabList.insertBefore(newTab, document.getElementById('add-tab'));
-    newTab.addEventListener('click', () => switchTab(newId));
+    currentDraft = newId;
+    loadTabs();
     loadTierList(newId);
-    switchTab(newId);
-}
-
-function clearDraft(draftId) {
-    const draft = drafts.find(d => d.id === draftId);
-    draft.tiers.forEach(tier => {
-        tier.items.forEach(item => {
-            const usageMap = item.category === 'pokemon' ? pokemonUsage : itemUsage;
-            usageMap.set(item.name, 0);
-        });
-        tier.items = [];
-    });
-    draft.tiers = [
-        { name: 'S', color: '#e74c3c', items: [] },
-        { name: 'A', color: '#3498db', items: [] },
-        { name: 'B', color: '#2ecc71', items: [] },
-        { name: 'C', color: '#f1c40f', items: [] },
-        { name: 'D', color: '#9b59b6', items: [] }
-    ];
-    loadTierList(draftId);
     loadGallery(currentCategory);
 }
 
-function loadGallery(category) {
-    currentCategory = category;
-    const basePath = window.location.pathname.includes('PokemonUniteDraft')
-        ? '/PokemonUniteDraft/'
-        : './';
-    const gallery = document.getElementById('gallery');
-    gallery.innerHTML = '';
-    let data = [];
-    if (category === 'pokemon') data = pokemonData;
-    else if (category === 'items') data = itemData;
-    else if (category === 'battle_items') data = battleItemData;
-
-    data.forEach(item => {
-        if (category === 'pokemon' && document.querySelector('.filter-btn.active')?.dataset.role !== 'unknown' && item.role !== document.querySelector('.filter-btn.active')?.dataset.role) return;
-        const count = category === 'pokemon' ? pokemonUsage.get(item.name) || 0 : itemUsage.get(item.name) || 0;
-        if (category === 'pokemon' && count >= 4) return;
-        if (category !== 'pokemon' && count >= 1) return;
-        const img = document.createElement('img');
-        img.src = `${basePath}assets/${category}/${item.file}`;
-        img.alt = item.name;
-        img.dataset.name = item.name;
-        img.dataset.category = category;
-        img.className = count >= (category === 'pokemon' ? 4 : 1) ? 'used' : '';
-        img.draggable = true;
-        gallery.appendChild(img);
-    });
-}
-
-function setupEventListeners() {
-    document.querySelectorAll('.category-tab').forEach(tab => {
-        tab.addEventListener('click', () => {
-            document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-            document.querySelector('.pokemon-filters').style.display = tab.dataset.category === 'pokemon' ? 'flex' : 'none';
-            loadGallery(tab.dataset.category);
-        });
-    });
-
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            loadGallery('pokemon');
-        });
-    });
-
-    document.addEventListener('click', (e) => {
-        if (e.target.id === 'add-tier') {
-            addTier(currentDraft);
-        } else if (e.target.id === 'clear-draft') {
-            clearDraft(currentDraft);
-        }
-    });
-
-    document.getElementById('save-moves').addEventListener('click', saveMoves);
-    document.getElementById('close-modal').addEventListener('click', () => document.getElementById('move-modal').style.display = 'none');
-    document.getElementById('save-tier').addEventListener('click', saveTier);
-    document.getElementById('delete-tier').addEventListener('click', deleteTier);
-    document.getElementById('close-tier-modal').addEventListener('click', () => document.getElementById('tier-modal').style.display = 'none');
-
-    document.addEventListener('dragstart', e => {
-        if (e.target.tagName === 'IMG' || e.target.classList.contains('tier-item')) {
-            const target = e.target.tagName === 'IMG' ? e.target : e.target.querySelector('img');
-            e.dataTransfer.setData('text/plain', JSON.stringify({
-                name: target.dataset.name || target.alt,
-                category: target.dataset.category,
-                fromTier: e.target.classList.contains('tier-item') ? parseInt(e.target.closest('.tier-row').dataset.tierIndex) : null,
-                moves: e.target.classList.contains('tier-item') && target.dataset.category === 'pokemon' ? 
-                    (drafts.find(d => d.id === currentDraft).tiers[parseInt(e.target.closest('.tier-row').dataset.tierIndex)]
-                        .items.find(item => item.name === (target.dataset.name || target.alt))?.moves || []) 
-                    : null
-            }));
-        }
-    });
-
-    document.addEventListener('dragover', e => {
-        e.preventDefault();
-        const tierItems = e.target.closest('.tier-items');
-        if (tierItems) {
-            tierItems.classList.add('drag-over');
-        }
-    });
-
-    document.addEventListener('dragleave', e => {
-        const tierItems = e.target.closest('.tier-items');
-        if (tierItems) {
-            tierItems.classList.remove('drag-over');
-        }
-    });
-
-    document.querySelectorAll('.tier-items').forEach(tier => {
-        tier.addEventListener('dragover', e => e.preventDefault());
-        tier.addEventListener('drop', e => e.preventDefault());
-    });
-
-    document.addEventListener('drop', e => {
-        e.preventDefault();
-
-        const tierItems = e.target.closest('.tier-items');
-        const data = JSON.parse(e.dataTransfer.getData('text/plain'));
-        const draft = drafts.find(d => d.id === currentDraft);
-
-        // 🔸 Si l’item est lâché sur un tier : on le déplace ou l’ajoute
-        if (tierItems) {
-            tierItems.classList.remove('drag-over');
-            const tierIndex = parseInt(tierItems.closest('.tier-row').dataset.tierIndex);
-            const usageMap = data.category === 'pokemon' ? pokemonUsage : itemUsage;
-            const maxUsage = data.category === 'pokemon' ? 4 : 1;
-            const count = usageMap.get(data.name) || 0;
-
-            // Empêcher les doublons
-            if (draft.tiers[tierIndex].items.some(i => i.name === data.name)) return;
-
-            // Supprimer de l’ancien tier si besoin
-            if (data.fromTier !== null) {
-                draft.tiers[data.fromTier].items = draft.tiers[data.fromTier].items.filter(i => i.name !== data.name);
-            }
-
-            // Vérifier la limite d’utilisation
-            if (data.fromTier === null && count >= maxUsage) return;
-
-            // Récupérer l’item
-            const itemDataSource = data.category === 'pokemon' ? pokemonData : (data.category === 'items' ? itemData : battleItemData);
-            const itemFile = itemDataSource.find(i => i.name === data.name)?.file;
-            if (!itemFile) return;
-
-            const item = {
-                name: data.name,
-                category: data.category,
-                file: itemFile,
-                moves: data.moves || []
-            };
-
-            // Ajouter dans le nouveau tier
-            draft.tiers[tierIndex].items.push(item);
-
-            // Mettre à jour le compteur d’utilisation
-            if (data.fromTier === null) usageMap.set(data.name, count + 1);
-
-            loadTierList(currentDraft);
-            loadGallery(currentCategory);
-            return;
-        }
-
-        // 🔹 Si l’item est lâché *en dehors* des tiers et de la galerie → suppression
-        const isOutsideAll =
-            !e.target.closest('.tierlist-container') &&
-            !e.target.closest('#gallery') &&
-            !e.target.closest('.pokemon-filters');
-
-        if (isOutsideAll && data.fromTier !== null) {
-            const usageMap = data.category === 'pokemon' ? pokemonUsage : itemUsage;
-            const tier = draft.tiers[data.fromTier];
-
-            // Retirer du tier
-            tier.items = tier.items.filter(i => i.name !== data.name);
-
-            // Décrémenter le compteur
-            const newCount = Math.max((usageMap.get(data.name) || 1) - 1, 0);
-            usageMap.set(data.name, newCount);
-
-            console.log(`🗑️ ${data.name} retiré du tier ${data.fromTier}, nouveau count: ${newCount}`);
-
-            loadTierList(currentDraft);
-            loadGallery(currentCategory);
-        }
-    });
-}
-
-function setupTierEventListeners(draftId) {
-    document.querySelectorAll(`#tierlist-${draftId} .settings-tier`).forEach(btn => {
-        btn.addEventListener('click', () => {
-            console.log('Settings button clicked for draft:', draftId);
-            const tierIndex = parseInt(btn.closest('.tier-row').dataset.tierIndex);
-            const draft = drafts.find(d => d.id === draftId);
-            const tier = draft.tiers[tierIndex];
-            document.getElementById('tier-name').value = tier.name;
-            document.getElementById('tier-color').value = tier.color;
-            document.getElementById('tier-modal').dataset.tierIndex = tierIndex;
-            document.getElementById('tier-modal').dataset.draftId = draftId;
-            document.getElementById('tier-modal').style.display = 'flex';
-        });
-    });
-}
-
-function addTier(draftId) {
-    const draft = drafts.find(d => d.id === draftId);
-    draft.tiers.push({ name: `Tier ${draft.tiers.length + 1}`, color: '#e74c3c', items: [] });
-    loadTierList(draftId);
-}
-
-function showMoveModal(name, category, tierIndex) {
-    document.getElementById('modal-pokemon-name').textContent = name;
-    document.getElementById('move-modal').dataset.tierIndex = tierIndex;
-    document.getElementById('move-modal').dataset.name = name;
-    document.getElementById('move-modal').dataset.category = category;
-    document.getElementById('move-modal').style.display = 'flex';
-}
-
-function saveMoves() {
-    const tierIndex = parseInt(document.getElementById('move-modal').dataset.tierIndex);
-    const name = document.getElementById('move-modal').dataset.name;
-    const category = document.getElementById('move-modal').dataset.category;
-    const move1 = document.getElementById('move1').value;
-    const move2 = document.getElementById('move2').value;
-    const draft = drafts.find(d => d.id === currentDraft);
-    draft.tiers[tierIndex].items.push({
-        name,
-        category,
-        file: pokemonData.find(p => p.name === name).file,
-        moves: [move1, move2].filter(move => move.trim() !== '')
-    });
-    pokemonUsage.set(name, (pokemonUsage.get(name) || 0) + 1);
-    loadTierList(currentDraft);
-    loadGallery(currentCategory);
-    document.getElementById('move-modal').style.display = 'none';
-}
-
-function saveTier() {
-    const tierIndex = parseInt(document.getElementById('tier-modal').dataset.tierIndex);
-    const draftId = parseInt(document.getElementById('tier-modal').dataset.draftId);
-    const draft = drafts.find(d => d.id === draftId);
-    draft.tiers[tierIndex].name = document.getElementById('tier-name').value;
-    draft.tiers[tierIndex].color = document.getElementById('tier-color').value;
-    loadTierList(draftId);
-    document.getElementById('tier-modal').style.display = 'none';
-}
-
-function deleteTier() {
-    const tierIndex = parseInt(document.getElementById('tier-modal').dataset.tierIndex);
-    const draftId = parseInt(document.getElementById('tier-modal').dataset.draftId);
-    const draft = drafts.find(d => d.id === draftId);
-    draft.tiers[tierIndex].items.forEach(item => {
-        const usageMap = item.category === 'pokemon' ? pokemonUsage : itemUsage;
-        usageMap.set(item.name, (usageMap.get(item.name) || 0) - 1);
-    });
-    draft.tiers.splice(tierIndex, 1);
-    loadTierList(draftId);
-    loadGallery(currentCategory);
-    document.getElementById('tier-modal').style.display = 'none';
-}
+/* -------------------------
+   End of script
+   ------------------------- */

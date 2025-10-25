@@ -43,32 +43,28 @@
     <div class="gallery" id="gallery"></div>
   </div>
 
+  <!-- Modals -->
   <div id="move-modal" class="modal">
     <div class="modal-content">
-      <h2>Select Moves for <span id="modal-pokemon-name"></span></h2>
-      <label>Move 1: <input type="text" id="move1" placeholder="Move 1"></label>
-      <label>Move 2: <input type="text" id="move2" placeholder="Move 2"></label>
-      <button id="save-moves">Save</button>
-      <button id="close-modal">Cancel</button>
+      <h3>Select Moves</h3>
+      <div id="move-options"></div>
+      <div class="modal-actions">
+        <button id="move-save">Save</button>
+        <button id="move-cancel">Cancel</button>
+      </div>
     </div>
   </div>
 
   <div id="tier-modal" class="modal">
     <div class="modal-content">
-      <h2>Edit Tier</h2>
-      <label>Tier Name: <input type="text" id="tier-name"></label>
-      <label>Tier Color:
-        <select id="tier-color">
-          <option value="#e74c3c">Red</option>
-          <option value="#3498db">Blue</option>
-          <option value="#2ecc71">Green</option>
-          <option value="#f1c40f">Yellow</option>
-          <option value="#9b59b6">Purple</option>
-        </select>
-      </label>
-      <button id="delete-tier">Delete</button>
-      <button id="save-tier">Save</button>
-      <button id="close-tier-modal">Cancel</button>
+      <h3>Edit Tier</h3>
+      <label>Name:</label><input id="tier-name" type="text">
+      <label>Color:</label><input id="tier-color" type="color">
+      <div class="modal-actions">
+        <button id="tier-save">Save</button>
+        <button id="tier-delete">Delete Tier</button>
+        <button id="tier-cancel">Cancel</button>
+      </div>
     </div>
   </div>
 
