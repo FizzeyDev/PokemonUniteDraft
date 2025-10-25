@@ -20,9 +20,9 @@ let battleItemData = [];
 async function loadData() {
     try {
         const [pokemonResponse, itemResponse, battleItemResponse] = await Promise.all([
-            fetch('../mons.json'),
-            fetch('../items.json'),
-            fetch('../battle_items.json')
+            fetch('/mons.json'),
+            fetch('/items.json'),
+            fetch('/battle_items.json')
         ]);
         pokemonData = await pokemonResponse.json();
         itemData = await itemResponse.json();
