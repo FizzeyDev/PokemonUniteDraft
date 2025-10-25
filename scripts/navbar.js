@@ -39,7 +39,7 @@ function initNavbar() {
 }
 
 function loadLang(lang) {
-  fetch(`/lang/${lang}.json`)
+  fetch(`./../lang/${lang}.json`)
     .then(res => {
       if (!res.ok) throw new Error(`Lang file not found: ${lang}`);
       return res.json();
