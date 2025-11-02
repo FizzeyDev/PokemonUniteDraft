@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pokémon Unite - Map Timer</title>
+  <link rel="stylesheet" href="./css/map_timer.css">
+  <link rel="stylesheet" href="./css/navbar.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="navbar-container"></div>
+
+  <h1>Pokémon Unite - Map Timer</h1>
+
+  <div class="timer-section">
+    <div class="middle-bubble">
+      <div class="timer-top">
+        <button id="play-btn">▶️</button>
+      </div>
+
+      <div id="timer-display">
+        <input type="number" id="minutes" min="0" max="10" value="10"> :
+        <input type="number" id="seconds" min="0" max="59" value="00">
+      </div>
+
+      <input type="range" id="time-slider" min="0" max="600" value="600" class="slider">
+    </div>
+  </div>
+
+  <div class="map-container">
+    <img src="assets/maps/map.webp" alt="Pokémon Unite Map">
+    <div id="spawns-container"></div>
+    <div id="towers-container"></div>
+  </div>
+
+  <!-- Tooltip Pokémon -->
+  <div id="pokemon-tooltip" class="pokemon-tooltip">
+    <div class="gif-container">
+      <img id="tooltip-gif" src="" alt="GIF">
+    </div>
+    <div class="separator"></div>
+    <div class="info-content">
+      <h3 id="tooltip-name"></h3>
+      <div id="tooltip-text">
+        <p>Loading...</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="./scripts/map_timer.js"></script>
+  <script src="./scripts/navbar.js"></script>
+</body>
+</html>

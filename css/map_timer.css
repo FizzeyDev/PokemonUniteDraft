@@ -1,0 +1,271 @@
+body {
+  font-family: 'Roboto', sans-serif;
+  background: #1c2526;
+  color: #d9e6e8;
+  max-width: 1400px;
+  margin: auto;
+  padding: 2rem;
+  margin-left: 460px;
+}
+
+h1 {
+  text-align: center;
+  color: white;
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
+}
+
+.timer-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.middle-bubble {
+  background: #2a3435;
+  border: 2px solid #000;
+  border-radius: 12px;
+  padding: 20px 25px;
+  text-align: center;
+  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+  color: #fff;
+  width: 100%;
+  max-width: 2000px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.timer-top {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+#play-btn {
+  padding: 8px 15px;
+  border-radius: 8px;
+  border: 2px solid #000;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.2s ease-in-out;
+  background: #1c2526;
+  color: #fff;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+#play-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+  background: #4a90e2;
+}
+
+#timer-display {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #f1c40f;
+  text-shadow: 0 0 10px rgba(241,196,15,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+#timer-display input {
+  width: 70px;
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #f1c40f;
+  background: transparent;
+  border: none;
+  outline: none;
+  border-bottom: 2px solid rgba(241,196,15,0.5);
+  transition: border 0.2s;
+}
+
+#timer-display input:focus {
+  border-color: #f1c40f;
+}
+
+#time-slider {
+  width: 100%;
+  direction: rtl;
+  -webkit-appearance: none;
+  background: transparent;
+}
+
+#time-slider::-webkit-slider-runnable-track {
+  height: 8px;
+  background: linear-gradient(to right, #4a90e2, #f1c40f);
+  border-radius: 4px;
+}
+
+#time-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #000;
+  cursor: pointer;
+  margin-top: -6px;
+  transition: transform 0.2s;
+}
+
+#time-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.map-container {
+  display: flex;
+  justify-content: center;
+  position: relative; /* nécessaire pour les spawns absolus */
+}
+
+.map-container img {
+  max-width: 2000px;
+  border-radius: 12px;
+  box-shadow: 0 0 25px rgba(0,0,0,0.4);
+  display: block; /* évite les décalages liés aux inline */
+}
+
+#spawns-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* pour que la map reste cliquable si besoin */
+}
+
+.spawn {
+  position: absolute;
+  width: 90px;   /* largeur de l'image de spawn */
+  height: 90px;  /* hauteur de l'image de spawn */
+  cursor: pointer;
+  pointer-events: auto;
+  transition: transform 0.3s;
+  transform: translate(-50%, -50%);
+}
+
+.spawn:hover {
+  transform: translate(-50%, -50%) scale(1.2);
+}
+
+#timer-display input::-webkit-outer-spin-button,
+#timer-display input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+#timer-display input[type=number] {
+  -moz-appearance: textfield; /* Firefox */
+}
+
+#towers-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.tower {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: transform 0.3s, opacity 0.3s;
+  transform: translate(-50%, -50%);
+}
+
+.tower:hover {
+  transform: translate(-50%, -50%) scale(1.2);
+}
+
+.tower.destroyed {
+  opacity: 0.8;
+}
+
+.tower.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* === TOOLTIP INFO POKÉMON === */
+.pokemon-tooltip {
+  position: absolute;
+  background: rgba(30, 35, 40, 0.95);
+  border: 2px solid #4a90e2;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+  z-index: 1000;
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  max-width: 400px;
+  font-family: 'Roboto', sans-serif;
+}
+
+.pokemon-tooltip.show {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.pokemon-tooltip .gif-container {
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 10px;
+}
+
+.pokemon-tooltip .gif-container img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.pokemon-tooltip .separator {
+  width: 2px;
+  background: #4a90e2;
+  box-shadow: 0 0 8px rgba(74, 144, 226, 0.6);
+}
+
+.pokemon-tooltip .info-content {
+  padding: 16px;
+  color: #e0e0e0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+  min-width: 200px;
+}
+
+.pokemon-tooltip .info-content h3 {
+  margin: 0;
+  font-size: 1.4rem;
+  color: #f1c40f;
+  text-shadow: 0 0 5px rgba(241, 196, 15, 0.4);
+}
+
+.pokemon-tooltip .info-content p {
+  margin: 4px 0;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: #ccc;
+}

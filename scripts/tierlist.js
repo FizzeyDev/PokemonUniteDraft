@@ -67,15 +67,52 @@ document.addEventListener('DOMContentLoaded', async () => {
 function loadTabs() {
     const tabList = document.querySelector('.tab-list');
     if (!tabList) return;
-    tabList.innerHTML = `
-        <button class="tab active" data-tab-id="1" data-lang="nav_tierlist_simulator">Tierlist 1</button>
-        <button id="add-tab" data-lang="add_draft">+ Add Tierlist</button>
-    `;
-    tabList.querySelectorAll('.tab').forEach(tab => {
-        tab.addEventListener('click', () => switchTab(parseInt(tab.dataset.tabId)));
+
+    // Clear existing content
+    tabList.innerHTML = '';
+
+    // Create a button for each draft
+    drafts.forEach(d => {
+        const btn = document.createElement('button');
+        btn.className = `tab ${d.id === currentDraft ? 'active' : ''}`;
+        btn.dataset.tabId = d.id;
+        btn.textContent = `Tierlist ${d.id}`;
+        btn.setAttribute('data-lang', 'nav_tierlist_simulator');
+        btn.addEventListener('click', () => switchTab(Number(btn.dataset.tabId)));
+        tabList.appendChild(btn);
     });
-    document.getElementById('add-tab').addEventListener('click', addTab);
+
+    // Add the "Add tab" button
+    const addBtn = document.createElement('button');
+    addBtn.id = 'add-tab';
+    addBtn.setAttribute('data-lang', 'add_draft');
+    addBtn.textContent = '+ Add Tierlist';
+    addBtn.addEventListener('click', addTab);
+    tabList.appendChild(addBtn);
 }
+
+function addTab() {
+    // compute a new unique id (max existing id + 1) to avoid collisions if drafts were deleted
+    const maxId = drafts.reduce((m, d) => Math.max(m, d.id), 0);
+    const newId = maxId + 1;
+
+    drafts.push({
+        id: newId,
+        tiers: [
+            { name: 'S', color: '#e74c3c', items: [] },
+            { name: 'A', color: '#3498db', items: [] },
+            { name: 'B', color: '#2ecc71', items: [] },
+            { name: 'C', color: '#f1c40f', items: [] },
+            { name: 'D', color: '#9b59b6', items: [] }
+        ]
+    });
+
+    currentDraft = newId;
+    loadTabs();                // re-render tab list (will highlight the new tab)
+    loadTierList(newId);       // create/render the new tierlist container
+    loadGallery(currentCategory);
+}
+
 
 function loadTierList(draftId) {
     const basePath = getBasePath();
@@ -717,7 +754,10 @@ document.addEventListener('dblclick', e => {
    ------------------------- */
 
 function addTab() {
-    const newId = drafts.length + 1;
+    // compute a new unique id (max existing id + 1) to avoid collisions if drafts were deleted
+    const maxId = drafts.reduce((m, d) => Math.max(m, d.id), 0);
+    const newId = maxId + 1;
+
     drafts.push({
         id: newId,
         tiers: [
@@ -728,9 +768,10 @@ function addTab() {
             { name: 'D', color: '#9b59b6', items: [] }
         ]
     });
+
     currentDraft = newId;
-    loadTabs();
-    loadTierList(newId);
+    loadTabs();                // re-render tab list (will highlight the new tab)
+    loadTierList(newId);       // create/render the new tierlist container
     loadGallery(currentCategory);
 }
 
