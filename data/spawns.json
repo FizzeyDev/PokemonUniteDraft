@@ -58,7 +58,7 @@
       "breakid": 5,
       "requiresTowerBreak": 3,
       "name": "Orange Second Top Pad",
-      "info": "<p>Second pad. Need <strong>100 Points</strong> to destroy.</p><p>When break, some pokemons dispawn and some other spawn.</p>",
+      "info": "<p>Second pad. Need <strong>90 Points</strong> to destroy.</p><p>When break, some pokemons dispawn and some other spawn.</p>",
       "mobsLinked": ["Altaria", "Swablu"]
     },
     {
@@ -84,7 +84,7 @@
       "breakid": 7,
       "requiresTowerBreak": 4,
       "name": "Purple Second Top Pad",
-      "info": "<p>First pad. Need <strong>100 Points</strong> to destroy.</p><p>When break, some pokemons dispawn and some other spawn.</p>",
+      "info": "<p>First pad. Need <strong>90 Points</strong> to destroy.</p><p>When break, some pokemons dispawn and some other spawn.</p>",
       "mobsLinked": ["Altaria", "Swablu"]
     },
     {
@@ -608,7 +608,7 @@
       "gif": "assets/maps/gifs/regidrago.gif",
       "spawns": [
         {
-          "time": 480,
+          "time": 0,
           "time_dispawn": 150,
           "time_before_respawn": 120,
           "img": "assets/maps/spawn/regidrago.png",
@@ -616,7 +616,7 @@
           "yPercent": 52,
           "size": 80,
           "delete": false,
-          "info": "<p>Spawns in the <strong>middle of the map at 8:00</strong>. When killed, <strong>respawns after 2:00</strong>.<br>The team that defeats <strong>Regidrago</strong> gains <strong>experience for all teammates</strong>.<br>The player who lands the killing blow receives a <strong>scoring-speed buff</strong> and <strong>20 points</strong>.</p>"
+          "info": "<p>Spawns in the <strong>middle of the map at 8:00</strong>. When killed, <strong>Altaria spawn instead 1:30 minute after</strong>.<br>The team that defeats <strong>Regidrago</strong> gains <strong>experience for all teammates</strong>.<br>The player who lands the killing blow receives a <strong>scoring-speed buff</strong> and <strong>20 points</strong>.</p>"
         }
       ],
       "killed": false
@@ -1152,15 +1152,20 @@
       "delete": true,
       "spawnInfos": {
         "0": [
-          "Fill for Base Bees"
+          "<p>Start spawning at <strong>8:50</strong>.</p><p>After we kill Altaria and all Swablu, they will spawn depending of the current state of the tower in a lane. When both is open, they spaw every 1:30 after their spawn, and can't spawn if past Altaria are still there.</p><p>Exact timing for both T1 alive: <strong>8:50/7:20/5:50/4:20/2:50/1:20</strong></p>"
         ],
         "1": [
-          "Fill for Bees when 1 tower destroyed"
+          "<p>Start spawning when one first tower is destroyed.</p><p>After we kill Altaria and all Swablu, they will spawn depending of the current state of the tower in a lane. When both is open, they spaw every 1:30 after their spawn, and can't spawn if past Altaria are still there.</p><p>Exact timing for one T1 destroyed: <strong>7:45/6:15/4:45/3:15/1:45/0:15</strong></p>"
         ],
         "2": [
-          "Fill for Bees when both T1 are destroyed"
+          "<p>Start spawning when both first tower are destroyed.</p><p>After we kill Altaria and all Swablu, they will spawn depending of the current state of the tower in a lane. When both is open, they spaw every 1:30 after their spawn, and can't spawn if past Altaria are still there.</p><p>Exact timing for both T1 destroyed: <strong>7:30/6:00/4:30/3:00/1:30</strong></p>"
         ]
-      }
+      },
+      "spawns": [
+        {
+          "info": "<p>Starts spawning <strong>mid 1:30 after Regidrago is killed</strong>. When defeated, <strong>Altaria or Regidrago respawn after 1:30</strong>, it's <strong>random</strong>. <strong>Can't spawn / dispawn at 2:30</strong>.</p>"
+        }
+      ]
     }
   ]
 }

@@ -1,414 +1,470 @@
-/* tierlist.css */
+/* --- GLOBAL --- */
 body {
-    font-family: 'Roboto', sans-serif;
-    background: #1c2526;
-    color: #d9e6e8;
-    max-width: 1400px;
-    margin: auto;
-    padding: 2rem;
-    margin-left: 270px; 
+  font-family: 'Roboto', sans-serif;
+  background: #1c2526;
+  color: #d9e6e8;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
 }
 
-@media (max-width: 768px) {
-    body {
-        margin-left: 0;
-    }
+h1 {
+  text-align: center;
+  color: #fff;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
+/* --- Onglets --- */
 .tabs {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
 }
 
 .tab-list {
-    display: flex;
-    gap: 12px;
-    background: #2a3435;
-    padding: 10px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  display: flex;
+  gap: 12px;
+  background: #2a3435;
+  padding: 10px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
-.tab {
-    padding: 12px 24px;
-    background: #3b4a4c;
-    border: none;
-    border-radius: 8px;
-    color: #fff;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
+.tab,
+#add-tab {
+  padding: 12px 24px;
+  background: rgba(255,255,255,0.05);
+  border: 2px solid #000;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.25s ease-in-out;
 }
 
 .tab.active {
-    background: #4a90e2;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(74, 144, 226, 0.5);
+  background: rgba(74,144,226,0.25);
+  border-color: #4a90e2;
+  box-shadow: 0 0 10px rgba(74,144,226,0.4);
 }
 
-.tab:hover {
-    background: #5aa0f2;
-}
-
-#add-tab {
-    background: #2ecc71;
-    border-radius: 8px;
-    font-weight: 500;
-}
-
+.tab:hover,
 #add-tab:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.4);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.35);
 }
 
+/* --- Conteneur principal --- */
 .tierlist-container {
-    display: none;
-    background: #2a3435;
-    border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  display: none;
+  background: #2a3435;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
 .tierlist-container.active {
-    display: block;
+  display: block;
 }
 
+/* --- Lignes de tier --- */
 .tier-row {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1rem;
-    background: #3b4a4c;
-    border-radius: 10px;
-    padding: 10px;
-    transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  background: rgba(255,255,255,0.05);
+  border: 2px solid #000;
+  border-radius: 10px;
+  padding: 10px;
+  transition: all 0.25s ease;
 }
 
 .tier-row:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(0,0,0,0.4);
 }
 
+/* --- En-tête du tier (S, A, B...) --- */
 .tier-header {
-    width: 120px;
-    text-align: center;
-    font-weight: 700;
-    font-size: 1.3rem;
-    padding: 12px;
-    border-radius: 8px;
-    color: #fff;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  width: 120px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.3rem;
+  padding: 12px;
+  border-radius: 8px;
+  color: #fff;
+  border: 2px solid #000;
+  background: #4a90e2;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
+/* --- Zone des Pokémon --- */
 .tier-items {
-    min-height: 90px;
-    padding: 8px;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: flex-start;
-    border: 2px solid transparent;
-    border-radius: 8px;
-    transition: border-color 0.2s ease;
-    flex: 1;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    padding: 10px;
+  flex: 1;
+  min-height: 90px;
+  padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-start;
+  border-radius: 8px;
+  background: #1c2526;
 }
 
+/* --- Pokémon --- */
 .tier-item {
-    width: 70px;
-    height: 70px;
-    background: #1c2526;
-    border: 2px solid #4a90e2;
-    border-radius: 8px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    cursor: move;
-    transition: transform 0.2s ease;
+  width: 80px;
+  height: 80px;
+  background: #1c2526;
+  border: 2px double #000000;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: move;
+  transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
 .tier-item:hover {
-    transform: scale(1.05);
+  transform: scale(1.07);
+  border-color: #f1c40f;
 }
 
 .tier-item img {
-    width: 50px;
-    height: 50px;
-    object-fit: contain;
-    border-radius: 6px;
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  border-radius: 6px;
 }
 
 .tier-item .moves {
-    font-size: 0.7rem;
-    color: #d9e6e8;
-    text-align: center;
-    position: absolute;
-    bottom: 2px;
-    width: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    padding: 2px;
+  font-size: 0.75rem;
+  color: #d9e6e8;
+  position: absolute;
+  bottom: 2px;
+  width: 100%;
+  text-align: center;
+  background: rgba(0,0,0,0.5);
+  padding: 2px;
+  border-radius: 0 0 6px 6px;
 }
 
+/* --- Contrôles --- */
 .tier-controls {
-    text-align: center;
-    margin-bottom: 1.5rem;
-    display: flex;
-    justify-content: center;
-    gap: 10px;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
 }
 
 .tier-controls button {
-    padding: 12px 24px;
-    background: #2ecc71;
-    border: none;
-    border-radius: 8px;
-    color: #fff;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
+  padding: 10px 20px;
+  background: #1c2526;
+  border: 2px solid #000;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-transform: uppercase;
 }
 
 .tier-controls button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.4);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.4);
 }
 
 .tier-controls button.clear-draft {
-    background: #e74c3c;
+  background: rgba(231,76,60,0.2);
+  border-color: #e74c3c;
 }
 
 .tier-controls button.clear-draft:hover {
-    background: #c0392b;
+  background: rgba(231,76,60,0.4);
 }
 
-.tier-actions {
-    display: flex;
-    align-items: center;
-}
-
-.tier-actions button.settings-tier {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.tier-actions button.settings-tier svg {
-    width: 24px;
-    height: 24px;
-    fill: #d9e6e8;
-    transition: fill 0.3s ease;
-}
-
-.tier-actions button.settings-tier:hover svg {
-    fill: #4a90e2;
-}
-
-.settings-tier {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.settings-tier img {
-    width: 24px;
-    height: 24px;
-    transition: opacity 0.3s;
-}
-
-.settings-tier:hover img {
-    opacity: 0.7;
-}
-
+/* --- Sélection (catégories et filtres) --- */
 .selection-panel {
-    margin-top: 2rem;
-    background: #2a3435;
-    border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  margin-top: 2rem;
+  background: #2a3435;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
+/* Onglets catégories (Pokémon, Items...) */
 .category-tabs {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
 .category-tab {
-    padding: 12px 24px;
-    background: #3b4a4c;
-    border: none;
-    border-radius: 8px;
-    color: #fff;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
+  padding: 10px 20px;
+  border: 2px solid #000;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.05);
+  color: #fff;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .category-tab.active {
-    background: #4a90e2;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(74, 144, 226, 0.5);
+  background: rgba(74,144,226,0.25);
+  border-color: #606163;
 }
 
 .category-tab:hover {
-    background: #5aa0f2;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
 }
 
-.pokemon-filters {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 1rem;
+/* --- Filtres Pokémon --- */
+#filters, .pokemon-filters {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  gap: 10px;
 }
 
 .filter-btn {
-    padding: 10px 20px;
-    background: #3b4a4c;
-    border: none;
-    border-radius: 20px;
-    color: #fff;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    font-size: 0.9rem;
+  border: 2px solid #000;
+  font-weight: 500;
+  padding: 10px 16px;
+  min-width: 110px;
+  text-align: center;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.25);
+  background: rgba(255,255,255,0.05);
+  color: #fff;
+  transition: all 0.2s ease-in-out;
+  text-transform: uppercase;
+  font-size: 0.9rem;
 }
 
+/* Couleurs par rôle */
+.filter-btn[data-role="def"] { background: rgba(39,174,96,0.2); }
+.filter-btn[data-role="atk"] { background: rgba(231,76,60,0.2); }
+.filter-btn[data-role="sup"] { background: rgba(184,184,20,0.2); }
+.filter-btn[data-role="spe"] { background: rgba(93,173,226,0.2); }
+.filter-btn[data-role="all"] { background: rgba(155,89,182,0.2); }
+.filter-btn[data-role="unknown"] { background: rgba(52,73,94,0.2); }
+
 .filter-btn.active {
-    background: #e67e22;
-    transform: scale(1.05);
-    box-shadow: 0 4px 8px rgba(230, 126, 34, 0.5);
+  border-color: #4a90e2;
+  box-shadow: 0 0 8px rgba(74,144,226,0.5);
 }
 
 .filter-btn:hover {
-    background: #e67e22;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(0,0,0,0.35);
+  background: rgba(255,255,255,0.1);
 }
 
+/* --- Galerie Pokémon --- */
 .gallery {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-    padding: 10px;
-    background: #1c2526;
-    border-radius: 10px;
-    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  padding: 10px;
+  background: #1c2526;
+  border-radius: 10px;
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.3);
 }
 
 .gallery img {
-    width: 60px;
-    height: 60px;
-    object-fit: contain;
-    border-radius: 8px;
-    border: 2px solid #4a90e2;
-    cursor: move;
-    transition: all 0.3s ease;
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  border-radius: 8px;
+  border: 2px double #000000;
+  cursor: move;
+  transition: all 0.2s ease;
 }
 
 .gallery img:hover {
-    transform: scale(1.1);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transform: scale(1.08);
+  border-color: #ffffff;
 }
 
 .gallery img.used {
-    opacity: 0.5;
-    cursor: not-allowed;
+  filter: grayscale(100%);
+  opacity: 0.5;
+  cursor: not-allowed;
+  border: 2px solid #e74c3c;
 }
 
+/* --- Modals --- */
 .modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6);
+  justify-content: center;
+  align-items: center;
 }
 
 .modal-content {
-    background: #3b4a4c;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-    color: #fff;
-    width: 350px;
-    text-align: center;
+  background: #2a3435;
+  border-radius: 10px;
+  padding: 1.5rem;
+  color: #fff;
+  width: 400px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.5);
 }
 
-.modal-content h2 {
-    margin-bottom: 1.5rem;
-    font-size: 1.5rem;
+.modal-actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
 }
 
-.modal-content label {
-    display: block;
-    margin-bottom: 0.8rem;
-    font-weight: 500;
+.modal-actions button {
+  background: #4a90e2;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+  color: #fff;
+  font-weight: 600;
+  transition: all 0.2s ease;
 }
 
-.modal-content input,
-.modal-content select {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 1rem;
-    border-radius: 6px;
-    border: 2px solid #4a90e2;
-    background: #1c2526;
-    color: #fff;
-    font-size: 0.9rem;
+.modal-actions button:hover {
+  background: #5aa1f3;
 }
 
-.modal-content button {
-    padding: 10px 20px;
-    margin: 0 10px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.modal-content button#save-tier {
-    background: #2ecc71;
-}
-
-.modal-content button#delete-tier {
-    background: #e74c3c;
-}
-
-.modal-content button#close-tier-modal {
-    background: #6c757d;
-}
-
-.modal-content button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-}
-
+/* --- Pied de page --- */
 .footer {
-    text-align: center;
-    padding: 20px;
-    margin-top: 2rem;
-    color: #d9e6e8;
-    font-size: 0.9rem;
+  text-align: center;
+  padding: 20px;
+  margin-top: 2rem;
+  color: #d9e6e8;
+  font-size: 0.9rem;
+  opacity: 0.8;
 }
 
-.footer p {
-    margin: 5px 0;
+/* Modal container */
+#tier-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  backdrop-filter: blur(6px);
+  transition: opacity 0.3s ease;
+}
+
+/* Modal card */
+#tier-modal .modal-content {
+  background: linear-gradient(180deg, #1e1e2f 0%, #121220 100%);
+  color: #fff;
+  padding: 25px 30px;
+  border-radius: 16px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  width: 360px;
+  max-width: 90%;
+  text-align: center;
+  animation: modalIn 0.25s ease-out;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+@keyframes modalIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+#tier-modal h2 {
+  margin-bottom: 20px;
+  font-size: 1.5em;
+  font-weight: 600;
+  color: #ffd95a;
+}
+
+#tier-modal label {
+  display: block;
+  margin: 10px 0;
+  font-weight: 500;
+}
+
+#tier-modal input[type="text"] {
+  width: 100%;
+  padding: 8px;
+  border: none;
+  border-radius: 8px;
+  background: #2a2a3d;
+  color: #fff;
+}
+
+#tier-modal input[type="color"] {
+  border: none;
+  background: transparent;
+  width: 60px;
+  height: 30px;
+  cursor: pointer;
+}
+
+#tier-modal .modal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+#tier-modal .modal-actions button {
+  flex: 1;
+  margin: 0 5px;
+  border: none;
+  border-radius: 10px;
+  padding: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+#tier-save { background: #2ecc71; color: white; }
+#tier-delete { background: #e74c3c; color: white; }
+#tier-cancel { background: #555; color: white; }
+
+#tier-modal .modal-actions button:hover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+
+/* bouton settings dans les tiers */
+.tier-actions .settings-tier {
+    background: transparent;
+    border: none;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.tier-actions .settings-tier img {
+    width: 24px;
+    height: 24px;
+    display: block;
+}
+
+/* hover effect */
+.tier-actions .settings-tier:hover {
+    filter: brightness(1.2);
+    transform: scale(1.1);
+    transition: all 0.2s;
 }

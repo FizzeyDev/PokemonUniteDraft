@@ -18,6 +18,12 @@ let timerInterval = null;
 let spawns = [];
 let towers = [];
 
+let midState = {
+  nextSpawnTime: 480,
+  active: null, 
+  pending: null
+};
+
 // --- ALTARIA SYSTEM ---
 let altariaState = {
   bot: { sequenceKey: null, seqIndex: -1, pending: null, active: null },
@@ -25,7 +31,7 @@ let altariaState = {
 };
 
 // === INITIALISATION ===
-fetch("spawns.json")
+fetch("data/spawns.json")
   .then((response) => response.json())
   .then((data) => {
     spawns = data.pokemons.map((p) => ({
@@ -257,7 +263,7 @@ function spawnAltaria(lane) {
       tooltipGif.src = altaria.gif || altaria.img;
       
       
-      tooltipText.innerHTML = `<p><strong>Altaria</strong> spawn depend on the tower break.</p>`;
+      tooltipText.innerHTML = altaria.spawnInfos[index];
       tooltip.classList.add("show");
     }, 1000);
   });
@@ -589,6 +595,25 @@ function updateSpawns() {
       }
     });
   });
+
+  // === MID SPAWN LOGIC (Regidrago + Altaria) ===
+  if (currentTime <= midState.nextSpawnTime && !midState.active && !midState.pending) {
+    spawnMid("Regidrago");
+  }
+
+  if (midState.pending && currentTime === midState.pending.time) {
+    spawnMid(midState.pending.pokemonName);
+    midState.pending = null;
+  }
+
+  // Supprime tout spawn mid à 2:30
+  if (currentTime <= 150 && midState.active) {
+    if (midState.active.element && spawnsContainer.contains(midState.active.element)) {
+      spawnsContainer.removeChild(midState.active.element);
+    }
+    midState.active = null;
+    midState.pending = null;
+  }
 }
 
 // === TOURS ===
@@ -674,4 +699,68 @@ function updateTowers() {
         tower.destroyed || !clickable ? "none" : "auto";
     }
   });
+}
+
+function spawnMid(pokemonName) {
+  const pokemon = spawns.find(p => p.name === pokemonName);
+  if (!pokemon) return;
+
+  // Vérifie si spawn encore avant 2:30
+  if (currentTime <= 150) return;
+
+  // Crée l'élément sur la map
+  const img = document.createElement("img");
+  img.src = pokemon.spawns?.[0]?.img || pokemon.img;
+  img.classList.add("spawn", "mid");
+  img.style.left = `50%`;
+  img.style.top = `52%`;
+  img.style.transform = "translate(-50%, -52%)";
+  img.style.width = `${pokemon.size || 90}px`;
+  img.style.height = `${pokemon.size || 90}px`;
+  img.title = pokemon.name;
+
+  // Tooltip simple
+  img.addEventListener("mouseenter", () => {
+    tooltipName.textContent = pokemon.name;
+    tooltipGif.src = pokemon.gif || pokemon.img;
+    tooltipText.innerHTML = pokemon.spawns?.[0]?.info || "<p>No info</p>";
+    tooltip.style.left = "50%";
+    tooltip.style.top = "4  0%";
+    tooltip.classList.add("show");
+  });
+  img.addEventListener("mouseleave", () => tooltip.classList.remove("show"));
+
+  // Click pour tuer
+  img.addEventListener("click", () => {
+    if (!midState.active) return;
+    midState.active.killed = true;
+    midState.active.killedTime = currentTime;
+    spawnsContainer.removeChild(midState.active.element);
+    
+    scheduleNextMidSpawn(midState.active.name);
+    midState.active = null;
+  });
+
+  spawnsContainer.appendChild(img);
+
+  midState.active = { name: pokemonName, element: img, killed: false, killedTime: null };
+  console.log(`[MID] ${pokemonName} spawned at ${currentTime}s`);
+}
+
+function scheduleNextMidSpawn(prevPokemon) {
+  const delay = 90; // 1:30 après mort
+
+  // Calcul du temps prévu
+  const nextTime = currentTime - delay;
+  if (nextTime <= 150) return; // annule si < 2:30
+
+  // Si c'était Regidrago -> spawn Altaria
+  if (prevPokemon === "Regidrago") {
+    midState.pending = { pokemonName: "Altaria", time: currentTime - delay };
+  } 
+  // Si c'était Altaria -> spawn aléatoire Regidrago ou Altaria
+  else if (prevPokemon === "Altaria") {
+    const choice = Math.random() < 0.5 ? "Altaria" : "Regidrago";
+    midState.pending = { pokemonName: choice, time: currentTime - delay };
+  }
 }

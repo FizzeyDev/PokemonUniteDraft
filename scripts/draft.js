@@ -378,7 +378,7 @@ function endDraft() {
 let monsData = [];
 let currentSort = "dex";
 
-fetch("mons.json")
+fetch("data/mons.json")
   .then(res => res.json())
   .then(data => {
     monsData = data;

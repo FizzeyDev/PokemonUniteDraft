@@ -9,8 +9,10 @@ Made by Fizzey, Pokemon Unite Player, this repository hosts the Pokémon Unite T
 
 This website, Unite Tools, as many use:
 - Pokemon Unite Draft Simulator
-- Pokemon Unite Tierlist Creator [BETA]
+- Pokemon Unite Tierlist Creator
 - Pokemon Unite Dynamic Map [SOON]
+- Pokemon Unite Map Timing [BETA]
+- Pokemon Unite Damage Calcultator [SOON]
 
 ## About
 

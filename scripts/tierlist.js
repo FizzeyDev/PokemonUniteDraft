@@ -30,9 +30,9 @@ async function loadData() {
     try {
         const basePath = getBasePath();
         const [pResp, iResp, bResp] = await Promise.all([
-            fetch(`${basePath}mons.json`),
-            fetch(`${basePath}items.json`),
-            fetch(`${basePath}battle_items.json`)
+            fetch(`${basePath}/data/mons.json`),
+            fetch(`${basePath}/data/items.json`),
+            fetch(`${basePath}/data/battle_items.json`)
         ]);
         if (!pResp.ok || !iResp.ok || !bResp.ok) throw new Error('Failed to fetch data files');
         pokemonData = await pResp.json();
@@ -140,7 +140,7 @@ function loadTierList(draftId) {
             <div class="tier-items" data-tier-index="${index}"></div>
             <div class="tier-actions">
                 <button class="settings-tier" aria-label="Tier Settings" data-lang="edit_tier">
-                    <img src="${basePath}assets/settings.svg" alt="Settings" style="width:24px;height:24px;">
+                    <img src="${basePath}assets/icons/settings.png" alt="Settings" style="width:24px;height:24px;">
                 </button>
             </div>
         `;
