@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pokémon Unite - Map Drawing</title>
+  <link rel="stylesheet" href="./css/map.css">
+  <link rel="stylesheet" href="./css/navbar.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="navbar-container"></div>
+    <div id="toolbar">
+        <button class="brush-size" data-size="5">🖌️</button>
+        <button class="brush-size" data-size="10">🖌️🖌️</button>
+        <button class="brush-size" data-size="20">🖌️🖌️🖌️</button>
+        
+        <button id="eraseBtn">🧽</button>
+        <button id="clearBtn">🗑️</button>
+        
+        <input type="color" id="colorPicker" value="#ff0000">
+    </div>
+
+    <div class="map-container">
+        <img src="assets/maps/map.webp" alt="Pokémon Unite Map" id="map-image">
+        <canvas id="map-canvas"></canvas>
+    </div>
+
+    <script src="./scripts/map.js"></script>
+    <script src="./scripts/navbar.js"></script>
+</body>
+</html>

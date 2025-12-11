@@ -1,0 +1,63 @@
+body {
+  font-family: 'Roboto', sans-serif;
+  background: #1c2526;
+  color: #d9e6e8;
+  max-width: 1400px;
+  margin: auto;
+  padding: 2rem;
+  margin-left: 460px;
+}
+
+h1 {
+  text-align: center;
+  color: white;
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
+}
+
+
+/* Panneau de contrôle */
+#toolbar {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.8);
+  padding: 10px;
+  border-radius: 10px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  z-index: 10;
+}
+
+#toolbar button {
+  font-size: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+#toolbar button.active {
+  border: 2px solid #fff;
+  border-radius: 5px;
+}
+
+.map-container {
+  position: relative;
+  width: 100%;
+  max-width: 1600px;
+  margin-top: 80px;
+}
+
+#map-image {
+  width: 100%;
+  display: block;
+}
+
+#map-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: all;
+}
