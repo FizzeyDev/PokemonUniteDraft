@@ -11,12 +11,86 @@ const tooltipGif = document.getElementById("tooltip-gif");
 const tooltipName = document.getElementById("tooltip-name");
 const tooltipText = document.getElementById("tooltip-text");
 
+let currentMap = "groudon";
+document.querySelector(".map-container img").src = "assets/maps/map_groudon.webp";
+loadSpawns("groudon");
+
 let totalTime = 600;
 let currentTime = totalTime;
 let timerRunning = false;
 let timerInterval = null;
 let spawns = [];
 let towers = [];
+
+const btnGroudon = document.getElementById("map-groudon");
+const btnKyogre = document.getElementById("map-kyogre");
+
+function setActive(button) {
+  document.querySelectorAll(".map-switch button").forEach(btn => {
+    btn.classList.remove("active");
+  });
+  button.classList.add("active");
+}
+
+btnGroudon.addEventListener("click", () => setActive(btnGroudon));
+btnKyogre.addEventListener("click", () => setActive(btnKyogre));
+
+document.getElementById("map-groudon").addEventListener("click", () => {
+  resetAll();
+  currentMap = "groudon";
+  document.querySelector(".map-container img").src = "assets/maps/map_groudon.webp";
+  loadSpawns("groudon");
+});
+
+document.getElementById("map-kyogre").addEventListener("click", () => {
+  resetAll();
+  currentMap = "kyogre";
+  document.querySelector(".map-container img").src = "assets/maps/map_groudon.webp";
+  loadSpawns("kyogre");
+});
+
+function resetAll() {
+  // Reset timer
+  totalTime = 600;
+  currentTime = totalTime;
+  stopTimer(); // Stoppe le timer si actif
+  updateDisplay();
+
+  // Remove all spawn elements
+  spawnsContainer.innerHTML = "";
+  
+  // Remove all tower elements
+  towersContainer.innerHTML = "";
+
+  // Reset internal spawn states
+  spawns.forEach(p => {
+    p.spawns?.forEach(s => {
+      s.element = null;
+      s.killed = false;
+      s.killedTime = null;
+      s.permanentDelete = false;
+    });
+  });
+
+  // Reset towers
+  towers.forEach(t => {
+    t.destroyed = false;
+    t.element = null;
+  });
+
+  // Reset Altaria & Mid
+  midState = {
+    nextSpawnTime: 480,
+    active: null,
+    pending: null
+  };
+
+  altariaState = {
+    bot: { sequenceKey: null, seqIndex: -1, pending: null, active: null },
+    top: { sequenceKey: null, seqIndex: -1, pending: null, active: null }
+  };
+}
+
 
 let midState = {
   nextSpawnTime: 480,
@@ -31,34 +105,38 @@ let altariaState = {
 };
 
 // === INITIALISATION ===
-fetch("data/spawns.json")
-  .then((response) => response.json())
-  .then((data) => {
-    spawns = data.pokemons.map((p) => ({
-      ...p,
-      originalName: p.name,
-      originalImg: p.spawns?.[0]?.img || p.img,
-      spawns:
-        p.spawns?.map((s) => ({
-          ...s,
-          element: null,
-          killed: false,
-          killedTime: null
-        })) || []
-    }));
+function loadSpawns(mapName) {
+  fetch(`data/spawns_${mapName}.json`)
+    .then((response) => response.json())
+    .then((data) => {
+      spawns = data.pokemons.map((p) => ({
+        ...p,
+        originalName: p.name,
+        originalImg: p.spawns?.[0]?.img || p.img,
+        spawns:
+          p.spawns?.map((s) => ({
+            ...s,
+            element: null,
+            killed: false,
+            killedTime: null
+          })) || []
+      }));
 
-    towers = data.towers.map((t) => ({ ...t, element: null }));
+      renderSpawns();
 
-    const altaria = spawns.find((p) => p.name === "Altaria");
-    if (altaria && altaria.isSpecial) {
-      ["top", "bot"].forEach((lane) => {
-        initializeAltariaLane(lane, altaria);
-      });
-    }
+      towers = data.towers.map((t) => ({ ...t, element: null }));
 
-    updateDisplay();
-  })
-  .catch((err) => console.error("Erreur JSON:", err));
+      const altaria = spawns.find((p) => p.name === "Altaria");
+      if (altaria && altaria.isSpecial) {
+        ["top", "bot"].forEach((lane) => {
+          initializeAltariaLane(lane, altaria);
+        });
+      }
+
+      updateDisplay();
+    })
+    .catch((err) => console.error("Erreur JSON:", err));
+}
 
 // === AFFICHAGE / TIMER ===
 function updateDisplay() {

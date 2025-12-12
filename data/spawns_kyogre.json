@@ -1,0 +1,1161 @@
+{
+  "towers": [
+    {
+      "id": "tower1",
+      "xPercent": 39,
+      "yPercent": 78,
+      "img": "assets/maps/tower/tower_score.png",
+      "imgBroken": "assets/maps/tower/break.png",
+      "destroyed": false,
+      "breakid": 1,
+      "name": "Purple First Bot Pad",
+      "info": "<p>First pad. Need <strong>90 Points</strong> to destroy.</p><p>When break, some pokemons dispawn and some other spawn.</p>",
+      "mobsLinked": ["Indeedee", "Baltoy", "Bunnelby", "Altaria"]
+    },
+    {
+      "id": "tower2",
+      "xPercent": 60,
+      "yPercent": 78,
+      "img": "assets/maps/tower/tower_score.png",
+      "imgBroken": "assets/maps/tower/break.png",
+      "destroyed": false,
+      "breakid": 2,
+      "name": "Orange First Bot Pad",
+      "info": "<p>First pad. Need <strong>90 Points</strong> to destroy.</p><p>When break, some pokemons dispawn and some other spawn.</p>",
+      "mobsLinked": ["Indeedee", "Baltoy", "Bunnelby", "Altaria"]
+    },
+    {
+      "id": "tower3",
+      "xPercent": 40,
+      "yPercent": 34,
+      "img": "assets/maps/tower/tower_score.png",
+      "imgBroken": "assets/maps/tower/break.png",
+      "destroyed": false,
+      "breakid": 3,
+      "name": "Purple First Top Pad",
+      "info": "<p>First pad. Need <strong>80 Points</strong> to destroy.</p><p>When break, some pokemons dispawn and some other spawn.</p>",
+      "mobsLinked": ["Indeedee", "Natu", "Bunnelby", "Altaria", "Baltoy"]
+    },
+    {
+      "id": "tower4",
+      "xPercent": 59,
+      "yPercent": 34,
+      "img": "assets/maps/tower/tower_score.png",
+      "imgBroken": "assets/maps/tower/break.png",
+      "destroyed": false,
+      "breakid": 4,
+      "name": "Orange First Top Pad",
+      "info": "<p>First pad. Need <strong>80 Points</strong> to destroy.</p><p>When break, some pokemons dispawn and some other spawn.</p>",
+      "mobsLinked": ["Indeedee", "Natu", "Bunnelby", "Altaria", "Baltoy"]
+    },
+    {
+      "id": "tower5",
+      "xPercent": 25,
+      "yPercent": 39.5,
+      "img": "assets/maps/tower/tower_score.png",
+      "imgBroken": "assets/maps/tower/break.png",
+      "destroyed": false,
+      "breakid": 5,
+      "requiresTowerBreak": 3,
+      "name": "Orange Second Top Pad",
+      "info": "<p>Second pad. Need <strong>90 Points</strong> to destroy.</p><p>When break, some pokemons dispawn and some other spawn.</p>",
+      "mobsLinked": ["Altaria", "Swablu"]
+    },
+    {
+      "id": "tower6",
+      "xPercent": 23,
+      "yPercent": 71,
+      "img": "assets/maps/tower/tower_score.png",
+      "imgBroken": "assets/maps/tower/break.png",
+      "destroyed": false,
+      "breakid": 6,
+      "requiresTowerBreak": 1,
+      "name": "Orange Second Bot Pad",
+      "info": "<p>First pad. Need <strong>100 Points</strong> to destroy.</p><p>When break, some pokemons dispawn and some other spawn.</p>",
+      "mobsLinked": ["Altaria", "Swablu"]
+    },
+    {
+      "id": "tower7",
+      "xPercent": 74,
+      "yPercent": 39.5,
+      "img": "assets/maps/tower/tower_score.png",
+      "imgBroken": "assets/maps/tower/break.png",
+      "destroyed": false,
+      "breakid": 7,
+      "requiresTowerBreak": 4,
+      "name": "Purple Second Top Pad",
+      "info": "<p>First pad. Need <strong>90 Points</strong> to destroy.</p><p>When break, some pokemons dispawn and some other spawn.</p>",
+      "mobsLinked": ["Altaria", "Swablu"]
+    },
+    {
+      "id": "tower8",
+      "xPercent": 76,
+      "yPercent": 71,
+      "img": "assets/maps/tower/tower_score.png",
+      "imgBroken": "assets/maps/tower/break.png",
+      "destroyed": false,
+      "breakid": 8,
+      "requiresTowerBreak": 2,
+      "name": "Purple Second Bot Pad",
+      "info": "<p>First pad. Need <strong>100 Points</strong> to destroy.</p><p>When break, some pokemons dispawn and some other spawn.</p>",
+      "mobsLinked": ["Altaria", "Swablu"]
+    }
+  ],
+  "pokemons": [
+    {
+      "name": "Kyogre",
+      "gif": "assets/maps/gifs/kyogre.gif",
+      "spawns": [
+        {
+          "time": 120,
+          "time_dispawn": 0,
+          "time_before_respawn": 0,
+          "img": "assets/maps/spawn/kyogre.png",
+          "xPercent": 50,
+          "yPercent": 52,
+          "size": 90,
+          "delete": false,
+          "info": "<p>When defeated, all team members alive receive a <strong>buff</strong>, <strong> 15 aeos points</strong> and all opponents tower still up are disabled for 1:30 (opponent can't receive shield and regen).<br>This buff is <strong>permanent until the holder is KO'd</strong>. When the holder is <strong>KO'd</strong>, the buff <strong>transfers to the killer</strong>.<br>It provides a <strong>goal-scoring speed boost</strong>, a <strong>self regen (5% per second)</strong>, and a <strong>small shield</strong>.<br>Always spawn at 2:00.</p>"
+        }
+      ],
+      "killed": false
+    },
+    {
+      "name": "Bunnelby",
+      "gif": "assets/maps/gifs/bunnelby.gif",
+      "evolution": {
+        "name": "Diggersby",
+        "img": "assets/maps/spawn/diggersby.png",
+        "time": 120
+      },
+      "spawns": [
+        {
+          "time": 600,
+          "time_dispawn": 0,
+          "time_before_respawn": 0,
+          "img": "assets/maps/spawn/bunnelby.png",
+          "xPercent": 14,
+          "yPercent": 60,
+          "size": 50,
+          "delete": true,
+          "info": "<p>They <strong>spawn at the beginning of the game</strong> and <strong>never respawn</strong> once killed.</p><p>Give 2 points.</p>"
+        },
+        {
+          "time": 600,
+          "time_dispawn": 0,
+          "time_before_respawn": 0,
+          "img": "assets/maps/spawn/bunnelby.png",
+          "xPercent": 14,
+          "yPercent": 49,
+          "size": 50,
+          "delete": true,
+          "info": "<p>They <strong>spawn at the beginning of the game</strong> and <strong>never respawn</strong> once killed.</p><p>Give 2 points.</p>"
+        },
+        {
+          "time": 600,
+          "time_dispawn": 0,
+          "time_before_respawn": 0,
+          "img": "assets/maps/spawn/bunnelby.png",
+          "xPercent": 21,
+          "yPercent": 69,
+          "size": 50,
+          "delete": true,
+          "info": "<p>They <strong>spawn at the beginning of the game</strong> and <strong>never respawn</strong> once killed.</p><p>Give 2 points.</p>"
+        },
+        {
+          "time": 600,
+          "time_dispawn": 0,
+          "time_before_respawn": 0,
+          "img": "assets/maps/spawn/bunnelby.png",
+          "xPercent": 21,
+          "yPercent": 41,
+          "size": 50,
+          "delete": true,
+          "info": "<p>They <strong>spawn at the beginning of the game</strong> and <strong>never respawn</strong> once killed.</p><p>Give 2 points.</p>"
+        },
+        {
+          "time": 600,
+          "time_dispawn": 0,
+          "time_before_respawn": 0,
+          "img": "assets/maps/spawn/bunnelby.png",
+          "xPercent": 31,
+          "yPercent": 75,
+          "size": 50,
+          "delete": true,
+          "info": "<p>They <strong>spawn at the beginning of the game</strong> and <strong>never respawn</strong> once killed.</p><p>Give 2 points.</p>"
+        },
+        {
+          "time": 600,
+          "time_dispawn": 0,
+          "time_before_respawn": 0,
+          "img": "assets/maps/spawn/bunnelby.png",
+          "xPercent": 31,
+          "yPercent": 36,
+          "size": 50,
+          "delete": true,
+          "info": "<p>They <strong>spawn at the beginning of the game</strong> and <strong>never respawn</strong> once killed.</p><p>Give 2 points.</p>"
+        },
+
+        {
+          "time": 600,
+          "time_dispawn": 0,
+          "time_before_respawn": 0,
+          "img": "assets/maps/spawn/bunnelby.png",
+          "xPercent": 86,
+          "yPercent": 60,
+          "size": 50,
+          "delete": true,
+          "info": "<p>They <strong>spawn at the beginning of the game</strong> and <strong>never respawn</strong> once killed.</p><p>Give 2 points.</p>"
+        },
+        {
+          "time": 600,
+          "time_dispawn": 0,
+          "time_before_respawn": 0,
+          "img": "assets/maps/spawn/bunnelby.png",
+          "xPercent": 86,
+          "yPercent": 49,
+          "size": 50,
+          "delete": true,
+          "info": "<p>They <strong>spawn at the beginning of the game</strong> and <strong>never respawn</strong> once killed.</p><p>Give 2 points.</p>"
+        },
+        {
+          "time": 600,
+          "time_dispawn": 0,
+          "time_before_respawn": 0,
+          "img": "assets/maps/spawn/bunnelby.png",
+          "xPercent": 78,
+          "yPercent": 69,
+          "size": 50,
+          "delete": true,
+          "info": "<p>They <strong>spawn at the beginning of the game</strong> and <strong>never respawn</strong> once killed.</p><p>Give 2 points.</p>"
+        },
+        {
+          "time": 600,
+          "time_dispawn": 0,
+          "time_before_respawn": 0,
+          "img": "assets/maps/spawn/bunnelby.png",
+          "xPercent": 78,
+          "yPercent": 41,
+          "size": 50,
+          "delete": true,
+          "info": "<p>They <strong>spawn at the beginning of the game</strong> and <strong>never respawn</strong> once killed.</p><p>Give 2 points.</p>"
+        },
+        {
+          "time": 600,
+          "time_dispawn": 0,
+          "time_before_respawn": 0,
+          "img": "assets/maps/spawn/bunnelby.png",
+          "xPercent": 69,
+          "yPercent": 75,
+          "size": 50,
+          "delete": true,
+          "info": "<p>They <strong>spawn at the beginning of the game</strong> and <strong>never respawn</strong> once killed.</p><p>Give 2 points.</p>"
+        },
+        {
+          "time": 600,
+          "time_dispawn": 0,
+          "time_before_respawn": 0,
+          "img": "assets/maps/spawn/bunnelby.png",
+          "xPercent": 69,
+          "yPercent": 36,
+          "size": 50,
+          "delete": true,
+          "info": "<p>They <strong>spawn at the beginning of the game</strong> and <strong>never respawn</strong> once killed.</p><p>Give 2 points.</p>" 
+        },
+
+        {
+          "time": 580,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/bunnelby.png",
+          "xPercent": 49.8,
+          "yPercent": 31,
+          "size": 50,
+          "delete": false,
+          "removeOnTowerBreak": [3, 4],
+          "info": "<p>Starts spawning at <strong>9:40</strong>.</p><p>When defeated, grants <strong>2 points</strong> and respawn after <strong>60 seconds</strong>.</p><p>If either of the <strong>first towers</strong> in the lane is destroyed, it <strong>disappears</strong>.</p>"
+        },
+        {
+          "time": 560,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/bunnelby.png",
+          "xPercent": 57,
+          "yPercent": 30,
+          "size": 50,
+          "delete": false,
+          "removeOnTowerBreak": [3, 4],
+          "info": "<p>Starts spawning at <strong>9:20</strong>.</p><p>When defeated, grants <strong>2 points</strong> and respawn after <strong>60 seconds</strong>.</p><p>If either of the <strong>first towers</strong> in the lane is destroyed, it <strong>disappears</strong>.</p>"
+        },
+        {
+          "time": 560,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/bunnelby.png",
+          "xPercent": 42,
+          "yPercent": 30,
+          "size": 50,
+          "delete": false,
+          "removeOnTowerBreak": [3, 4],
+          "info": "<p>Starts spawning at <strong>9:20</strong>.</p><p>When defeated, grants <strong>2 points</strong> and respawn after <strong>60 seconds</strong>.</p><p>If either of the <strong>first towers</strong> in the lane is destroyed, it <strong>disappears</strong>.</p>"
+        },
+
+        {
+          "time": 580,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/bunnelby.png",
+          "xPercent": 48.5,
+          "yPercent": 84,
+          "size": 50,
+          "delete": false,
+          "removeOnTowerBreak": [1, 2],
+          "info": "<p>Starts spawning at <strong>9:40</strong>.</p><p>When defeated, grants <strong>2 points</strong> and respawn after <strong>60 seconds</strong>.</p><p>If either of the <strong>first towers</strong> in the lane is destroyed, it <strong>disappears</strong>.</p>"
+        },
+        {
+          "time": 580,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/bunnelby.png",
+          "xPercent": 51.5,
+          "yPercent": 84,
+          "size": 50,
+          "delete": false,
+          "removeOnTowerBreak": [1, 2],
+          "info": "<p>Starts spawning at <strong>9:40</strong>.</p><p>When defeated, grants <strong>2 points</strong> and respawn after <strong>60 seconds</strong>.</p><p>If either of the <strong>first towers</strong> in the lane is destroyed, it <strong>disappears</strong>.</p>"
+        },
+        {
+          "time": 555,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/bunnelby.png",
+          "xPercent": 49.7,
+          "yPercent": 70.5,
+          "size": 50,
+          "delete": false,
+          "removeOnTowerBreak": [1, 2],
+          "info": "<p>Starts spawning at <strong>9:15</strong>.</p><p>When defeated, grants <strong>2 points</strong> and respawn after <strong>60 seconds</strong>.</p><p>If either of the <strong>first towers</strong> in the lane is destroyed, it <strong>disappears</strong>.</p>"
+        }
+      ],
+      "killed": false
+    },
+    {
+      "name": "Accelgor",
+      "gif": "assets/maps/gifs/accelgor.gif",
+      "spawns": [
+        {
+          "time": 585,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/accelgor.png",
+          "xPercent": 24,
+          "yPercent": 59.5,
+          "size": 60,
+          "delete": false,
+          "info": "<p>Starts spawning at <strong>9:45</strong>.</p><p>When defeated, grants <strong>4 / 7 points</strong> and a <strong>buff</strong>. <strong>Respawns after 60 seconds</strong>.</p><p>This buff lasts for <strong>70 seconds</strong> and provides a <strong>10% move cooldown reduction</strong>.</p>"
+        },
+        {
+          "time": 585,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/accelgor.png",
+          "xPercent": 75,
+          "yPercent": 59.5,
+          "size": 60,
+          "delete": false,
+          "info": "<p>Starts spawning at <strong>9:45</strong>.</p><p>When defeated, grants <strong>4 / 7 points</strong> and a <strong>buff</strong>. <strong>Respawns after 60 seconds</strong>.</p><p>This buff lasts for <strong>70 seconds</strong> and provides a <strong>10% move cooldown reduction</strong>.</p>"
+        }
+      ],
+      "killed": false
+    },  
+    {
+      "name": "Escavalier",
+      "gif": "assets/maps/gifs/escavalier.gif",
+      "spawns": [
+        {
+          "time": 585,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/escavalier.png",
+          "xPercent": 32.5,
+          "yPercent": 46.5,
+          "size": 60,
+          "delete": false,
+          "info": "<p>Starts spawning at <strong>9:45</strong>.</p><p>When defeated, grants <strong>4 / 7 points</strong> and a <strong>buff</strong>. <strong>Respawns after 60 seconds</strong>.</p><p>This buff lasts for <strong>70 seconds</strong> and provides a <strong>basic attacks extra damage and decreases opponent movement speed for a short time</strong>.</p>"
+        },
+        {
+          "time": 585,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/escavalier.png",
+          "xPercent": 67.5,
+          "yPercent": 46.5,
+          "size": 60,
+          "delete": false,
+          "info": "<p>Starts spawning at <strong>9:45</strong>.</p><p>When defeated, grants <strong>4 / 7 points</strong> and a <strong>buff</strong>. <strong>Respawns after 60 seconds</strong>.</p><p>This buff lasts for <strong>70 seconds</strong> and provides a <strong>basic attacks extra damage and decreases opponent movement speed for a short time</strong>.</p>"
+       }
+      ],
+      "killed": false
+    },
+    {
+      "name": "Baltoy",
+      "gif": "assets/maps/gifs/baltoy.gif",
+      "evolution": {
+        "name": "Claydol",
+        "img": "assets/maps/spawn/claydol.png",
+        "time": 120
+      },
+      "spawns": [
+        {
+          "time": 585,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/baltoy.png",
+          "xPercent": 24.5,
+          "yPercent": 50,
+          "size": 50,
+          "delete": false,
+          "info": "<p>Starts spawning at <strong>9:45</strong>.</p><p>When defeated, grants <strong>2 points. <strong>Respawns after 60 seconds</strong>.</p>"
+        },
+        {
+          "time": 585,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/baltoy.png",
+          "xPercent": 32.5,
+          "yPercent": 61,
+          "size": 50,
+          "delete": false,
+          "info": "<p>Starts spawning at <strong>9:45</strong>.</p><p>When defeated, grants <strong>2 points. <strong>Respawns after 60 seconds</strong>.</p>"
+        },
+        {
+          "time": 585,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/baltoy.png",
+          "xPercent": 74.5,
+          "yPercent": 50,
+          "size": 50,
+          "delete": false,
+          "info": "<p>Starts spawning at <strong>9:45</strong>.</p><p>When defeated, grants <strong>2 points. <strong>Respawns after 60 seconds</strong>.</p>"
+        },
+        {
+          "time": 585,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/baltoy.png",
+          "xPercent": 66.5,
+          "yPercent": 61,
+          "size": 50,
+          "delete": false,
+          "info": "<p>Starts spawning at <strong>9:45</strong>.</p><p>When defeated, grants <strong>2 points. <strong>Respawns after 60 seconds</strong>.</p>"
+        },
+        {
+          "time": 580,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/baltoy.png",
+          "xPercent": 57,
+          "yPercent": 38,
+          "size": 50,
+          "delete": false,
+          "removeOnTowerBreak": [3, 4],
+          "info": "<p>Starts spawning at <strong>9:40</strong>.</p><p>When defeated, grants <strong>2 points. <strong>Respawns after 60 seconds</strong>.</p><p>If either of the <strong>first towers</strong> in the lane is destroyed, it <strong>disappears</strong>.</p>"
+        },
+        {
+          "time": 580,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/baltoy.png",
+          "xPercent": 42,
+          "yPercent": 38,
+          "size": 50,
+          "delete": false,
+          "removeOnTowerBreak": [3, 4],
+          "info": "<p>Starts spawning at <strong>9:40</strong>.</p><p>When defeated, grants <strong>2 points. <strong>Respawns after 60 seconds</strong>.</p><p>If either of the <strong>first towers</strong> in the lane is destroyed, it <strong>disappears</strong>.</p>"
+        },
+        {
+          "time": 550,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/baltoy.png",
+          "xPercent": 49.7,
+          "yPercent": 28,
+          "size": 50,
+          "delete": false,
+          "removeOnTowerBreak": [3, 4],
+          "info": "<p>Starts spawning at <strong>9:10</strong>.</p><p>When defeated, grants <strong>2 points. <strong>Respawns after 60 seconds</strong>.</p><p>If either of the <strong>first towers</strong> in the lane is destroyed, it <strong>disappears</strong>.</p>"
+        },
+        {
+          "time": 550,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/baltoy.png",
+          "xPercent": 32,
+          "yPercent": 30,
+          "size": 50,
+          "delete": false,
+          "info": "<p>Starts spawning at <strong>9:10</strong>.</p><p>When defeated, grants <strong>2 points. <strong>Respawns after 60 seconds</strong>.</p>"
+        },
+        {
+          "time": 550,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/baltoy.png",
+          "xPercent": 68,
+          "yPercent": 30,
+          "size": 50,
+          "delete": false,
+          "info": "<p>Starts spawning at <strong>9:10</strong>.</p><p>When defeated, grants <strong>2 points. <strong>Respawns after 60 seconds</strong>.</p>"
+        },
+        {
+          "time": 550,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/baltoy.png",
+          "xPercent": 29.5,
+          "yPercent": 82,
+          "size": 50,
+          "delete": false,
+          "info": "<p>Starts spawning at <strong>9:40</strong>.</p><p>When defeated, grants <strong>2 points. <strong>Respawns after 60 seconds</strong>.</p>"
+        },
+        {
+          "time": 550,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/baltoy.png",
+          "xPercent": 70,
+          "yPercent": 82,
+          "size": 50,
+          "delete": false,
+          "info": "<p>Starts spawning at <strong>9:10</strong>.</p><p>When defeated, grants <strong>2 points. <strong>Respawns after 60 seconds</strong>.</p>"
+        },
+        {
+          "time": 520,
+          "time_dispawn": 120,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/baltoy.png",
+          "xPercent": 41.5,
+          "yPercent": 54,
+          "size": 50,
+          "delete": false,
+          "info": "<p>Starts spawning at <strong>8:40</strong>.</p><p>When defeated, grants <strong>2 points. <strong>Respawns after 60 seconds</strong>.</p>"
+        },
+        {
+          "time": 520,
+          "time_dispawn": 120,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/baltoy.png",
+          "xPercent": 57.8,
+          "yPercent": 54,
+          "size": 50,
+          "delete": false,
+          "info": "<p>Starts spawning at <strong>8:40</strong>.</p><p>When defeated, grants <strong>2 points. <strong>Respawns after 60 seconds</strong>.</p>"
+        },
+        {
+          "time": 600,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/baltoy.png",
+          "xPercent": 26.5,
+          "yPercent": 44.5,
+          "size": 50,
+          "delete": false,
+          "spawnOnTowerBreak": [3],
+          "info": "<p>Starts spawning when the corresponding <strong>first tower is destroy</strong>.</p><p>When defeated, grants <strong>2 points. <strong>Respawns after 60 seconds</strong>.</p>"
+        },
+        {
+          "time": 600,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/baltoy.png",
+          "xPercent": 73,
+          "yPercent": 44.5,
+          "size": 50,
+          "delete": false,
+          "spawnOnTowerBreak": [4],
+          "info": "<p>Starts spawning when the corresponding <strong>first tower is destroy</strong>.</p><p>When defeated, grants <strong>2 points. <strong>Respawns after 60 seconds</strong>.</p>"
+        },
+        {
+          "time": 600,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/baltoy.png",
+          "xPercent": 24,
+          "yPercent": 64,
+          "size": 50,
+          "delete": false,
+          "spawnOnTowerBreak": [1],
+          "info": "<p>Starts spawning when the corresponding <strong>first tower is destroy</strong>.</p><p>When defeated, grants <strong>2 points. <strong>Respawns after 60 seconds</strong>.</p>"
+        },
+        {
+          "time": 600,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/baltoy.png",
+          "xPercent": 75.5,
+          "yPercent": 63.5,
+          "size": 50,
+          "delete": false,
+          "spawnOnTowerBreak": [2],
+          "info": "<p>Starts spawning when the corresponding <strong>first tower is destroy</strong>.</p><p>When defeated, grants <strong>2 points. <strong>Respawns after 60 seconds</strong>.</p>"
+        }
+      ],
+      "killed": false
+    },
+    {
+      "name": "Regidrago",
+      "gif": "assets/maps/gifs/regidrago.gif",
+      "spawns": [
+        {
+          "time": 0,
+          "time_dispawn": 150,
+          "time_before_respawn": 120,
+          "img": "assets/maps/spawn/regidrago.png",
+          "xPercent": 50,
+          "yPercent": 52,
+          "size": 80,
+          "delete": false,
+          "info": "<p>Spawns in the <strong>middle of the map at 8:00</strong>. When killed, <strong>Altaria spawn instead 1:30 minute after</strong>.<br>The team that defeats <strong>Regidrago</strong> gains <strong>experience for all teammates</strong>.<br>The player who lands the killing blow receives a <strong>scoring-speed buff</strong> and <strong>20 points</strong>.</p>"
+        }
+      ],
+      "killed": false
+    },
+    {
+      "name": "Regieleki",
+      "spawns": [
+        {
+          "time": 420,
+          "time_dispawn": 120,
+          "time_before_respawn": 120,
+          "img": "assets/maps/spawn/regieleki.png",
+          "xPercent": 49.8,
+          "yPercent": 26,
+          "size": 70,
+          "delete": false,
+          "info": "<p>Spawns at <strong>7:00</strong> on a random lane between <strong>toplane and botlane</strong>.<br>When is defeated, he go to the base of the opposing team and if he touch the base, he score <strong>20/16/12/8 points</strong> and if the base is still alive, he make <strong>any goal become instant during 20/15/10/5</strong>.<br>The player who lands the killing blow receives <strong>20 points</strong>.<br>A Regi-Boss respawn <strong>2 minutes</strong> after his death.</p>"
+        },
+        {
+          "time": 420,
+          "time_dispawn": 120,
+          "time_before_respawn": 120,
+          "img": "assets/maps/spawn/regieleki.png",
+          "xPercent": 49.8,
+          "yPercent": 92,
+          "size": 70,
+          "delete": false,
+          "info": "<p>Spawns at <strong>7:00</strong> on a random lane between <strong>toplane and botlane</strong>.<br>When is defeated, he go to the base of the opposing team and if he touch the base, he score <strong>20/16/12/8 points</strong> and if the base is still alive, he make <strong>any goal become instant during 20/15/10/5</strong>.<br>The player who lands the killing blow receives <strong>20 points</strong>.<br>A Regi-Boss respawn <strong>2 minutes</strong> after his death.</p>"
+        }
+      ],
+      "killed": false
+    },
+    {
+      "name": "Regice",
+      "gif": "assets/maps/gifs/regice.gif",
+      "spawns": [
+        {
+          "time": 420,
+          "time_dispawn": 120,
+          "time_before_respawn": 120,
+          "img": "assets/maps/spawn/regice.png",
+          "xPercent": 49.8,
+          "yPercent": 20,
+          "size": 70,
+          "delete": false,
+          "info": "<p>Spawns at <strong>7:00</strong> on a random lane between <strong>toplane and botlane</strong>. Regi-Boss spawning is random between Registeel, Regirock and Regice.<br>When is defeated, he gave to the whole team who defeat him some experiences, a little shield and a buff that boost shield and hp recovery to all mates alive.<br>The player who lands the killing blow receives <strong>20 points</strong>.<br>A Regi-Boss respawn <strong>2 minutes</strong> after his death.</p>"
+        },
+        {
+          "time": 420,
+          "time_dispawn": 120,
+          "time_before_respawn": 120,
+          "img": "assets/maps/spawn/regice.png",
+          "xPercent": 49.8,
+          "yPercent": 98,
+          "size": 70,
+          "delete": false,
+          "info": "<p>Spawns at <strong>7:00</strong> on a random lane between <strong>toplane and botlane</strong>. Regi-Boss spawning is random between Registeel, Regirock and Regice.<br>When is defeated, he gave to the whole team who defeat him some experiences, a little shield and a buff that boost shield and hp recovery to all mates alive.<br>The player who lands the killing blow receives <strong>20 points</strong>.<br>A Regi-Boss respawn <strong>2 minutes</strong> after his death.</p>"
+        }
+      ],
+      "killed": false
+    },
+    {
+      "name": "Registeel",
+      "gif": "assets/maps/gifs/registeel.gif",
+      "spawns": [
+        {
+          "time": 420,
+          "time_dispawn": 120,
+          "time_before_respawn": 120,
+          "img": "assets/maps/spawn/registeel.png",
+          "xPercent": 44.8,
+          "yPercent": 20,
+          "size": 70,
+          "delete": false,
+          "info": "<p>Spawns at <strong>7:00</strong> on a random lane between <strong>toplane and botlane</strong>. Regi-Boss spawning is random between Registeel, Regirock and Regice.<br>When is defeated, he gave to the whole team who defeat him some experiences, a little shield and a buff that boost attack and special attack to all mates alive.<br>The player who lands the killing blow receives <strong>20 points</strong>.<br>A Regi-Boss respawn <strong>2 minutes</strong> after his death.</p>"
+        },
+        {
+          "time": 420,
+          "time_dispawn": 120,
+          "time_before_respawn": 120,
+          "img": "assets/maps/spawn/registeel.png",
+          "xPercent": 44.8,
+          "yPercent": 98,
+          "size": 70,
+          "delete": false,
+          "info": "<p>Spawns at <strong>7:00</strong> on a random lane between <strong>toplane and botlane</strong>. Regi-Boss spawning is random between Registeel, Regirock and Regice.<br>When is defeated, he gave to the whole team who defeat him some experiences, a little shield and a buff that boost attack and special attack to all mates alive.<br>The player who lands the killing blow receives <strong>20 points</strong>.<br>A Regi-Boss respawn <strong>2 minutes</strong> after his death.</p>"
+        }
+      ],
+      "killed": false
+    },
+    {
+      "name": "Regirock",
+      "gif": "assets/maps/gifs/regirock.gif",
+      "spawns": [
+        {
+          "time": 420,
+          "time_dispawn": 120,
+          "time_before_respawn": 120,
+          "img": "assets/maps/spawn/regirock.png",
+          "xPercent": 54.8,
+          "yPercent": 20,
+          "size": 70,
+          "delete": false,
+          "info": "<p>Spawns at <strong>7:00</strong> on a random lane between <strong>toplane and botlane</strong>. Regi-Boss spawning is random between Registeel, Regirock and Regice.<br>When is defeated, he gave to the whole team who defeat him some experiences, a little shield and a buff that boost defense and special defense to all mates alive.<br>The player who lands the killing blow receives <strong>20 points</strong>.<br>A Regi-Boss respawn <strong>2 minutes</strong> after his death.</p>"
+        },
+        {
+          "time": 420,
+          "time_dispawn": 120,
+          "time_before_respawn": 120,
+          "img": "assets/maps/spawn/regirock.png",
+          "xPercent": 54.8,
+          "yPercent": 98,
+          "size": 70,
+          "delete": false,
+          "info": "<p>Spawns at <strong>7:00</strong> on a random lane between <strong>toplane and botlane</strong>. Regi-Boss spawning is random between Registeel, Regirock and Regice.<br>When is defeated, he gave to the whole team who defeat him some experiences, a little shield and a buff that boost defense and special defense to all mates alive.<br>The player who lands the killing blow receives <strong>20 points</strong>.<br>A Regi-Boss respawn <strong>2 minutes</strong> after his death.</p>"
+        }
+      ],
+      "killed": false
+    },
+    {
+      "name": "Xatu",
+      "gif": "assets/maps/gifs/xatu.gif",
+      "spawns": [
+        {
+          "time": 599,
+          "time_dispawn": 0,
+          "time_before_respawn": 0,
+          "img": "assets/maps/spawn/xatu.png",
+          "xPercent": 22,
+          "yPercent": 55,
+          "size": 60,
+          "delete": true,
+          "info": "<p>Spawns at <strong>9:59</strong>.</p><p>Grants <strong>a large amount of experience</strong> and <strong>2 points</strong> when defeated.</p><p><strong>Does not respawn</strong>.</p>"
+        },
+        {
+          "time": 599,
+          "time_dispawn": 0,
+          "time_before_respawn": 0,
+          "img": "assets/maps/spawn/xatu.png",
+          "xPercent": 78,
+          "yPercent": 55,
+          "size": 60,
+          "delete": true,
+          "info": "<p>Spawns at <strong>9:59</strong>.</p><p>Grants <strong>a large amount of experience</strong> and <strong>2 points</strong> when defeated.</p><p><strong>Does not respawn</strong>.</p>"
+        }
+      ],
+      "killed": false
+    },
+    {
+      "name": "Natu",
+      "gif": "assets/maps/gifs/natu.gif",
+      "spawns": [
+        {
+          "time": 540,
+          "time_dispawn": 490,
+          "time_before_respawn": 0,
+          "img": "assets/maps/spawn/natu.png",
+          "xPercent": 49.9,
+          "yPercent": 54.5,
+          "size": 60,
+          "delete": true,
+          "info": "<p>Spawns at <strong>9:00</strong> in groups of <strong>three</strong>.</p><p>When defeated, each <strong>Natu</strong> grants <strong>2 points</strong> and they <strong>do not respawn</strong>.</p><p>If they are still alive at <strong>8:10</strong>, they <strong>disappear</strong>.</p>"
+        },
+        {
+          "time": 560,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/natu.png",
+          "xPercent": 49.9,
+          "yPercent": 39.5,
+          "size": 60,
+          "delete": false,
+          "removeOnTowerBreak": [3, 4],
+          "info": "<p>Spawns at <strong>9:20</strong> in groups of <strong>three</strong>.</p><p>When defeated, each <strong>Natu</strong> grants <strong>2 points</strong>.</p><p>When all Natu's are defeated, respawn after <strong>60 seconds</strong>.</p><p>If either of the <strong>first towers</strong> in the lane is destroyed, it <strong>disappears</strong>.</p>"
+        }
+      ],
+      "killed": false
+    },
+    {
+      "name": "Indeedee",
+      "gif": "assets/maps/gifs/indeedee.gif",
+      "spawns": [
+        {
+          "time": 570,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/indeedee.png",
+          "xPercent": 40,
+          "yPercent": 83,
+          "size": 60,
+          "delete": false,
+          "removeOnTowerBreak": [1, 2],
+          "info": "<p>Starts spawning at <strong>9:30</strong>.</p><p>When defeated, it <strong>respawns after 60 seconds</strong> and grants <strong>5 points</strong>.</p><p>If either of the <strong>first towers</strong> in the lane is destroyed, it <strong>disappears</strong>.</p>"
+        },
+        {
+          "time": 575,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/indeedee.png",
+          "xPercent": 41,
+          "yPercent": 72,
+          "size": 60,
+          "delete": false,
+          "removeOnTowerBreak": [1, 2],
+          "info": "<p>Starts spawning at <strong>9:35</strong>.</p><p>When defeated, it <strong>respawns after 60 seconds</strong> and grants <strong>5 points</strong>.</p><p>If either of the <strong>first towers</strong> in the lane is destroyed, it <strong>disappears</strong>.</p>"
+        },
+        {
+          "time": 570,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/indeedee.png",
+          "xPercent": 59,
+          "yPercent": 83,
+          "size": 60,
+          "delete": false,
+          "removeOnTowerBreak": [1, 2],
+          "info": "<p>Starts spawning at <strong>9:30</strong>.</p><p>When defeated, it <strong>respawns after 60 seconds</strong> and grants <strong>5 points</strong>.</p><p>If either of the <strong>first towers</strong> in the lane is destroyed, it <strong>disappears</strong>.</p>"
+        },
+        {
+          "time": 575,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/indeedee.png",
+          "xPercent": 58,
+          "yPercent": 72,
+          "size": 60,
+          "delete": false,
+          "removeOnTowerBreak": [1, 2],
+          "info": "<p>Starts spawning at <strong>9:35</strong>.</p><p>When defeated, it <strong>respawns after 60 seconds</strong> and grants <strong>5 points</strong>.</p><p>If either of the <strong>first towers</strong> in the lane is destroyed, it <strong>disappears</strong>.</p>"
+        },
+        {
+          "time": 600,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/indeedee.png",
+          "xPercent": 24,
+          "yPercent": 33,
+          "size": 60,
+          "delete": false,
+          "spawnOnTowerBreak": [3],
+          "info": "<p>Spawns when the corresponding <strong>first tower</strong> is destroyed.</p><p>When defeated, it <strong>respawns after 60 seconds</strong> and grants <strong>5 points</strong>.</p>"
+        },
+        {
+          "time": 600,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/indeedee.png",
+          "xPercent": 17,
+          "yPercent": 37,
+          "size": 60,
+          "delete": false,
+          "spawnOnTowerBreak": [3],
+          "info": "<p>Spawns when the corresponding <strong>first tower</strong> is destroyed.</p><p>When defeated, it <strong>respawns after 60 seconds</strong> and grants <strong>5 points</strong>.</p>"
+        },
+        {
+          "time": 600,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/indeedee.png",
+          "xPercent": 12,
+          "yPercent": 43,
+          "size": 60,
+          "delete": false,
+          "spawnOnTowerBreak": [3],
+          "info": "<p>Spawns when the corresponding <strong>first tower</strong> is destroyed.</p><p>When defeated, it <strong>respawns after 60 seconds</strong> and grants <strong>5 points</strong>.</p>"
+        },
+        {
+          "time": 600,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/indeedee.png",
+          "xPercent": 75,
+          "yPercent": 33,
+          "size": 60,
+          "delete": false,
+          "spawnOnTowerBreak": [4],
+          "info": "<p>Spawns when the corresponding <strong>first tower</strong> is destroyed.</p><p>When defeated, it <strong>respawns after 60 seconds</strong> and grants <strong>5 points</strong>.</p>"
+        },
+        {
+          "time": 600,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/indeedee.png",
+          "xPercent": 82,
+          "yPercent": 37,
+          "size": 60,
+          "delete": false,
+          "spawnOnTowerBreak": [4],
+          "info": "<p>Spawns when the corresponding <strong>first tower</strong> is destroyed.</p><p>When defeated, it <strong>respawns after 60 seconds</strong> and grants <strong>5 points</strong>.</p>"
+        },
+        {
+          "time": 600,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/indeedee.png",
+          "xPercent": 86,
+          "yPercent": 42,
+          "size": 60,
+          "delete": false,
+          "spawnOnTowerBreak": [4],
+          "info": "<p>Spawns when the corresponding <strong>first tower</strong> is destroyed.</p><p>When defeated, it <strong>respawns after 60 seconds</strong> and grants <strong>5 points</strong>.</p>"
+        },
+        {
+          "time": 600,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/indeedee.png",
+          "xPercent": 9.8,
+          "yPercent": 67.8,
+          "size": 60,
+          "delete": false,
+          "spawnOnTowerBreak": [1],
+          "info": "<p>Spawns when the corresponding <strong>first tower</strong> is destroyed.</p><p>When defeated, it <strong>respawns after 60 seconds</strong> and grants <strong>5 points</strong>.</p>"
+        },
+        {
+          "time": 600,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/indeedee.png",
+          "xPercent": 14,
+          "yPercent": 72.5,
+          "size": 60,
+          "delete": false,
+          "spawnOnTowerBreak": [1],
+          "info": "<p>Spawns when the corresponding <strong>first tower</strong> is destroyed.</p><p>When defeated, it <strong>respawns after 60 seconds</strong> and grants <strong>5 points</strong>.</p>"
+        },
+        {
+          "time": 600,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/indeedee.png",
+          "xPercent": 85.5,
+          "yPercent": 72.5,
+          "size": 60,
+          "delete": false,
+          "spawnOnTowerBreak": [2],
+          "info": "<p>Spawns when the corresponding <strong>first tower</strong> is destroyed.</p><p>When defeated, it <strong>respawns after 60 seconds</strong> and grants <strong>5 points</strong>.</p>"
+        },
+        {
+          "time": 600,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/indeedee.png",
+          "xPercent": 89.8,
+          "yPercent": 68,
+          "size": 60,
+          "delete": false,
+          "spawnOnTowerBreak": [2],
+          "info": "<p>Spawns when the corresponding <strong>first tower</strong> is destroyed.</p><p>When defeated, it <strong>respawns after 60 seconds</strong> and grants <strong>5 points</strong>.</p>"
+        }
+      ],
+      "killed": false
+    },
+    {
+      "name": "Sitrus",
+      "spawns": [
+        {
+          "time": 570,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/sitrus.png",
+          "xPercent": 35.5,
+          "yPercent": 74.5,
+          "size": 40,
+          "delete": false,
+          "removeOnTowerBreak": [1]
+        },
+        {
+          "time": 570,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/sitrus.png",
+          "xPercent": 33.5,
+          "yPercent": 78,
+          "size": 40,
+          "delete": false,
+          "removeOnTowerBreak": [1]
+        },
+        {
+          "time": 570,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/sitrus.png",
+          "xPercent": 65,
+          "yPercent": 74.5,
+          "size": 40,
+          "delete": false,
+          "removeOnTowerBreak": [2]
+        },
+        {
+          "time": 570,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/sitrus.png",
+          "xPercent": 67,
+          "yPercent": 78,
+          "size": 40,
+          "delete": false,
+          "removeOnTowerBreak": [2]
+        },
+        
+        {
+          "time": 570,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/sitrus.png",
+          "xPercent": 36.5,
+          "yPercent": 36.5,
+          "size": 40,
+          "delete": false,
+          "removeOnTowerBreak": [3]
+        },
+        {
+          "time": 570,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/sitrus.png",
+          "xPercent": 35.5,
+          "yPercent": 33,
+          "size": 40,
+          "delete": false,
+          "removeOnTowerBreak": [3]
+        },
+        {
+          "time": 570,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/sitrus.png",
+          "xPercent": 63.5,
+          "yPercent": 36,
+          "size": 40,
+          "delete": false,
+          "removeOnTowerBreak": [4]
+        },
+        {
+          "time": 570,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/sitrus.png",
+          "xPercent": 64.5,
+          "yPercent": 33,
+          "size": 40,
+          "delete": false,
+          "removeOnTowerBreak": [4]
+        },
+        {
+          "time": 510,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/sitrus.png",
+          "xPercent": 44.5,
+          "yPercent": 62.5,
+          "size": 40,
+          "delete": false
+        },
+        {
+          "time": 510,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/sitrus.png",
+          "xPercent": 54.5,
+          "yPercent": 62.5,
+          "size": 40,
+          "delete": false
+        },
+        {
+          "time": 510,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/sitrus.png",
+          "xPercent": 44.5,
+          "yPercent": 47,
+          "size": 40,
+          "delete": false
+          },
+        {
+          "time": 510,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/sitrus.png",
+          "xPercent": 54.5,
+          "yPercent": 47,
+          "size": 40,
+          "delete": false
+        }
+      ],
+      "killed": false
+    },
+    {
+      "name": "Altaria",
+      "isSpecial": true,
+      "lanes": {
+        "bot": { "x": 49.8, "y": 77 },
+        "top": { "x": 49.8, "y": 34 }
+      },
+      "t1Positions": {
+        "top": {
+          "left": { "x": 33.5, "y": 35 },
+          "right": { "x": 65, "y": 35 }
+        },
+        "bot": {
+          "left": { "x": 31.5, "y": 75 },
+          "right": { "x": 67, "y": 75 }
+        }
+      },
+      "t2Positions": {
+        "top": {
+          "left": { "x": 21.5, "y": 41 },
+          "right": { "x": 78, "y": 41 }
+        },
+        "bot": {
+          "left": { "x": 21.5, "y": 70 },
+          "right": { "x": 78, "y": 70 }
+        }
+      },
+      "spawnLists": {
+        "0": [530, 440, 350, 260, 170, 80],
+        "1": [465, 375, 285, 195, 105, 15],
+        "2": [450, 360, 270, 180, 90]
+      },
+      "img": "assets/maps/spawn/altaria.png",
+      "size": 70,
+      "delete": true,
+      "spawnInfos": {
+        "0": [
+          "<p>Start spawning at <strong>8:50</strong>.</p><p>After we kill Altaria and all Swablu, they will spawn depending of the current state of the tower in a lane. When both is open, they spaw every 1:30 after their spawn, and can't spawn if past Altaria are still there.</p><p>Exact timing for both T1 alive: <strong>8:50/7:20/5:50/4:20/2:50/1:20</strong></p>"
+        ],
+        "1": [
+          "<p>Start spawning when one first tower is destroyed.</p><p>After we kill Altaria and all Swablu, they will spawn depending of the current state of the tower in a lane. When both is open, they spaw every 1:30 after their spawn, and can't spawn if past Altaria are still there.</p><p>Exact timing for one T1 destroyed: <strong>7:45/6:15/4:45/3:15/1:45/0:15</strong></p>"
+        ],
+        "2": [
+          "<p>Start spawning when both first tower are destroyed.</p><p>After we kill Altaria and all Swablu, they will spawn depending of the current state of the tower in a lane. When both is open, they spaw every 1:30 after their spawn, and can't spawn if past Altaria are still there.</p><p>Exact timing for both T1 destroyed: <strong>7:30/6:00/4:30/3:00/1:30</strong></p>"
+        ]
+      },
+      "spawns": [
+        {
+          "info": "<p>Starts spawning <strong>mid 1:30 after Regidrago is killed</strong>. When defeated, <strong>Altaria or Regidrago respawn after 1:30</strong>, it's <strong>random</strong>. <strong>Can't spawn / dispawn at 2:30</strong>.</p>"
+        }
+      ]
+    }
+  ]
+}

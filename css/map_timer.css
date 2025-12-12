@@ -269,3 +269,29 @@ h1 {
   line-height: 1.4;
   color: #ccc;
 }
+
+.map-switch {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.map-switch button {
+  padding: 10px 20px;
+  background: #2a3435;
+  border: 2px solid #000;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.map-switch button:hover {
+  background: #4a90e2;
+}
+
+.map-switch button.active {
+  background: #4a90e2;
+  border-color: #fff;
+}
