@@ -771,7 +771,7 @@
       "spawns": [
         {
           "time": 540,
-          "time_dispawn": 490,
+          "time_dispawn": 485,
           "time_before_respawn": 0,
           "img": "assets/maps/spawn/natu.png",
           "xPercent": 49.9,
@@ -1099,6 +1099,26 @@
           "img": "assets/maps/spawn/sitrus.png",
           "xPercent": 54.5,
           "yPercent": 47,
+          "size": 40,
+          "delete": false
+        },
+        {
+          "time": 300,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/sitrus.png",
+          "xPercent": 35.5,
+          "yPercent": 55,
+          "size": 40,
+          "delete": false
+          },
+        {
+          "time": 300,
+          "time_dispawn": 0,
+          "time_before_respawn": 60,
+          "img": "assets/maps/spawn/sitrus.png",
+          "xPercent": 64,
+          "yPercent": 55,
           "size": 40,
           "delete": false
         }

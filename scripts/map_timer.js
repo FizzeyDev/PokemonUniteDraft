@@ -113,16 +113,13 @@ function loadSpawns(mapName) {
         ...p,
         originalName: p.name,
         originalImg: p.spawns?.[0]?.img || p.img,
-        spawns:
-          p.spawns?.map((s) => ({
-            ...s,
-            element: null,
-            killed: false,
-            killedTime: null
-          })) || []
+        spawns: p.spawns?.map((s) => ({
+          ...s,
+          element: null,
+          killed: false,
+          killedTime: null
+        })) || []
       }));
-
-      renderSpawns();
 
       towers = data.towers.map((t) => ({ ...t, element: null }));
 
@@ -132,6 +129,9 @@ function loadSpawns(mapName) {
           initializeAltariaLane(lane, altaria);
         });
       }
+
+      spawnsContainer.innerHTML = "";
+      towersContainer.innerHTML = "";
 
       updateDisplay();
     })

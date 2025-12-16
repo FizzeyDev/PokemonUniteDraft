@@ -1,0 +1,1051 @@
+[
+    {
+        "name": "Accel Bracer",
+        "display_name": "Accel Bracer",
+        "bonus1": "Attack +17.5",
+        "bonus2": "CD Reduction +3.5%",
+        "stats": [
+            {
+                "label": "Attack",
+                "percent": false,
+                "float": 1,
+                "initial": 0.5,
+                "start": 0,
+                "skip": 0,
+                "increment": 0.5,
+                "initial_diff": 0
+            },
+            {
+                "label": "CD Reduction",
+                "percent": true,
+                "float": 1,
+                "initial": 0,
+                "start": 1,
+                "skip": 1,
+                "increment": 0.2,
+                "initial_diff": 0
+            }
+        ],
+        "description1": "Upon making an assist, or knocking out a Pokémon from the opposing team: increases Attack by 0.3/0.45/0.6% until the end of battle (up to 20 stacks; maximum 6/9/12%). Assists add 1 stack; KOs add 2 stacks.",
+        "note": "Stacks are not lost upon being KO'd.",
+        "tier": "A",
+        "description3": "Attack",
+        "level1": "0.3%",
+        "level10": "0.45%",
+        "level20": "0.6%"
+    },
+    {
+        "name": "Aeos Cookie",
+        "display_name": "Aeos Cookie",
+        "bonus1": "HP +280",
+        "stats": [
+            {
+                "label": "HP",
+                "percent": false,
+                "float": 0,
+                "initial": 8,
+                "start": 0,
+                "skip": 0,
+                "increment": 8,
+                "initial_diff": 0
+            }
+        ],
+        "description1": "Upon scoring a goal: increases max HP by 100/150/200 until the end of battle (up to 6 times; maximum 600/900/1200 bonus max HP).",
+        "tier": "C",
+        "description3": "Max HP",
+        "level1": "100",
+        "level10": "150",
+        "level20": "200"
+    },
+    {
+        "name": "Amulet Coin",
+        "display_name": "Amulet Coin",
+        "bonus1": "HP +280",
+        "bonus2": "Speed +175",
+        "stats": [
+            {
+                "label": "HP",
+                "percent": false,
+                "float": 0,
+                "initial": 8,
+                "start": 0,
+                "skip": 0,
+                "increment": 8,
+                "initial_diff": 0
+            },
+            {
+                "label": "Speed",
+                "percent": false,
+                "float": 0,
+                "initial": 0,
+                "start": 1,
+                "skip": 1,
+                "increment": 10,
+                "initial_diff": 0
+            }
+        ],
+        "description1": "Gain 60/80/100% more Aeos Energy for defeating wild Pokémon (16s cd). Goal-scoring speed is passively increased by 10%.",
+        "tier": "D",
+        "description3": "Additional Aeos Energy",
+        "level1": "60%",
+        "level10": "80%",
+        "level20": "100%"
+    },
+    {
+        "name": "Assault Vest",
+        "display_name": "Assault Vest",
+        "bonus1": "HP +315",
+        "bonus2": "Sp. Defense +59.5",
+        "stats": [
+            {
+                "label": "HP",
+                "percent": false,
+                "float": 0,
+                "initial": 18,
+                "start": 0,
+                "skip": 1,
+                "increment": 18,
+                "initial_diff": 0
+            },
+            {
+                "label": "Sp. Defense",
+                "percent": false,
+                "float": 1,
+                "initial": 0,
+                "start": 1,
+                "skip": 1,
+                "increment": 3.4
+            }
+        ],
+        "description1": "When not receiving special damage for 15s: grants a 10/15/20% max HP shield effect that nullifies Sp. Attack-based damage until it is destroyed. This shield can be refreshed even if its not fully depleted.",
+        "tier": "B",
+        "description3": "Max HP",
+        "level1": "10%",
+        "level10": "15%",
+        "level20": "20%"
+    },
+    {
+        "name": "Attack Weight",
+        "display_name": "Attack Weight",
+        "bonus1": "Attack +21",
+        "stats": [
+            {
+                "label": "Attack",
+                "percent": false,
+                "float": 1,
+                "initial": 0.6,
+                "start": 0,
+                "skip": 0,
+                "increment": 0.6,
+                "initial_diff": 0
+            }
+        ],
+        "description1": "Upon scoring a goal: increases Attack by 6/9/12 until the end of battle (up to 6 times; maximum 36/54/72 bonus Attack).",
+        "tier": "S",
+        "description3": "Attack",
+        "level1": "6",
+        "level10": "9",
+        "level20": "12"
+    },
+    {
+        "name": "Big Root",
+        "display_name": "Big Root",
+        "bonus1": "HP + 525",
+        "stats": [
+            {
+                "label": "HP",
+                "percent": false,
+                "float": 0,
+                "initial": 15,
+                "start": 0,
+                "skip": 0,
+                "increment": 15,
+                "initial_diff": 0
+            }
+        ],
+        "description1": "Improves HP recovery by 10/15/20% from self healing.",
+        "note": "Self healing sources that are unaffected are: Wild Pokémon KO healing, Pokémon's innate HP/5s, the HP/5s stat provided by Leftovers and Resonant Guard, and Slowbro's Oblivious.",
+        "tier": "C",
+        "description3": "HP Recovery",
+        "level1": "10%",
+        "level10": "15%",
+        "level20": "20%"
+    },
+    {
+        "name": "Buddy Barrier",
+        "display_name": "Buddy Barrier",
+        "bonus1": "HP +525",
+        "stats": [
+            {
+                "label": "HP",
+                "percent": false,
+                "float": 0,
+                "initial": 15,
+                "start": 0,
+                "skip": 0,
+                "increment": 15,
+                "initial_diff": 0
+            }
+        ],
+        "description1": "When using their Unite Move: grants the holder and 1 nearby ally with the lowest current HP a shield equal to 15/20/25% of the holder's max HP for 5s (30s CD). Additional Buddy Barrier shields do not stack, but instead refresh the duration of the remaining shield effect.",
+        "tier": "A",
+        "description3": "Max HP Shield",
+        "level1": "15%",
+        "level10": "20%",
+        "level20": "25%"
+    },
+    {
+        "name": "Charging Charm",
+        "display_name": "Charging Charm",
+        "bonus1": "Attack +17.5",
+        "bonus2": "Speed +140",
+        "stats": [
+            {
+                "label": "Attack",
+                "percent": false,
+                "float": 1,
+                "initial": 1,
+                "start": 0,
+                "skip": 1,
+                "increment": 1,
+                "initial_diff": 0
+            },
+            {
+                "label": "Speed",
+                "percent": false,
+                "float": 0,
+                "initial": 4,
+                "start": 1,
+                "skip": 0,
+                "increment": 4
+            }
+        ],
+        "description1": "Charges energy through movement (+1 per distance unit traveled) and auto attacks (+9 per auto attack damage instance dealt), up to 100 energy. When energy is full: damaging an opposing Pokémon deals 20/30/40 + 50/60/70% Attack as additional damage to the first target hit, consuming the charged energy.",
+        "tier": "C",
+        "description3": "Attack",
+        "level1": "50%",
+        "level10": "60%",
+        "level20": "70%"
+    },
+    {
+        "name": "Charizardite X",
+        "display_name": "Charizardite X",
+        "description1": "One of the variety of mysterious Mega Stones. Have Mega Charizard X hold it, and this stone will enable it to Mega Evolve during battle.",
+        "extra_info": "Charizardite X must be used and can only be used while playing Mega Charizard X. Has no effect."
+    },
+    {
+        "name": "Choice Scarf",
+        "display_name": "Choice Scarf",
+        "bonus1": "Attack Speed +8.75%",
+        "bonus2": "Speed +175",
+        "stats": [
+            {
+                "label": "Attack Speed",
+                "percent": true,
+                "float": 1,
+                "initial": 0.5,
+                "start": 0,
+                "skip": 1,
+                "increment": 0.5,
+                "initial_diff": 0
+            },
+            {
+                "label": "Speed",
+                "percent": false,
+                "float": 0,
+                "initial": 0,
+                "start": 1,
+                "skip": 1,
+                "increment": 10,
+                "initial_diff": 0
+            }
+        ],
+        "description1": "Dealing auto attack damage to a Pokémon from the opposing team adds 1 stack of a hidden buff for 2s, up to 3 stacks. Taking non movement, non auto attack actions will reset the stack count to 0. After the 3rd stack: increases movement speed by 30/35/40% for 3s (8s CD).",
+        "tier": "D",
+        "description3": "Movement Speed",
+        "level1": "30%",
+        "level10": "35%",
+        "level20": "40%"
+    },
+    {
+        "name": "Choice Specs",
+        "display_name": "Choice Specs",
+        "bonus1": "Sp. Attack +44",
+        "stats": [
+            {
+                "label": "Sp. Attack",
+                "percent": false,
+                "float": 0,
+                "initial": 10,
+                "start": 0,
+                "skip": 0,
+                "increment": 1,
+                "initial_diff": 9
+            }
+        ],
+        "description1": "When damaging an opposing Pokémon with a move: deals 40/50/60 + 30/35/40% Sp. Attack as additional damage to the first target hit (8s CD).",
+        "tier": "A",
+        "description3": "Sp. Attack",
+        "level1": "30%",
+        "level10": "35%",
+        "level20": "40%"
+    },
+    {
+        "name": "Curse Bangle",
+        "display_name": "Curse Bangle",
+        "bonus1": "Attack +28",
+        "stats": [
+            {
+                "label": "Attack",
+                "percent": false,
+                "float": 1,
+                "initial": 0.8,
+                "start": 0,
+                "skip": 0,
+                "increment": 0.8,
+                "initial_diff": 0
+            }
+        ],
+        "description1": "Attack-based damage dealt to opposing Pokémon weakens their HP recovery effect by 20/25/30% for 1.5 seconds.",
+        "tier": "B",
+        "description3": "Reduced HP Recovery",
+        "level1": "20%",
+        "level10": "25%",
+        "level20": "30%"
+    },
+    {
+        "name": "Curse Incense",
+        "display_name": "Curse Incense",
+        "bonus1": "Sp. Attack +45.5",
+        "stats": [
+            {
+                "label": "Sp. Attack",
+                "percent": false,
+                "float": 1,
+                "initial": 1.3,
+                "start": 0,
+                "skip": 0,
+                "increment": 1.3,
+                "initial_diff": 0
+            }
+        ],
+        "description1": "Sp. Attack-based damage dealt to opposing Pokémon weakens their HP recovery effect by 20/25/30% for 1.5 seconds.",
+        "tier": "A",
+        "description3": "Reduced HP Recovery",
+        "level1": "20%",
+        "level10": "25%",
+        "level20": "30%"
+    },
+    {
+        "name": "Drain Crown",
+        "display_name": "Drain Crown",
+        "bonus1": "HP +140",
+        "bonus2": "Attack +21",
+        "stats": [
+            {
+                "label": "HP",
+                "percent": false,
+                "float": 0,
+                "initial": 8,
+                "start": 0,
+                "skip": 1,
+                "increment": 8,
+                "initial_diff": 0
+            },
+            {
+                "label": "Attack",
+                "percent": false,
+                "float": 1,
+                "initial": 0,
+                "start": 1,
+                "skip": 1,
+                "increment": 1.2,
+                "initial_diff": 0
+            }
+        ],
+        "description1": "Attack-based auto attacks restore HP equal to 9%/12%/15% of damage dealt directly to an opposing Pokémon's HP.",
+        "tier": "D",
+        "description3": "Lifesteal",
+        "level1": "9%",
+        "level10": "12%",
+        "level20": "15%"
+    },
+    {
+        "name": "Drive Lens",
+        "display_name": "Drive Lens",
+        "bonus1": "Sp. Attack +28",
+        "bonus2": "CD Reduction +3.5%",
+        "stats": [
+            {
+                "label": "Sp. Attack",
+                "percent": false,
+                "float": 1,
+                "initial": 0.8,
+                "start": 0,
+                "skip": 0,
+                "increment": 0.8,
+                "initial_diff": 0
+            },
+            {
+                "label": "CD Reduction",
+                "percent": true,
+                "float": 1,
+                "initial": 0,
+                "start": 1,
+                "skip": 1,
+                "increment": 0.2,
+                "initial_diff": 0
+            }
+        ],
+        "description1": "Upon making an assist, or knocking out a Pokémon from the opposing team: increases Sp. Attack by 0.3/0.45/0.6% until the end of battle (up to 20 stacks; maximum 6/9/12%). Assists add 1 stack; KOs add 2 stacks.",
+        "note": "Stacks are not lost upon being KO'd.",
+        "tier": "A",
+        "description3": "Sp. Attack",
+        "level1": "0.3%",
+        "level10": "0.45%",
+        "level20": "0.6%"
+    },
+    {
+        "name": "Energy Amplifier",
+        "display_name": "Energy Amplifier",
+        "bonus1": "Energy Rate +7%",
+        "bonus2": "CD Reduction +5.25%",
+        "stats": [
+            {
+                "label": "Energy Rate",
+                "percent": true,
+                "float": 1,
+                "initial": 0.4,
+                "start": 0,
+                "skip": 1,
+                "increment": 0.4,
+                "initial_diff": 0
+            },
+            {
+                "label": "CD Reduction",
+                "percent": true,
+                "float": 1,
+                "initial": 0,
+                "start": 1,
+                "skip": 1,
+                "increment": 0.3,
+                "initial_diff": 0
+            }
+        ],
+        "description1": "When using their Unite Move: increases damage dealt by 7/14/21% for 4s (15s CD). Note: certain Unite Moves have unique interactions with this held item.",
+        "tier": "A",
+        "description3": "Damage",
+        "level1": "7%",
+        "level10": "14%",
+        "level20": "21%"
+    },
+    {
+        "name": "Exp Share",
+        "display_name": "Exp. Share",
+        "bonus1": "HP +280",
+        "bonus2": "Speed +175",
+        "stats": [
+            {
+                "label": "HP",
+                "percent": false,
+                "float": 0,
+                "initial": 16,
+                "start": 0,
+                "skip": 1,
+                "increment": 16,
+                "initial_diff": 0
+            },
+            {
+                "label": "Speed",
+                "percent": false,
+                "float": 0,
+                "initial": 0,
+                "start": 1,
+                "skip": 1,
+                "increment": 10,
+                "initial_diff": 0
+            }
+        ],
+        "description1": "While having the fewest Exp. Points on the team: gains an additional 3/4/5 Exp. Points every 1s. When the holder and at least one other ally Pokémon not holding Exp. Share gain Exp. Points from knocking out an opposing Pokémon; ally Pokémon not holding Exp. Share gain Exp. Points as if the holder didn't participate in the KO, and the holder separately gains 30% of the total Exp. Points instead. Only 1 holder can gain Exp. Points whenever an opposing Pokémon is knocked out.",
+        "note": "Visit <a href=https://docs.google.com/spreadsheets/d/e/2PACX-1vSjv2g6kMd450B8b1URRE9XIDGZMnyw6MPZvKlEEQ8tY2mOs2eAOkgatZiEKd2pZQKriuxB5m4LZX5H/pubhtml>Experience & Experience Share</a> to learn more about Experience and Exp Share.",
+        "tier": "S",
+        "description3": "EXP/s",
+        "level1": "3",
+        "level10": "4",
+        "level20": "5"
+    },
+    {
+        "name": "Float Stone",
+        "display_name": "Float Stone",
+        "bonus1": "Attack +28",
+        "bonus2": "Speed +175",
+        "stats": [
+            {
+                "label": "Attack",
+                "percent": false,
+                "float": 1,
+                "initial": 1.6,
+                "start": 0,
+                "skip": 1,
+                "increment": 1.6,
+                "initial_diff": 0
+            },
+            {
+                "label": "Speed",
+                "percent": false,
+                "float": 0,
+                "initial": 0,
+                "start": 1,
+                "skip": 1,
+                "increment": 10,
+                "initial_diff": 0
+            }
+        ],
+        "description1": "When not in combat for 5s: increases movement speed by 10/15/20%.",
+        "tier": "C",
+        "description3": "Speed",
+        "level1": "10%",
+        "level10": "15%",
+        "level20": "20%"
+    },
+    {
+        "name": "Focus Band",
+        "display_name": "Focus Band",
+        "bonus1": "Sp. Defense +35",
+        "bonus2": "Defense +35",
+        "stats": [
+            {
+                "label": "Defense",
+                "percent": false,
+                "float": 0,
+                "initial": 2,
+                "start": 0,
+                "skip": 1,
+                "increment": 2,
+                "initial_diff": 0
+            },
+            {
+                "label": "Sp. Defense",
+                "percent": false,
+                "float": 0,
+                "initial": 0,
+                "start": 1,
+                "skip": 1,
+                "increment": 2,
+                "initial_diff": 0
+            }
+        ],
+        "description1": "When below 25% HP: recovers 6/9/12% missing HP 3 times over 3s, once every 1s (100/90/80s CD).",
+        "tier": "B",
+        "description3": "HP Lost",
+        "level1": "6%",
+        "level10": "9%",
+        "level20": "12%"
+    },
+    {
+        "name": "Gyaradosite",
+        "display_name": "Gyaradosite",
+        "description1": "One of the variety of mysterious Mega Stones. Have Gyarados hold it, and this stone will enable it to Mega Evolve during battle.",
+        "extra_info": "Gyaradosite must be used and can only be used while playing Mega Gyarados. Has no effect."
+    },
+    {
+        "name": "Leftovers",
+        "display_name": "Leftovers",
+        "bonus1": "HP +420",
+        "bonus2": "HP/5s +10.5",
+        "stats": [
+            {
+                "label": "HP",
+                "percent": false,
+                "float": 0,
+                "initial": 24,
+                "start": 0,
+                "skip": 1,
+                "increment": 24,
+                "initial_diff": 0
+            },
+            {
+                "label": "HP/5s",
+                "percent": false,
+                "float": 1,
+                "initial": 0,
+                "start": 1,
+                "skip": 1,
+                "increment": 0.6,
+                "initial_diff": 0
+            }
+        ],
+        "description1": "When not in combat for 5s: recovers 2/3/4% max HP every 1s.",
+        "tier": "C",
+        "description3": "Max HP/s",
+        "level1": "2%",
+        "level10": "3%",
+        "level20": "4%"
+    },
+    {
+        "name": "Lucarionite",
+        "display_name": "Lucarionite",
+        "description1": "One of the variety of mysterious Mega Stones. Have Lucario hold it, and this stone will enable it to Mega Evolve during battle.",
+        "extra_info": "Lucarionite must be used and can only be used while playing Mega Lucario. Has no effect."
+    },
+    {
+        "name": "Mewtwonite X",
+        "display_name": "Mewtwonite X",
+        "description1": "One of a variety of mysterious Mega Stones. Have Mewtwo hold it, and this stone will enable it to Mega Evolve during battle.",
+        "extra_info": "Mewtwonite X must be used and can only be used while playing Mewtwo X. Has no effect."
+    },
+    {
+        "name": "Mewtwonite Y",
+        "display_name": "Mewtwonite Y",
+        "description1": "One of a variety of mysterious Mega Stones. Have Mewtwo hold it, and this stone will enable it to Mega Evolve during battle.",
+        "extra_info": "Mewtwonite Y must be used and can only be used while playing Mewtwo Y. Has no effect."
+    },
+    {
+        "name": "Muscle Band",
+        "display_name": "Muscle Band",
+        "bonus1": "Attack +17.5",
+        "bonus2": "Attack Speed +8.75%",
+        "stats": [
+            {
+                "label": "Attack",
+                "percent": false,
+                "float": 0,
+                "initial": 1,
+                "start": 0,
+                "skip": 1,
+                "increment": 1,
+                "initial_diff": 0
+            },
+            {
+                "label": "Attack Speed",
+                "percent": true,
+                "float": 1,
+                "initial": 0,
+                "start": 1,
+                "skip": 1,
+                "increment": 0.5,
+                "initial_diff": 0
+            }
+        ],
+        "description1": "Auto attacks deal 1/2/3% of opposing Pokémon's remaining HP as additional Attack-based damage (against Pokémon from the opposing team: additional damage is capped at 120/240/360).",
+        "tier": "A",
+        "description3": "Remaining HP",
+        "level1": "1%",
+        "level10": "2%",
+        "level20": "3%"
+    },
+    {
+        "name": "Rapid Fire Scarf",
+        "display_name": "Rapid-Fire Scarf",
+        "bonus1": "Attack +14",
+        "bonus2": "Attack Speed +10.5%",
+        "stats": [
+            {
+                "label": "Attack",
+                "percent": false,
+                "float": 1,
+                "initial": 0.8,
+                "start": 0,
+                "skip": 1,
+                "increment": 0.8,
+                "initial_diff": 0
+            },
+            {
+                "label": "Attack Speed",
+                "percent": true,
+                "float": 1,
+                "initial": 0,
+                "start": 1,
+                "skip": 1,
+                "increment": 0.6,
+                "initial_diff": 0
+            }
+        ],
+        "description1": "Dealing auto attack damage to an opposing Pokémon adds 1 stack of a hidden buff for 3s, up to 3 stacks. After the 3rd stack: increases auto attack speed by 15/20/25% for 5s (10s CD).",
+        "tier": "B",
+        "description3": "Attack Speed",
+        "level1": "15%",
+        "level10": "20%",
+        "level20": "25%"
+    },
+    {
+        "name": "Razor Claw",
+        "display_name": "Razor Claw",
+        "bonus1": "Attack +17.5",
+        "bonus2": "Critical-Hit Rate +2.35%",
+        "stats": [
+            {
+                "label": "Attack",
+                "percent": false,
+                "float": 0,
+                "initial": 1,
+                "start": 0,
+                "skip": 1,
+                "increment": 1,
+                "initial_diff": 0
+            },
+            {
+                "label": "Critical-Hit Rate",
+                "percent": true,
+                "float": 1,
+                "initial": 0.6,
+                "start": 1,
+                "skip": 1,
+                "increment": 0.1,
+                "initial_diff": 0.6
+            }
+        ],
+        "description1": "For 3s after using a move: the next auto attack to damage an opposing Pokémon deals 10/15/20 + 40/45/50% Attack as additional damage to the first target hit; if held by a Melee Pokémon: also decreases the movement speed of the target by 30% for 1s (1.5s CD).",
+        "tier": "A",
+        "description3": "Attack",
+        "level1": "40%",
+        "level10": "45%",
+        "level20": "50%"
+    },
+    {
+        "name": "Rescue Hood",
+        "display_name": "Rescue Hood",
+        "bonus1": "Defense +35",
+        "bonus2": "Sp. Defense +35",
+        "stats": [
+            {
+                "label": "Defense",
+                "percent": false,
+                "float": 0,
+                "initial": 2,
+                "start": 0,
+                "skip": 1,
+                "increment": 2,
+                "initial_diff": 0
+            },
+            {
+                "label": "Sp. Defense",
+                "percent": false,
+                "float": 0,
+                "initial": 0,
+                "start": 1,
+                "skip": 1,
+                "increment": 2,
+                "initial_diff": 0
+            }
+        ],
+        "description1": "Increases HP recovery and shield effects granted to ally Pokémon by 11/14/17%.",
+        "tier": "D",
+        "description3": "Shield and Recovery Effects",
+        "level1": "11%",
+        "level10": "14%",
+        "level20": "17%"
+    },
+    {
+        "name": "Resonant Guard",
+        "display_name": "Resonant Guard",
+        "bonus1": "HP +525",
+        "bonus2": "HP/5s +21",
+        "stats": [
+            {
+                "label": "HP",
+                "percent": false,
+                "float": 0,
+                "initial": 15,
+                "start": 0,
+                "skip": 0,
+                "increment": 15,
+                "initial_diff": 0
+            },
+            {
+                "label": "HP/5s",
+                "percent": false,
+                "float": 1,
+                "initial": 0.6,
+                "start": 0,
+                "skip": 0,
+                "increment": 0.6,
+                "initial_diff": 0
+            }
+        ],
+        "description1": "When damaging a Pokémon from the opposing team: grants the holder and 1 nearby ally with the lowest current HP a shield for 60/80/100 + 4%/5%/6% of the holder's max HP for 3s (10s CD). Additional Resonant Guard shields do not stack, but instead refresh the duration of the remaining shield effect.",
+        "tier": "S",
+        "description3": "Max HP Shield",
+        "level1": "4%",
+        "level10": "5%",
+        "level20": "6%"
+    },
+    {
+        "name": "Rocky Helmet",
+        "display_name": "Rocky Helmet",
+        "bonus1": "HP +315",
+        "bonus2": "Defense +59.5",
+        "stats": [
+            {
+                "label": "HP",
+                "percent": false,
+                "float": 0,
+                "initial": 18,
+                "start": 0,
+                "skip": 1,
+                "increment": 18,
+                "initial_diff": 0
+            },
+            {
+                "label": "Defense",
+                "percent": false,
+                "float": 1,
+                "initial": 0,
+                "start": 1,
+                "skip": 1,
+                "increment": 3.4,
+                "initial_diff": 0
+            }
+        ],
+        "description1": "Upon receiving damage equal to 3% max HP or more from an opposing Pokémon in a single hit: deals 1.2/1.5/1.8% of the holder's max HP as Attack-based damage to nearby opposing Pokémon (0.6s CD).",
+        "tier": "B",
+        "description3": "Max HP",
+        "level1": "1.2%",
+        "level10": "1.5%",
+        "level20": "1.8%"
+    },
+    {
+        "name": "Rusted Sword",
+        "display_name": "Rusted Sword",
+        "description1": "It is said that a hero used this sword to halt a terrible disaster in ancient times. But it's grown rusty and worn.",
+        "extra_info": "Rusted Sword must be used and can only be used while playing Zacian. Has no effect."
+    },
+    {
+        "name": "Scope Lens",
+        "display_name": "Scope Lens",
+        "bonus1": "Critical-Hit Rate +7%",
+        "bonus2": "Critical-Hit Damage Modifier +14%",
+        "stats": [
+            {
+                "label": "Critical-Hit Rate",
+                "percent": true,
+                "float": 1,
+                "initial": 0.4,
+                "start": 0,
+                "skip": 1,
+                "increment": 0.4,
+                "initial_diff": 0
+            },
+            {
+                "label": "Critical-Hit Damage Modifier",
+                "percent": true,
+                "float": 1,
+                "initial": 0,
+                "start": 1,
+                "skip": 1,
+                "increment": 0.8
+            }
+        ],
+        "description1": "Upon dealing a critical hit with an auto attack: deals an additional hit of damage equal to 45/60/75% Attack to 1 target (1s CD).",
+        "tier": "B",
+        "description3": "Of Attack Stat",
+        "level1": "45%",
+        "level10": "60%",
+        "level20": "75%"
+    },
+    {
+        "name": "Score Shield",
+        "display_name": "Score Shield",
+        "bonus1": "HP +525",
+        "stats": [
+            {
+                "label": "HP",
+                "percent": false,
+                "float": 0,
+                "initial": 15,
+                "start": 0,
+                "skip": 0,
+                "increment": 15,
+                "initial_diff": 0
+            }
+        ],
+        "description1": "While attempting to score a goal: grants a score shield that prevents scoring from being interrupted until it is destroyed or the goal is scored (20s CD). This shield will be destroyed before other shields. Shield value uses the holder's HP and current level: 15/22/30 + 5/7.5/10% max HP + 15/22/30 × (Lv. - 1).",
+        "tier": "F",
+        "description3": "Shield",
+        "level1": "5%",
+        "level10": "7.5%",
+        "level20": "10%"
+    },
+    {
+        "name": "Shell Bell",
+        "display_name": "Shell Bell",
+        "bonus1": "Sp. Attack +28",
+        "bonus2": "CD Reduction +5.25%",
+        "stats": [
+            {
+                "label": "Sp. Attack",
+                "percent": false,
+                "float": 1,
+                "initial": 1.6,
+                "start": 0,
+                "skip": 1,
+                "increment": 1.6,
+                "initial_diff": 0
+            },
+            {
+                "label": "CD Reduction",
+                "percent": true,
+                "float": 1,
+                "initial": 0,
+                "start": 1,
+                "skip": 1,
+                "increment": 0.3,
+                "initial_diff": 0
+            }
+        ],
+        "description1": "When hitting an opposing Pokémon with a move: recovers HP equal to 50/65/80 + 40/50/60% Sp. Attack (8s CD).",
+        "tier": "B",
+        "description3": "HP",
+        "level1": "50",
+        "level10": "65",
+        "level20": "80"
+    },
+    {
+        "name": "Slick Spoon",
+        "display_name": "Slick Spoon",
+        "bonus1": "HP +245",
+        "bonus2": "Sp. Attack +35",
+        "stats": [
+            {
+                "label": "HP",
+                "percent": false,
+                "float": 0,
+                "initial": 14,
+                "start": 0,
+                "skip": 1,
+                "increment": 14,
+                "initial_diff": 0
+            },
+            {
+                "label": "Sp. Attack",
+                "percent": false,
+                "float": 0,
+                "initial": 0,
+                "start": 1,
+                "skip": 1,
+                "increment": 2,
+                "initial_diff": 0
+            }
+        ],
+        "description1": "Sp. Attack-based damage dealt ignores 9/12/15% of opposing Pokémon's Sp. Def.",
+        "tier": "A",
+        "description3": "Sp. Defense Penetration",
+        "level1": "9%",
+        "level10": "12%",
+        "level20": "15%"
+    },
+    {
+        "name": "Sp. Atk Specs",
+        "display_name": "Sp. Atk Specs",
+        "bonus1": "Sp. Attack +28",
+        "stats": [
+            {
+                "label": "Sp. Attack",
+                "percent": false,
+                "float": 1,
+                "initial": 0.8,
+                "start": 0,
+                "skip": 0,
+                "increment": 0.8,
+                "initial_diff": 0
+            }
+        ],
+        "description1": "Upon scoring a goal: increases Sp. Attack by 8/12/16 until the end of battle (up to 6 times; maximum 48/72/96 bonus Sp. Attack).",
+        "tier": "C",
+        "description3": "Sp. Attack",
+        "level1": "8",
+        "level10": "12",
+        "level20": "16"
+    },
+    {
+        "name": "Tenacity Belt",
+        "display_name": "Tenacity Belt",
+        "bonus1": "Defense +35",
+        "bonus2": "Sp. Defense +35",
+        "stats": [
+            {
+                "label": "Defense",
+                "percent": false,
+                "float": 0,
+                "initial": 2,
+                "start": 0,
+                "skip": 1,
+                "increment": 2,
+                "initial_diff": 0
+            },
+            {
+                "label": "Sp. Defense",
+                "percent": false,
+                "float": 0,
+                "initial": 0,
+                "start": 1,
+                "skip": 1,
+                "increment": 2,
+                "initial_diff": 0
+            }
+        ],
+        "description1": "When a hindrance is inflicted on the Pokémon, the Pokémon's Defense and Sp. Def are increased by 12/20/28% for 3 seconds.",
+        "tier": "F",
+        "description3": "Def. & Sp. Def.",
+        "level1": "12%",
+        "level10": "20%",
+        "level20": "28%"
+    },
+    {
+        "name": "Weakness Policy",
+        "display_name": "Weakness Policy",
+        "bonus1": "HP +235",
+        "bonus2": "Attack +17.5",
+        "stats": [
+            {
+                "label": "HP",
+                "percent": false,
+                "float": 0,
+                "initial": 70,
+                "start": 0,
+                "skip": 1,
+                "increment": 10,
+                "initial_diff": 60
+            },
+            {
+                "label": "Attack",
+                "percent": false,
+                "float": 0,
+                "initial": 0,
+                "start": 1,
+                "skip": 1,
+                "increment": 1,
+                "initial_diff": 0
+            }
+        ],
+        "description1": "Upon receiving damage: increases Attack by 1.5/2/2.5% for 3s (up to 4 times; maximum 6/8/10%).",
+        "tier": "A",
+        "description3": "Attack",
+        "level1": "1.5%",
+        "level10": "2%",
+        "level20": "2.5%"
+    },
+    {
+        "name": "Wise Glasses",
+        "display_name": "Wise Glasses",
+        "bonus1": "Sp. Attack +44",
+        "stats": [
+            {
+                "label": "Sp. Attack",
+                "percent": false,
+                "float": 0,
+                "initial": 10,
+                "start": 0,
+                "skip": 0,
+                "increment": 1,
+                "initial_diff": 9
+            }
+        ],
+        "description1": "Further increases Sp. Atk by 3/5/7%.",
+        "tier": "A",
+        "description3": "Sp. Attack",
+        "level1": "3%",
+        "level10": "5%",
+        "level20": "7%"
+    }
+]
