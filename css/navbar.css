@@ -149,6 +149,14 @@
   filter: drop-shadow(0 0 6px rgba(126,240,255,0.12)); 
 }
 
+.sidebar ul li a.active {
+  color: #13212a;
+  background: linear-gradient(90deg, #ffd27a, #ff7848);
+  box-shadow: 0 4px 14px rgba(255, 210, 122, 0.35);
+  transform: scale(1.06);
+  font-weight: 700;
+}
+
 /* responsive */
 @media (max-width: 768px) {
   .sidebar { transform: translateX(-100%); }

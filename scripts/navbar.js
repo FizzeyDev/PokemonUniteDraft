@@ -60,6 +60,18 @@ function initNavbar(basePath) {
       updateDynamicContent();
     });
   });
+
+  const currentPath = window.location.pathname.replace(/^\/|\/$/g, "")
+
+  document.querySelectorAll("#sidebar a").forEach(link => {
+    const linkPath = link.getAttribute("href")
+      .replace(basePath, "")
+      .replace(/^\/|\/$/g, "")
+
+    if (linkPath && currentPath.endsWith(linkPath)) {
+      link.classList.add("active")
+    }
+  })
 }
 
 function loadLang(lang, basePath) {
