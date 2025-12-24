@@ -27,8 +27,16 @@
     { "name": "Scope Lens", "file": "scope_lens.png" },
     { "name": "Score Shield", "file": "score_shield.png" },
     { "name": "Shell Bell", "file": "shell_bell.png" },
-    { "name": "Sp.Atk Specs", "file": "sp-atk_specs.png" },
+    { "name": "Slick Spoon", "file": "slick_spoon.png" },
+    { "name": "Sp. Atk Specs", "file": "sp-atk_specs.png" },
     { "name": "Tenacity Belt", "file": "tenacity_belt.png" },
     { "name": "Weakness Policy", "file": "weakness_policy.png" },
-    { "name": "Wise Glasses", "file": "wise_glasses.png" }
+    { "name": "Wise Glasses", "file": "wise_glasses.png" },
+    { "name": "Charizardite X", "file": "charizardite_X.png" },
+    { "name": "Charizardite Y", "file": "charizardite_Y.png" },
+    { "name": "Mewtwonite X", "file": "mewtwonite_X.png" },
+    { "name": "Mewtwonite Y", "file": "mewtwonite_Y.png" },
+    { "name": "Gyaradosite", "file": "gyaradosite.png" },
+    { "name": "Lucarionite", "file": "lucarionite.png" },
+    { "name": "Rusted Sword", "file": "rusted_sword.png" }
 ]

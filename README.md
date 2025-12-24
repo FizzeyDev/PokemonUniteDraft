@@ -12,7 +12,7 @@ This website, Unite Tools, as many use:
 - Pokemon Unite Tierlist Creator
 - Pokemon Unite Dynamic Map [SOON]
 - Pokemon Unite Map Timing [BETA]
-- Pokemon Unite Damage Calcultator [SOON]
+- Pokemon Unite Damage Calcultator [BETA]
 
 ## About
 

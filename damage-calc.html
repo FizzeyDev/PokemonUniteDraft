@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pokémon UNITE Damage Calculator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/navbar.css">
+  <link rel="stylesheet" href="css/damage-calc.css" />
+  <style>
+    /* Styles pour les stats éditables de la Custom Doll */
+    .editable-custom {
+      cursor: pointer;
+      color: #ffdd77;
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+
+    .editable-custom:hover {
+      text-decoration: underline;
+      color: #ffeaaa;
+    }
+
+    .custom-stat {
+      background: rgba(255, 221, 119, 0.1);
+      border-radius: 8px;
+      padding: 4px 0;
+      margin: 4px 0;
+    }
+  </style>
+</head>
+<body>
+  <div id="navbar-container"></div>
+  <h1>Pokémon UNITE Damage Calculator (WIP)</h1>
+
+  <!-- Bouton Warning -->
+  <button id="warningBtn" class="warning-btn" title="Important Information">
+    ⚠️
+  </button>
+  <div class="battle-container">
+    <!-- ATTAQUANT (Violet) -->
+    <div class="pokemon-panel attacker">
+      <div class="pokemon-header">
+        <div class="pokemon-image" id="attackerImage"></div>
+        <h2 id="attackerName"></h2>
+        <span id="attackerRole" class="role-icon"></span>
+      </div>
+
+      <input type="text" id="searchAttacker" class="pokemon-search" placeholder="Search a Pokemon...">
+
+      <div class="pokemon-grid-wrapper">
+        <div id="pokemonGridAttacker" class="pokemon-grid"></div>
+      </div>
+
+      <div class="level-section">
+        <label>Level: <span id="levelValueAttacker">15</span></label>
+        <input type="range" id="levelSliderAttacker" min="1" max="15" value="15">
+      </div>
+
+      <div class="items-section">
+        <h3>Equiped Items</h3>
+        <div class="items-equipped-grid" id="itemsEquippedAttacker">
+          <div class="item-equipped-card" data-slot="0">
+            <div class="item-equipped-icon">
+              <img src="assets/items/none.png" alt="Empty">
+            </div>
+            <div class="item-equipped-name">Empty</div>
+            <div class="item-equipped-stats"></div>
+            <div class="item-equipped-stacks" style="display:none;">
+              <div class="stacks-controls">
+                <button class="stack-btn minus">-</button>
+                <span class="stack-value">0</span>
+                <button class="stack-btn plus">+</button>
+              </div>
+              <div class="stack-max">/6</div>
+            </div>
+          </div>
+          <div class="item-equipped-card" data-slot="1">
+            <div class="item-equipped-icon">
+              <img src="assets/items/none.png" alt="Empty">
+            </div>
+            <div class="item-equipped-name">Empty</div>
+            <div class="item-equipped-stats"></div>
+            <div class="item-equipped-stacks" style="display:none;">
+              <div class="stacks-controls">
+                <button class="stack-btn minus">-</button>
+                <span class="stack-value">0</span>
+                <button class="stack-btn plus">+</button>
+              </div>
+              <div class="stack-max">/6</div>
+            </div>
+          </div>
+          <div class="item-equipped-card" data-slot="2">
+            <div class="item-equipped-icon">
+              <img src="assets/items/none.png" alt="Empty">
+            </div>
+            <div class="item-equipped-name">Empty</div>
+            <div class="item-equipped-stats"></div>
+            <div class="item-equipped-stacks" style="display:none;">
+              <div class="stacks-controls">
+                <button class="stack-btn minus">-</button>
+                <span class="stack-value">0</span>
+                <button class="stack-btn plus">+</button>
+              </div>
+              <div class="stack-max">/6</div>
+            </div>
+          </div>
+        </div>
+        <button class="reset-items-btn" onclick="resetItems('attacker')">Reset Items</button>
+      </div>
+    </div>
+
+    <!-- VS -->
+    <div class="vs-section">
+      <div class="vs-icon">VS</div>
+    </div>
+
+    <!-- DÉFENSEUR (Orange) -->
+    <div class="pokemon-panel defender">
+      <div class="pokemon-header">
+        <div class="pokemon-image" id="defenderImage"></div>
+        <h2 id="defenderName"></h2>
+      </div>
+
+      <!-- NOUVEAU : Onglets de catégorie -->
+      <div class="category-tabs defender-tabs">
+        <button class="tab-button active" data-category="playable">Playable Pokemons</button>
+        <button class="tab-button" data-category="mob">Mobs Farm [Coming Soon]</button>
+        <button class="tab-button" data-category="other">Other</button>
+      </div>
+
+      <input type="text" id="searchDefender" class="pokemon-search" placeholder="Search a Pokemon...">
+
+      <div class="pokemon-grid-wrapper">
+        <div id="pokemonGridDefender" class="pokemon-grid"></div>
+      </div>
+
+      <div class="level-section">
+        <label>Level: <span id="levelValueDefender">15</span></label>
+        <input type="range" id="levelSliderDefender" min="1" max="15" value="15">
+      </div>
+
+      <div class="items-section">
+        <h3>Equiped Items</h3>
+        <div class="items-equipped-grid" id="itemsEquippedDefender">
+          <div class="item-equipped-card" data-slot="0">
+            <div class="item-equipped-icon">
+              <img src="assets/items/none.png" alt="Vide">
+            </div>
+            <div class="item-equipped-name">Empty</div>
+            <div class="item-equipped-stats"></div>
+            <div class="item-equipped-stacks" style="display:none;">
+              <div class="stacks-controls">
+                <button class="stack-btn minus">-</button>
+                <span class="stack-value">0</span>
+                <button class="stack-btn plus">+</button>
+              </div>
+              <div class="stack-max">/6</div>
+            </div>
+          </div>
+          <div class="item-equipped-card" data-slot="1">
+            <div class="item-equipped-icon">
+              <img src="assets/items/none.png" alt="Vide">
+            </div>
+            <div class="item-equipped-name">Empty</div>
+            <div class="item-equipped-stats"></div>
+            <div class="item-equipped-stacks" style="display:none;">
+              <div class="stacks-controls">
+                <button class="stack-btn minus">-</button>
+                <span class="stack-value">0</span>
+                <button class="stack-btn plus">+</button>
+              </div>
+              <div class="stack-max">/6</div>
+            </div>
+          </div>
+          <div class="item-equipped-card" data-slot="2">
+            <div class="item-equipped-icon">
+              <img src="assets/items/none.png" alt="Vide">
+            </div>
+            <div class="item-equipped-name">Empty</div>
+            <div class="item-equipped-stats"></div>
+            <div class="item-equipped-stacks" style="display:none;">
+              <div class="stacks-controls">
+                <button class="stack-btn minus">-</button>
+                <span class="stack-value">0</span>
+                <button class="stack-btn plus">+</button>
+              </div>
+              <div class="stack-max">/6</div>
+            </div>
+          </div>
+        </div>
+        <button class="reset-items-btn" onclick="resetItems('defender')">Reset Items</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RÉSULTATS : STATS + MOVES -->
+  <div class="results-container">
+    <!-- Stats Attaquant -->
+    <div class="stats-card attacker-stats">
+      <h3>Attaquant</h3>
+      <div class="pokemon-name-header">
+        <span id="resultsAttackerName">Select an attacker</span>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-label">HP</span>
+          <div class="hp-slider-container">
+            <input type="range" id="hpSliderAttacker" min="0" max="100" value="100" class="hp-slider">
+            <span id="hpValueAttacker">0 / 0</span>
+          </div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">ATK</span>
+          <span id="attackerAtk" class="stat-value">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Sp.Atk</span>
+          <span id="attackerSpAtk" class="stat-value">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Crit Chance</span>
+          <span id="attackerCritChance" class="stat-value">0%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dégâts des moves (section centrale large) -->
+    <div class="moves-section">
+      <h3>Dégâts des Moves</h3>
+      <div id="movesGrid" class="moves-grid"></div>
+    </div>
+
+    <!-- Stats Défenseur -->
+    <div class="stats-card defender-stats">
+      <h3>Défenseur</h3>
+      <div class="pokemon-name-header">
+        <span id="resultsDefenderName">Select a defender</span>
+      </div>
+      <div class="stats-grid">
+        <!-- HP avec slider (toujours visible) -->
+        <div class="stat-item">
+          <span class="stat-label">HP</span>
+          <div class="hp-slider-container">
+            <input type="range" id="hpSliderDefender" min="0" max="100" value="100" class="hp-slider">
+            <span id="hpValueDefender">0 / 0</span>
+          </div>
+        </div>
+
+        <!-- HP Max éditable (seulement pour Custom Doll) -->
+        <div class="stat-item custom-stat" style="display:none;">
+          <span class="stat-label">HP Max</span>
+          <span id="defenderMaxHP" class="stat-value editable-custom">10 000</span>
+        </div>
+
+        <!-- DEF normale -->
+        <div class="stat-item" id="defenderDefNormal">
+          <span class="stat-label">DEF</span>
+          <span id="defenderDef" class="stat-value">0</span>
+        </div>
+        <!-- DEF custom -->
+        <div class="stat-item custom-stat" style="display:none;">
+          <span class="stat-label">DEF</span>
+          <span id="defenderDefCustom" class="stat-value editable-custom">100</span>
+        </div>
+
+        <!-- Sp.Def normale -->
+        <div class="stat-item" id="defenderSpDefNormal">
+          <span class="stat-label">Sp.Def</span>
+          <span id="defenderSpDef" class="stat-value">0</span>
+        </div>
+        <!-- Sp.Def custom -->
+        <div class="stat-item custom-stat" style="display:none;">
+          <span class="stat-label">Sp.Def</span>
+          <span id="defenderSpDefCustom" class="stat-value editable-custom">100</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL ITEMS -->
+  <div id="itemSelectorModal" class="item-modal" style="display:none;">
+    <div class="item-modal-content">
+      <span class="close-modal">×</span>
+      <h3>Select an Item</h3>
+      <input type="text" id="itemSearch" class="item-search" placeholder="Rechercher...">
+      <div id="itemGrid" class="item-grid"></div>
+    </div>
+  </div>
+
+  <!-- MODAL WARNING -->
+  <div id="warningModal" class="warning-modal" style="display:none;">
+    <div class="warning-modal-content">
+      <span class="close-warning">x</span>
+      <h3>⚠️ IMPORTANT INFORMATIONS - BETA</h3>
+        <div id="warningText">
+        <p><strong>This calculator try to provides exact values but may contain errors.</strong></p>
+
+        <p>The displayed damage and stats do <strong>not</strong> take into account:</p>
+        <ul>
+          <li>Battlefield effects (Regis, Rayquaza, Kyogre, Groudon, etc.)</li>
+          <li>Emblems</li>
+          <li>Temporary buffs or debuffs unless explicitly implemented</li>
+        </ul>
+
+        <p>All items are set to <strong>maximum level (40)</strong> and cannot be changed (tournament format).</p>
+        <p>Some items or passives may be missing and will be implemented later.</p>
+        <p>Only support English language.</p>
+        <p>If you encounter incorrect values or bugs, feel free to contact <strong>@FizzeyS</strong> on Twitter or <strong>fizzeys</strong> on Discord.</p>
+
+        <br><p><strong>Planned features:</strong></p>
+        <ul>
+          <li>Shield and healing calculations (with linked item implementation)</li>
+          <li>Regis, Rayquaza, Groudon and Kyogre buffs</li>
+          <li>Passive wild Pokémon for defender testing</li>
+          <li>Battle item usage (x-attack for example)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script src="scripts/navbar.js"></script>
+  <script src="scripts/damage-calc.js"></script>
+</body>
+</html>

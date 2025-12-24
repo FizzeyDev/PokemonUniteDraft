@@ -24,6 +24,7 @@ let towers = [];
 
 const btnGroudon = document.getElementById("map-groudon");
 const btnKyogre = document.getElementById("map-kyogre");
+const btnRayquaza = document.getElementById("map-rayquaza");
 
 function setActive(button) {
   document.querySelectorAll(".map-switch button").forEach(btn => {
@@ -34,6 +35,7 @@ function setActive(button) {
 
 btnGroudon.addEventListener("click", () => setActive(btnGroudon));
 btnKyogre.addEventListener("click", () => setActive(btnKyogre));
+btnRayquaza.addEventListener("click", () => setActive(btnRayquaza));
 
 document.getElementById("map-groudon").addEventListener("click", () => {
   resetAll();
@@ -49,20 +51,22 @@ document.getElementById("map-kyogre").addEventListener("click", () => {
   loadSpawns("kyogre");
 });
 
+document.getElementById("map-rayquaza").addEventListener("click", () => {
+  resetAll();
+  currentMap = "rayquaza";
+  document.querySelector(".map-container img").src = "assets/maps/map_groudon.webp";
+  loadSpawns("rayquaza");
+});
+
 function resetAll() {
-  // Reset timer
   totalTime = 600;
   currentTime = totalTime;
-  stopTimer(); // Stoppe le timer si actif
+  stopTimer();
   updateDisplay();
 
-  // Remove all spawn elements
-  spawnsContainer.innerHTML = "";
-  
-  // Remove all tower elements
+  spawnsContainer.innerHTML = "";  
   towersContainer.innerHTML = "";
 
-  // Reset internal spawn states
   spawns.forEach(p => {
     p.spawns?.forEach(s => {
       s.element = null;
@@ -72,13 +76,11 @@ function resetAll() {
     });
   });
 
-  // Reset towers
   towers.forEach(t => {
     t.destroyed = false;
     t.element = null;
   });
 
-  // Reset Altaria & Mid
   midState = {
     nextSpawnTime: 480,
     active: null,
