@@ -108,6 +108,51 @@
         </div>
         <button class="reset-items-btn" onclick="resetItems('attacker')">Reset Items</button>
       </div>
+      <div class="additional-effects">
+        <h3>Universal Offensive Buffs</h3>
+        <div class="buff-checkboxes">
+          <label class="buff-label">
+            <input type="checkbox" id="registeelBuffAttacker">
+            Registeel Buff (+15% Atk / Sp.Atk)
+          </label>
+          <label class="buff-label">
+            <input type="checkbox" id="groudonBuffAttacker">
+            Groudon Buff (+50% Damage)
+          </label>
+          <label class="buff-label">
+            <input type="checkbox" id="rayquazaBuffAttacker">
+            Rayquaza Buff (+40% Damage)
+          </label>
+          <label class="buff-label">
+            <input type="checkbox" id="xattackBuffAttacker">
+            XAttack Item (+20% Atk / Sp.Atk)
+          </label>
+          <label class="buff-label">
+            <input type="checkbox" id="blisseyUltBuffAttacker">
+            Blissey: Bliss Assistance (Unite Move) (+20% Atk / Sp.Atk)
+          </label>
+          <label class="buff-label">
+            <input type="checkbox" id="blisseyHandBuffAttacker">
+            Blissey: Helping Hand + (+15% Damage)
+          </label>
+          <label class="buff-label">
+            <input type="checkbox" id="mimeSwapBuffAttacker">
+            Mr. Mime: Power Swap (+15% Damage)
+          </label>
+          <label class="buff-label">
+            <input type="checkbox" id="mimeSwapPlusBuffAttacker">
+            Mr. Mime: Power Swap + (+20% Damage)
+          </label>
+          <label class="buff-label">
+            <input type="checkbox" id="alcreamieBuffAttacker">
+            Alcreamie: Helping Hand (+40 Atk / +25 Sp.Atk)
+          </label>
+          <label class="buff-label">
+            <input type="checkbox" id="miraidonBuffAttacker">
+            Miraidon: Hadron Engine (Passive) (+10% Damage / +30% if Miraidon)
+          </label>
+        </div>
+      </div>
     </div>
 
     <!-- VS -->
@@ -190,6 +235,43 @@
           </div>
         </div>
         <button class="reset-items-btn" onclick="resetItems('defender')">Reset Items</button>
+      </div>
+      <div class="additional-effects">
+        <h3>Universal Defensive Buffs</h3>
+        <div class="buff-checkboxes">
+          <label class="buff-label">
+            <input type="checkbox" id="regirockBuffDefender">
+            Regirock Buff (+30% Def / +25% Sp.Def)
+          </label>
+          <label class="buff-label">
+            <input type="checkbox" id="eldegossBuffDefender">
+            Eldegoss: Pollen Puff + (-15% Damage Received)
+          </label>
+          <label class="buff-label">
+            <input type="checkbox" id="ninetailsBuffDefender">
+            Ninetails [Alolan]: Aurora Veil (-35% Damage Received)
+          </label>
+          <label class="buff-label">
+            <input type="checkbox" id="ninetailsPlusBuffDefender">
+            Ninetails [Alolan]: Aurora Veil + (-40% Damage Received)
+          </label>
+          <label class="buff-label">
+            <input type="checkbox" id="umbreonBuffDefender">
+            Umbreon: Wish (-15% Damage Received)
+          </label>
+          <label class="buff-label">
+            <input type="checkbox" id="umbreonPlusBuffDefender">
+            Umbreon: Wish + (-25% Damage Received)
+          </label>
+          <label class="buff-label">
+            <input type="checkbox" id="blisseyRedirectionBuffDefender">
+            Blissey: Bliss Assistance (Unite Move) (-50% Damage Redirection)
+          </label>
+          <label class="buff-label">
+            <input type="checkbox" id="hoohRedirectionBuffDefender">
+            Ho-Oh: Fire Spin (-60% Damage Redirection)
+          </label>
+        </div>
       </div>
     </div>
   </div>
@@ -311,9 +393,7 @@
         <br><p><strong>Planned features:</strong></p>
         <ul>
           <li>Shield and healing calculations (with linked item implementation)</li>
-          <li>Regis, Rayquaza, Groudon and Kyogre buffs</li>
           <li>Passive wild Pokémon for defender testing</li>
-          <li>Battle item usage (x-attack for example)</li>
         </ul>
       </div>
     </div>

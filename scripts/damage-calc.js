@@ -46,6 +46,28 @@ let defenderStance = 'shield';
 let attackerFlashFireActive = false;
 let defenderFlashFireActive = false;
 
+// Buffs attaquant
+let attackerRegisteelBuff = false;
+let attackerGroudonBuff = false;
+let attackerRayquazaBuff = false;
+let attackerXAttackBuff = false;
+let attackerBlisseyUltBuff = false;
+let attackerBlisseyHandBuff = false;
+let attackerMimeSwapBuff = false;
+let attackerMimeSwapPlusBuff = false;
+let attackerAlcreamieBuff = false;
+let attackerMiraidonBuff = false;
+
+// Buffs défenseur
+let defenderRegirockBuff = false;
+let defenderEldegossBuff = false;
+let defenderNinetailsBuff = false;
+let defenderNinetailsPlusBuff = false;
+let defenderUmbreonBuff = false;
+let defenderUmbreonPlusBuff = false;
+let defenderBlisseyRedirectionBuff = false;
+let defenderHoOhRedirectionBuff = false;
+
 const substituteDoll = {
   pokemonId: "substitute-doll",
   role: "dummy",
@@ -202,6 +224,61 @@ function initUI() {
   selectAttacker('absol');
   selectDefender('substitute-doll');
   updateDamages();
+
+  // Event listeners buffs attaquant
+  const attackerBuffIds = [
+    'registeelBuffAttacker', 'groudonBuffAttacker', 'rayquazaBuffAttacker',
+    'xattackBuffAttacker', 'blisseyUltBuffAttacker', 'blisseyHandBuffAttacker',
+    'mimeSwapBuffAttacker', 'mimeSwapPlusBuffAttacker', 'alcreamieBuffAttacker',
+    'miraidonBuffAttacker'
+  ];
+
+  attackerBuffIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('change', (e) => {
+        switch (id) {
+          case 'registeelBuffAttacker': attackerRegisteelBuff = e.target.checked; break;
+          case 'groudonBuffAttacker': attackerGroudonBuff = e.target.checked; break;
+          case 'rayquazaBuffAttacker': attackerRayquazaBuff = e.target.checked; break;
+          case 'xattackBuffAttacker': attackerXAttackBuff = e.target.checked; break;
+          case 'blisseyUltBuffAttacker': attackerBlisseyUltBuff = e.target.checked; break;
+          case 'blisseyHandBuffAttacker': attackerBlisseyHandBuff = e.target.checked; break;
+          case 'mimeSwapBuffAttacker': attackerMimeSwapBuff = e.target.checked; break;
+          case 'mimeSwapPlusBuffAttacker': attackerMimeSwapPlusBuff = e.target.checked; break;
+          case 'alcreamieBuffAttacker': attackerAlcreamieBuff = e.target.checked; break;
+          case 'miraidonBuffAttacker': attackerMiraidonBuff = e.target.checked; break;
+        }
+        updateDamages();
+      });
+    }
+  });
+
+  // Event listeners buffs défenseur
+  const defenderBuffIds = [
+    'regirockBuffDefender', 'eldegossBuffDefender', 'ninetailsBuffDefender',
+    'ninetailsPlusBuffDefender', 'umbreonBuffDefender', 'umbreonPlusBuffDefender',
+    'blisseyRedirectionBuffDefender', 'hoohRedirectionBuffDefender'
+  ];
+
+  defenderBuffIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('change', (e) => {
+        switch (id) {
+          case 'regirockBuffDefender': defenderRegirockBuff = e.target.checked; break;
+          case 'eldegossBuffDefender': defenderEldegossBuff = e.target.checked; break;
+          case 'ninetailsBuffDefender': defenderNinetailsBuff = e.target.checked; break;
+          case 'ninetailsPlusBuffDefender': defenderNinetailsPlusBuff = e.target.checked; break;
+          case 'umbreonBuffDefender': defenderUmbreonBuff = e.target.checked; break;
+          case 'umbreonPlusBuffDefender': defenderUmbreonPlusBuff = e.target.checked; break;
+          case 'blisseyRedirectionBuffDefender': defenderBlisseyRedirectionBuff = e.target.checked; break;
+          case 'hoohRedirectionBuffDefender': defenderHoOhRedirectionBuff = e.target.checked; break;
+        }
+        updateDamages();
+      });
+    }
+  });
 }
 
 function selectAttacker(id) {
@@ -222,6 +299,29 @@ function selectAttacker(id) {
   attackerStance = 'shield';
   attackerFlashFireActive = false;
 
+  // Reset buffs attaquant
+  attackerRegisteelBuff = false;
+  attackerGroudonBuff = false;
+  attackerRayquazaBuff = false;
+  attackerXAttackBuff = false;
+  attackerBlisseyUltBuff = false;
+  attackerBlisseyHandBuff = false;
+  attackerMimeSwapBuff = false;
+  attackerMimeSwapPlusBuff = false;
+  attackerAlcreamieBuff = false;
+  attackerMiraidonBuff = false;
+
+  const attackerCheckboxes = [
+    'registeelBuffAttacker', 'groudonBuffAttacker', 'rayquazaBuffAttacker',
+    'xattackBuffAttacker', 'blisseyUltBuffAttacker', 'blisseyHandBuffAttacker',
+    'mimeSwapBuffAttacker', 'mimeSwapPlusBuffAttacker', 'alcreamieBuffAttacker',
+    'miraidonBuffAttacker'
+  ];
+  attackerCheckboxes.forEach(cid => {
+    const el = document.getElementById(cid);
+    if (el) el.checked = false;
+  });
+
   updateDamages();
 }
 
@@ -241,6 +341,26 @@ function selectDefender(id) {
 
   defenderStance = 'shield';
   defenderFlashFireActive = false;
+
+  // Reset buffs défenseur
+  defenderRegirockBuff = false;
+  defenderEldegossBuff = false;
+  defenderNinetailsBuff = false;
+  defenderNinetailsPlusBuff = false;
+  defenderUmbreonBuff = false;
+  defenderUmbreonPlusBuff = false;
+  defenderBlisseyRedirectionBuff = false;
+  defenderHoOhRedirectionBuff = false;
+
+  const defenderCheckboxes = [
+    'regirockBuffDefender', 'eldegossBuffDefender', 'ninetailsBuffDefender',
+    'ninetailsPlusBuffDefender', 'umbreonBuffDefender', 'umbreonPlusBuffDefender',
+    'blisseyRedirectionBuffDefender', 'hoohRedirectionBuffDefender'
+  ];
+  defenderCheckboxes.forEach(cid => {
+    const el = document.getElementById(cid);
+    if (el) el.checked = false;
+  });
 
   if (id === 'substitute-doll') {
     disableItemSlots('defender');
@@ -710,6 +830,37 @@ function getModifiedStats(pokemon, level, items, stacksArray, activatedArray) {
     });
   });
 
+  // Buffs additionnels attaquant (stats % sur base)
+  if (pokemon === currentAttacker) {
+    if (attackerRegisteelBuff) {
+      atk += Math.floor(baseAtk * 0.15);
+      sp_atk += Math.floor(baseSpAtk * 0.15);
+    }
+    if (attackerXAttackBuff) {
+      atk += Math.floor(baseAtk * 0.20);
+      sp_atk += Math.floor(baseSpAtk * 0.20);
+    }
+    if (attackerBlisseyUltBuff) {
+      atk += Math.floor(baseAtk * 0.20);
+      sp_atk += Math.floor(baseSpAtk * 0.20);
+    }
+    if (attackerAlcreamieBuff) {
+      if (pokemon.style === "physical") {
+        atk += 40;
+      } else if (pokemon.style === "special") {
+        sp_atk += 25;
+      }
+    }
+  }
+
+  // Buffs défenseur (stats % sur base)
+  if (pokemon === currentDefender) {
+    if (defenderRegirockBuff) {
+      def += Math.floor(baseDef * 0.30);
+      sp_def += Math.floor(baseSpDef * 0.25);
+    }
+  }
+
   if (pokemon?.pokemonId === "aegislash") {
     const levelMinusOne = level - 1;
     const stance = (pokemon === currentAttacker) ? attackerStance : defenderStance;
@@ -921,10 +1072,21 @@ function updateDamages() {
   const itemEffects = applyItemsAndGlobalEffects(atkStats, defStats);
   applyPassiveEffects(atkStats, defStats);
 
+  // Calcul réduction dégâts défenseur
+  let defenderDamageMult = 1.0;
+  if (defenderEldegossBuff) defenderDamageMult *= 0.85;
+  if (defenderNinetailsBuff) defenderDamageMult *= 0.65;
+  if (defenderNinetailsPlusBuff) defenderDamageMult *= 0.60;
+  if (defenderUmbreonBuff) defenderDamageMult *= 0.85;
+  if (defenderUmbreonPlusBuff) defenderDamageMult *= 0.75;
+  if (defenderBlisseyRedirectionBuff) defenderDamageMult *= 0.50;
+  if (defenderHoOhRedirectionBuff) defenderDamageMult *= 0.40;
+
   const finalEffects = {
     ...itemEffects,
     infiltratorIgnore: currentAttacker?.pokemonId === "chandelure" ? Math.min(attackerPassiveStacks * 0.025, 0.20) : 0,
-    defenderFlashFireReduction: currentDefender?.pokemonId === "armarouge" && defenderFlashFireActive ? 0.20 : 0
+    defenderFlashFireReduction: currentDefender?.pokemonId === "armarouge" && defenderFlashFireActive ? 0.20 : 0,
+    defenderDamageMult
   };
 
   displayMoves(atkStats, defStats, finalEffects, currentDefHP);
@@ -940,6 +1102,19 @@ function applyItemsAndGlobalEffects(atkStats, defStats) {
   let slickIgnore = 0;
   let scopeCritBonus = 1.0;
   let globalDamageMult = 1.0;
+
+  // Boosts dégâts attaquant
+  if (attackerGroudonBuff) globalDamageMult *= 1.50;
+  if (attackerRayquazaBuff) globalDamageMult *= 1.40;
+  if (attackerBlisseyHandBuff) globalDamageMult *= 1.15;
+  if (attackerMimeSwapBuff) globalDamageMult *= 1.15;
+  if (attackerMimeSwapPlusBuff) globalDamageMult *= 1.20;
+  if (attackerMiraidonBuff) {
+    globalDamageMult *= 1.10;
+    if (currentAttacker?.pokemonId === "miraidon") {
+      globalDamageMult *= 1.30;
+    }
+  }
 
   attackerItems.forEach((item, i) => {
     if (!item) return;
@@ -1110,7 +1285,7 @@ function applyPassiveEffects(atkStats, defStats) {
 }
 
 function displayMoves(atkStats, defStats, effects, currentDefHP) {
-  const { choiceSpecsBonus, hasChoiceSpecs, slickIgnore, scopeCritBonus, globalDamageMult, infiltratorIgnore, defenderFlashFireReduction } = effects;
+  const { choiceSpecsBonus, hasChoiceSpecs, slickIgnore, scopeCritBonus, globalDamageMult, infiltratorIgnore, defenderFlashFireReduction, defenderDamageMult } = effects;
 
   const aaResults = getAutoAttackResults(atkStats, defStats, currentDefHP, globalDamageMult);
 
@@ -1152,6 +1327,7 @@ function displayMoves(atkStats, defStats, effects, currentDefHP) {
       let normal = calculateDamage(dmg, relevantAtk, effectiveDef, attackerLevel, false, currentAttacker.pokemonId, 1.0, globalDamageMult);
       let crit = calculateDamage(dmg, relevantAtk, effectiveDef, attackerLevel, true, currentAttacker.pokemonId, scopeCritBonus, globalDamageMult);
 
+      // Flash Fire Armarouge
       if (move.name === "Auto-attack" && attackerFlashFireActive && currentAttacker.pokemonId === "armarouge") {
         const passive = currentAttacker.passive || { extraAutoMultiplier: 60, extraAutoConstant: 120 };
         const bonus = calculateDamage({ multiplier: passive.extraAutoMultiplier, levelCoef: 0, constant: passive.extraAutoConstant }, relevantAtk, effectiveDef, attackerLevel);
@@ -1159,11 +1335,18 @@ function displayMoves(atkStats, defStats, effects, currentDefHP) {
         crit += bonus;
       }
 
+      // Réduction dégâts défenseur
+      normal = Math.floor(normal * defenderDamageMult);
+      crit = Math.floor(crit * defenderDamageMult);
+
       let displayedNormal = normal;
       let displayedCrit = crit;
+
       if (hasChoiceSpecs && firstHit && (dmg.scaling === "special" || currentAttacker.style === "special")) {
         displayedNormal += choiceSpecsBonus;
         displayedCrit += choiceSpecsBonus;
+        displayedNormal = Math.floor(displayedNormal * defenderDamageMult);
+        displayedCrit = Math.floor(displayedCrit * defenderDamageMult);
       }
 
       const line = document.createElement("div");
@@ -1194,16 +1377,18 @@ function displayMoves(atkStats, defStats, effects, currentDefHP) {
 
     if (move.name === "Auto-attack") {
       if (aaResults.hasMuscle) {
+        let muscleExtra = Math.floor(aaResults.muscleExtra * defenderDamageMult);
         const line = document.createElement("div");
         line.className = "damage-line";
-        line.innerHTML = `<span class="dmg-name">Muscle Band bonus (remaining HP)</span><div class="dmg-values"><span class="dmg-crit">+ ${aaResults.muscleExtra.toLocaleString()}</span></div>`;
+        line.innerHTML = `<span class="dmg-name">Muscle Band bonus (remaining HP)</span><div class="dmg-values"><span class="dmg-crit">+ ${muscleExtra.toLocaleString()}</span></div>`;
         card.appendChild(line);
       }
 
       if (aaResults.hasScope) {
+        let scopeExtra = Math.floor(aaResults.scopeExtra * defenderDamageMult);
         const line = document.createElement("div");
         line.className = "damage-line";
-        line.innerHTML = `<span class="dmg-name">Scope Lens bonus (extra hit on crit)</span><div class="dmg-values"><span class="dmg-crit">+ ${aaResults.scopeExtra.toLocaleString()}</span></div>`;
+        line.innerHTML = `<span class="dmg-name">Scope Lens bonus (extra hit on crit)</span><div class="dmg-values"><span class="dmg-crit">+ ${scopeExtra.toLocaleString()}</span></div>`;
         card.appendChild(line);
       }
 
@@ -1218,7 +1403,8 @@ function displayMoves(atkStats, defStats, effects, currentDefHP) {
 
       if (hasRazorClaw && razorBonusPercent > 0) {
         const razorExtraBase = Math.floor(atkStats.atk * razorBonusPercent) + 20;
-        const razorExtra = calculateDamage({ constant: razorExtraBase, multiplier: 0, levelCoef: 0 }, atkStats.atk, defStats.def, attackerLevel, false, null, 1.0, globalDamageMult);
+        let razorExtra = calculateDamage({ constant: razorExtraBase, multiplier: 0, levelCoef: 0 }, atkStats.atk, defStats.def, attackerLevel, false, null, 1.0, globalDamageMult);
+        razorExtra = Math.floor(razorExtra * defenderDamageMult);
         const line = document.createElement("div");
         line.className = "damage-line";
         line.innerHTML = `<span class="dmg-name">Razor Claw bonus (next AA after move)</span><div class="dmg-values"><span class="dmg-crit">+ ${razorExtra.toLocaleString()}</span></div>`;

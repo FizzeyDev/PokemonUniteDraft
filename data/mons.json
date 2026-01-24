@@ -900,6 +900,26 @@
     "talent": "assets/moves/meowscarada/placeholder_talent.png"
   },
   {
+    "name": "Meowth",
+    "name_fr": "Miaouss",
+    "name_es": "Meowth",
+    "name_de": "Mauzi",
+    "name_it": "Meowth",
+    "file": "meowth_spe.png",
+    "role": "spe",
+    "dex": 52,
+    "spell1": {
+      "first": "assets/moves/meowth/placeholder1.png",
+      "second": "assets/moves/meowth/placeholder2.png"
+    },
+    "spell2": {
+      "first": "assets/moves/meomeowthwscarada/placeholder3.png",
+      "second": "assets/moves/meowth/placeholder4.png"
+    },
+    "unite": "assets/moves/meowth/placeholder_unite.png",
+    "talent": "assets/moves/meowth/placeholder_talent.png"
+  },
+  {
     "name": "Mimikyu",
     "name_fr": "Mimiqui",
     "name_es": "Mimikyu",
