@@ -1,0 +1,122 @@
+// state.js - Gestion de l'état global
+
+export const state = {
+  allPokemon: [],
+  allItems: [],
+  currentAttacker: null,
+  currentDefender: null,
+  attackerLevel: 15,
+  defenderLevel: 15,
+
+  attackerItems: [null, null, null],
+  defenderItems: [null, null, null],
+
+  attackerItemStacks: [0, 0, 0],
+  defenderItemStacks: [0, 0, 0],
+
+  attackerItemActivated: [false, false, false],
+  defenderItemActivated: [false, false, false],
+
+  isEditingHP: {
+    attacker: false,
+    defender: false
+  },
+
+  attackerHPPercent: 100,
+  defenderHPPercent: 100,
+
+  attackerPassiveStacks: 0,
+  attackerStance: 'shield',
+  defenderStance: 'shield',
+  attackerFlashFireActive: false,
+  defenderFlashFireActive: false,
+
+  // Buffs attaquant
+  attackerRegisteelBuff: false,
+  attackerGroudonBuff: false,
+  attackerRayquazaBuff: false,
+  attackerXAttackBuff: false,
+  attackerBlisseyUltBuff: false,
+  attackerBlisseyHandBuff: false,
+  attackerMimeSwapBuff: false,
+  attackerMimeSwapPlusBuff: false,
+  attackerAlcreamieBuff: false,
+  attackerMiraidonBuff: false,
+
+  // Buffs défenseur
+  defenderRegirockBuff: false,
+  defenderEldegossBuff: false,
+  defenderNinetailsBuff: false,
+  defenderNinetailsPlusBuff: false,
+  defenderUmbreonBuff: false,
+  defenderUmbreonPlusBuff: false,
+  defenderBlisseyRedirectionBuff: false,
+  defenderHoOhRedirectionBuff: false,
+
+  // Debuffs attaquant
+  debuffBuzzwoleLunge: false,
+  debuffCharizardBurn: false,
+  debuffCinderaceBurn: false,
+  debuffCramorantFeatherDance: false,
+  debuffDodrioTriAttackFlame: false,
+  debuffDodrioTriAttackFlameSprint: false,
+  debuffGengarWillOWisp: false,
+  debuffSlowbroScald: false,
+  debuffSylveonBabyDollEyes: false,
+  debuffSylveonMysticalFire: false,
+  debuffTrevenantWillOWisp: false,
+  debuffTsareenaTropKick: false,
+  debuffGoodraMuddyWater: false,
+  debuffMimePowerSwap: false,
+  debuffMimePowerSwapPlus: false,
+  debuffTrevenantWoodHammerPlus: false,
+  debuffUmbreonSnarl: false,
+  debuffUmbreonSnarlFinalHit: false,
+  debuffInteleonTearfulLook: false,
+  debuffHoohFlamethrower: false,
+  debuffHoohSacredFire: false,
+  debuffHoohSacredFirePlus: false,
+  debuffPsyduckSurfPlus: false,
+  debuffPsyduckUnite: false,
+  debuffTinkatonIceHammer: false,
+  debuffTinkatonIceHammerPlus: false,
+  debuffAlcremieCharm: false,
+  debuffLatiasMistBall: false,
+
+  umbreonSnarlStacks: 0,
+  sylveonMysticalFireStacks: 0,
+
+  // Debuffs défenseur
+  defenderAbsolBoosted: false,
+  defenderCramorantBoostedGulpMissile: false,
+  defenderDecidueyeShadowSneak: false,
+  defenderDecidueyeShadowSneakPlus: false,
+  defenderGardevoirBoosted: false,
+  defenderGardevoirPsychic: false,
+  defenderGengarShadowBall: false,
+  defenderGlaceonTailWhip: false,
+  defenderHoopaShadowBall: false,
+  defenderMimePsychic: false,
+  defenderSlowbroOblivious: false,
+  defenderSylveonHyperVoice: false,
+  defenderTsareenaBoosted: false,
+  defenderUrshifuLiquidation: false,
+  defenderVenusaurSludgeBomb: false,
+  defenderWigglytuffSing: false,
+  defenderUmbreonFakeTears: false,
+  defenderMewtwoXUnite: false,
+  defenderMewtwoYUnite: false,
+  defenderCeruledgePsychoCut: false,
+  defenderCeruledgePsychoCutPlus: false,
+  defenderTinkatonThief: false,
+  defenderTinkatonThiefPlus: false,
+  defenderPsyduckTailWhip: false,
+  defenderPsyduckTailWhipMysterious: false,
+  defenderPsyduckPsychicPlus: false,
+  defenderAlolanRaichuStoredPowerPlus: false,
+  defenderLatiasDragonBreath: false,
+  defenderEmpoleonAquaJetTorrent: false,
+  defenderDhelmiseAnchorShotPlus: false,
+
+  currentSlotTarget: null
+};

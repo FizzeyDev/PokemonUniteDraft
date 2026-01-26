@@ -997,35 +997,184 @@ h1 {
 }
 
 /* Additional Effect */
+/* === ADDITIONAL EFFECTS - NOUVELLE VERSION PLUS JOLIE === */
 .additional-effects {
   margin-top: 20px;
-  padding: 12px;
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 12px;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 16px;
+  border: 2px solid transparent;
+  transition: all 0.4s ease;
+}
+
+.additional-effects:hover {
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .additional-effects h3 {
-  margin: 0 0 12px 0;
-  font-size: 1.1rem;
-  color: #ffdd77;
-}
-
-.buff-checkboxes {
+  cursor: pointer;
+  user-select: none;
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 16px 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.1));
+  transition: all 0.3s;
 }
 
+.additional-effects h3:hover {
+  background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.2));
+}
+
+.additional-effects h3::before {
+  content: "⚡"; /* Offensive */
+  margin-right: 12px;
+  font-size: 1.5rem;
+}
+
+.attacker .additional-effects:nth-of-type(2) h3::before { /* Offensive Debuffs */
+  content: "🔥";
+}
+
+.defender .additional-effects h3::before {
+  content: "🛡️"; /* Defensive */
+}
+
+.additional-effects h3::after {
+  content: "▼";
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+.additional-effects.collapsed h3::after {
+  content: "▶";
+  transform: rotate(-90deg);
+}
+
+/* Ouverture avec glow selon côté */
+.additional-effects:not(.collapsed) {
+  border-color: var(--violet);
+  box-shadow: 0 0 20px rgba(187, 134, 252, 0.3);
+}
+
+.defender .additional-effects:not(.collapsed) {
+  border-color: var(--orange);
+  box-shadow: 0 0 20px rgba(255, 157, 0, 0.3);
+}
+
+/* Checkboxes en grid */
+.buff-checkboxes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+  overflow: hidden;
+  transition: all 0.4s ease;
+  max-height: 2000px;
+  opacity: 1;
+}
+
+.additional-effects.collapsed .buff-checkboxes {
+  max-height: 0;
+  opacity: 0;
+  padding: 0;
+  margin: 0;
+  gap: 0;
+}
+
+/* Labels stylés */
 .buff-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 12px;
+  font-size: 0.95rem;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.buff-label:hover {
+  background: rgba(255,255,255,0.15);
+  transform: translateX(6px);
+}
+
+/* Couleurs selon type */
+.attacker .additional-effects:first-of-type .buff-label { /* Offensive Buffs */
+  border-left: 4px solid var(--green);
+}
+
+.attacker .additional-effects:nth-of-type(2) .buff-label { /* Offensive Debuffs */
+  border-left: 4px solid var(--red);
+}
+
+.defender .additional-effects:first-of-type .buff-label { /* Defensive Buffs */
+  border-left: 4px solid var(--green);
+}
+
+.defender .additional-effects:nth-of-type(2) .buff-label { /* Defensive Debuffs */
+  border-left: 4px solid var(--red);
+}
+
+/* Icônes dans les labels */
+.buff-label::before {
+  font-size: 1.2rem;
+}
+
+/* Buffs = ↑ vert, Debuffs = ↓ rouge */
+.attacker .additional-effects:first-of-type .buff-label::before,
+.defender .additional-effects:first-of-type .buff-label::before {
+  content: "⬆️";
+  color: var(--green);
+}
+
+.attacker .additional-effects:nth-of-type(2) .buff-label::before,
+.defender .additional-effects:nth-of-type(2) .buff-label::before {
+  content: "⬇️";
+  color: var(--red);
+}
+
+.buff-label input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--yellow);
+  cursor: pointer;
+}
+
+/* Stacks (déjà existant mais amélioré) */
+.ability-stacks-container {
+  margin-top: 8px;
+  margin-left: 30px;
+  background: rgba(0,0,0,0.4);
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.ability-stack-control {
   display: flex;
   align-items: center;
   gap: 8px;
   font-size: 0.95rem;
-  cursor: pointer;
+  justify-content: center;
 }
 
-.buff-label input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
-  cursor: pointer;
+.ability-stack-control .stack-btn {
+  background: var(--yellow);
+  color: black;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.ability-stack-control .stack-value {
+  min-width: 40px;
+  text-align: center;
+  font-weight: bold;
+  color: var(--blue);
 }
