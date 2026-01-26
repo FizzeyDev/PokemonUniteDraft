@@ -4,6 +4,7 @@ import { state } from './state.js';
 import { specialHeldItems, stackableItems } from './constants.js';
 import { selectAttacker, selectDefender } from './pokemonManager.js';
 import { updateDamages } from './damageDisplay.js';
+import { getModifiedStats } from './damageCalculator.js';
 
 const levelSliderAttacker = document.getElementById("levelSliderAttacker");
 const levelSliderDefender = document.getElementById("levelSliderDefender");
@@ -107,9 +108,21 @@ export function updateSliderStyle(slider, value) {
 export function updateHPDisplays() {
   if (!state.currentAttacker || !state.currentDefender) return;
 
-  const { getModifiedStats } = require('./damageCalculator.js');
-  const atkStats = getModifiedStats(state.currentAttacker, state.attackerLevel, state.attackerItems, state.attackerItemStacks, state.attackerItemActivated);
-  const defStats = getModifiedStats(state.currentDefender, state.defenderLevel, state.defenderItems, state.defenderItemStacks, state.defenderItemActivated);
+  const atkStats = getModifiedStats(
+    state.currentAttacker, 
+    state.attackerLevel, 
+    state.attackerItems, 
+    state.attackerItemStacks, 
+    state.attackerItemActivated
+  );
+
+  const defStats = getModifiedStats(
+    state.currentDefender, 
+    state.defenderLevel, 
+    state.defenderItems, 
+    state.defenderItemStacks, 
+    state.defenderItemActivated
+  );
 
   if (!state.isEditingHP.attacker) {
     const currentAtkHP = Math.floor(atkStats.hp * (state.attackerHPPercent / 100));
