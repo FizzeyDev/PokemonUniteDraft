@@ -137,6 +137,13 @@ export function getModifiedStats(pokemon, level, items, stacksArray, activatedAr
     }
   }
 
+  if (pokemon?.pokemonId === "mega-charizard-y" && pokemon === state.currentAttacker) {
+    if (state.attackerBlazeActive) {
+      atk += Math.floor(baseAtk * 0.20);
+    }
+  }
+
+
   if (pokemon === state.currentAttacker) {
     let atkMult = 1.0;
     let spMult = 1.0;

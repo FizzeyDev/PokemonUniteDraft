@@ -5,6 +5,24 @@ import { getModifiedStats, calculateDamage, getAutoAttackResults } from './damag
 import { updateHPDisplays } from './uiManager.js';
 import { stackableItems } from './constants.js';
 
+import {
+  applyBuzzwoleAttacker,
+  applyCeruledgeAttacker,
+  applyChandelureAttacker,
+  applyZardyAttacker,
+  applyAegislashAttacker,
+  applyArmarougeAttacker,
+  applyGyaradosAttacker
+} from './passiveEffectsAtk.js';
+
+import {
+  applyAegislashDefender,
+  applyArmarougeDefender,
+  applyZardxDefender,
+  applyGyaradosDefender
+} from './passiveEffectsDef.js';
+
+
 const movesGrid = document.getElementById("movesGrid");
 
 export function updateDamages() {
@@ -13,8 +31,68 @@ export function updateDamages() {
     return;
   }
 
-  const atkStats = getModifiedStats(state.currentAttacker, state.attackerLevel, state.attackerItems, state.attackerItemStacks, state.attackerItemActivated);
-  const defStats = getModifiedStats(state.currentDefender, state.defenderLevel, state.defenderItems, state.defenderItemStacks, state.defenderItemActivated);
+  const atkStats = getModifiedStats(
+    state.currentAttacker,
+    state.attackerLevel,
+    state.attackerItems,
+    state.attackerItemStacks,
+    state.attackerItemActivated
+  );
+
+  const defStats = getModifiedStats(
+    state.currentDefender,
+    state.defenderLevel,
+    state.defenderItems,
+    state.defenderItemStacks,
+    state.defenderItemActivated
+  );
+
+  if (
+    state.currentAttacker?.pokemonId === "mega-gyarados" &&
+    state.attackerMoldBreakerActive
+  ) {
+    atkStats.atk = Math.floor(
+      atkStats.atk * (1 + state.currentAttacker.passive.bonusPercentAtk / 100)
+    );
+  }
+
+  if (
+    state.currentDefender?.pokemonId === "mega-gyarados" &&
+    state.defenderMoldBreakerActive
+  ) {
+    defStats.def = Math.floor(
+      defStats.def * (1 + state.currentDefender.passive.bonusPercentDef / 100)
+    );
+    defStats.sp_def = Math.floor(
+      defStats.sp_def * (1 + state.currentDefender.passive.bonusPercentSpDef / 100)
+    );
+  }
+
+  if (
+    state.currentDefender?.pokemonId === "mega-charizard-x" &&
+    state.defenderZardToughClaw
+  ) {
+    defStats.def = Math.floor(
+      defStats.def * (1 + state.currentDefender.passive.bonusPercentDef / 100)
+    );
+    defStats.sp_def = Math.floor(
+      defStats.sp_def * (1 + state.currentDefender.passive.bonusPercentSpDef / 100)
+    );
+  }
+
+  if (
+    state.currentAttacker?.pokemonId === "blastoise" &&
+    state.attackerHPPercent <= state.currentAttacker.passive.lowHpThreshold
+  ) {
+    atkStats.atk = Math.floor(
+      atkStats.atk * (1 + state.currentAttacker.passive.bonusPercentAtk / 100)
+    );
+
+    atkStats.sp_atk = Math.floor(
+      atkStats.sp_atk * (1 + state.currentAttacker.passive.bonusPercentSpAtk / 100)
+    );
+  }
+
   const currentDefHP = Math.floor(defStats.hp * (state.defenderHPPercent / 100));
 
   document.getElementById('resultsAttackerName').textContent = state.currentAttacker.displayName;
@@ -50,6 +128,14 @@ export function updateDamages() {
   });
 
   totalCritChance = Math.min(100, totalCritChance);
+
+  if (
+    state.currentAttacker?.pokemonId === "charizard" &&
+    state.attackerHPPercent <= state.currentAttacker.passive.lowHpThreshold
+  ) {
+    totalCritChance += 20;
+  }
+
   document.getElementById('attackerCritChance').textContent = `${totalCritChance}%`;
 
   document.querySelectorAll('.global-bonus-line').forEach(el => el.remove());
@@ -69,8 +155,20 @@ export function updateDamages() {
 
   const finalEffects = {
     ...itemEffects,
-    infiltratorIgnore: state.currentAttacker?.pokemonId === "chandelure" ? Math.min(state.attackerPassiveStacks * 0.025, 0.20) : 0,
-    defenderFlashFireReduction: state.currentDefender?.pokemonId === "armarouge" && state.defenderFlashFireActive ? 0.20 : 0,
+    infiltratorIgnore:
+      state.currentAttacker?.pokemonId === "chandelure"
+        ? Math.min(state.attackerPassiveStacks * 0.025, 0.20)
+        : 0,
+    defenderFlashFireReduction:
+      state.currentDefender?.pokemonId === "armarouge" &&
+      state.defenderFlashFireActive
+        ? 0.20
+        : 0,
+    moldBreakerDefPen:
+      state.currentAttacker?.pokemonId === "mega-gyarados" &&
+      state.attackerMoldBreakerActive
+        ? state.currentAttacker.passive.bonusDefPen / 100
+        : 0,
     defenderDamageMult
   };
 
@@ -94,12 +192,18 @@ function applyItemsAndGlobalEffects(atkStats, defStats) {
   if (state.attackerMimeSwapBuff) globalDamageMult *= 1.15;
   if (state.attackerMimeSwapPlusBuff) globalDamageMult *= 1.20;
   if (state.attackerMiraidonBuff) {
-    globalDamageMult *= 1.10;
     if (state.currentAttacker?.pokemonId === "miraidon") {
       globalDamageMult *= 1.30;
+    } else {
+      globalDamageMult *= 1.10;
     }
   }
-
+  if (
+    state.currentAttacker?.pokemonId === "mega-charizard-y" &&
+    state.attackerDroughtActive
+  ) {
+    globalDamageMult *= 1.10;
+  }
   if (state.debuffGoodraMuddyWater) globalDamageMult *= 0.85;
   if (state.debuffMimePowerSwap) globalDamageMult *= 0.85;
   if (state.debuffMimePowerSwapPlus) globalDamageMult *= 0.80;
@@ -171,109 +275,98 @@ function applyItemsAndGlobalEffects(atkStats, defStats) {
   return { choiceSpecsBonus, hasChoiceSpecs, slickIgnore, scopeCritBonus, globalDamageMult };
 }
 
+function applyAttackerPassive(pokemonId, atkStats, defStats, card) {
+  const handlers = {
+    buzzwole: applyBuzzwoleAttacker,
+    ceruledge: applyCeruledgeAttacker,
+    chandelure: applyChandelureAttacker,
+    "mega-charizard-y": applyZardyAttacker,
+    aegislash: applyAegislashAttacker,
+    armarouge: applyArmarougeAttacker,
+    "mega-gyarados": applyGyaradosAttacker
+  };
+
+  handlers[pokemonId]?.(atkStats, defStats, card);
+}
+
+function applyDefenderPassive(pokemonId, atkStats, defStats, card) {
+  const handlers = {
+    aegislash: applyAegislashDefender,
+    armarouge: applyArmarougeDefender,
+    "mega-charizard-x": applyZardxDefender,
+    "mega-gyarados": applyGyaradosDefender
+  };
+
+  handlers[pokemonId]?.(atkStats, defStats, card);
+}
+
 function applyPassiveEffects(atkStats, defStats) {
   const attackerCard = document.querySelector('.attacker-stats');
   const defenderCard = document.querySelector('.defender-stats');
 
-  if (state.currentAttacker?.pokemonId === "chandelure") {
-    const line = document.createElement("div");
-    line.className = "global-bonus-line";
-    line.innerHTML = `
-      <div style="margin:12px 0;padding:10px;background:#2a2a3a;border-radius:8px;border-left:4px solid #bb86fc;display:flex;align-items:center;gap:12px;">
-        <img src="assets/moves/chandelure/infiltrator.png" style="width:40px;height:40px;border-radius:6px;" onerror="this.src='assets/moves/missing.png'">
-        <div style="flex:1;">
-          <strong style="color:#bb86fc;">Infiltrator</strong><br>
-          Stacks: <button class="stack-btn minus">-</button> <strong style="color:#a0d8ff;">${state.attackerPassiveStacks}</strong>/8 <button class="stack-btn plus">+</button>
-          → Ignore ${(state.attackerPassiveStacks * 2.5).toFixed(1)}% Sp. Def
-        </div>
-      </div>
-    `;
-    line.querySelector('.minus').onclick = () => { if (state.attackerPassiveStacks > 0) { state.attackerPassiveStacks--; updateDamages(); } };
-    line.querySelector('.plus').onclick = () => { if (state.attackerPassiveStacks < 8) { state.attackerPassiveStacks++; updateDamages(); } };
-    attackerCard.appendChild(line);
+  if (state.currentAttacker) {
+    applyAttackerPassive(state.currentAttacker.pokemonId, atkStats, defStats, attackerCard);
   }
 
-  if (state.currentAttacker?.pokemonId === "aegislash") {
-    const isSword = state.attackerStance === 'sword';
-    const line = document.createElement("div");
-    line.className = "global-bonus-line";
-    line.innerHTML = `
-      <div style="margin:12px 0;padding:10px;background:#2a2a3a;border-radius:8px;border-left:4px solid #e67e22;display:flex;align-items:center;gap:12px;">
-        <img src="assets/moves/aegislash/stance_change.png" style="width:40px;height:40px;border-radius:6px;" onerror="this.src='assets/moves/missing.png'">
-        <div style="flex:1;">
-          <strong style="color:#e67e22;">Stance Change</strong><br>
-          Forme: <strong style="color:${isSword?'#e74c3c':'#3498db'};">${isSword?'Blade':'Shield'}</strong><br>
-          <button class="stance-toggle" style="margin-top:8px;padding:8px 16px;background:${isSword?'#3498db':'#e74c3c'};color:white;border:none;border-radius:6px;cursor:pointer;">
-            Switch to ${isSword?'Shield':'Blade'} Forme
-          </button>
-        </div>
-      </div>
-    `;
-    line.querySelector('.stance-toggle').onclick = () => { state.attackerStance = isSword ? 'shield' : 'sword'; updateDamages(); };
-    attackerCard.appendChild(line);
+  if (state.currentDefender) {
+    applyDefenderPassive(state.currentDefender.pokemonId, atkStats, defStats, defenderCard);
+  }
+}
+
+function getCeruledgeWoundMultiplier() {
+  if (state.currentAttacker?.pokemonId !== "ceruledge") return 1;
+  if (state.attackerPassiveStacks < 6) return 1;
+  return 1.15;
+}
+
+function getCeruledgeWeakArmorDamage(atkStats, defStats, globalDamageMult) {
+  if (state.currentAttacker?.pokemonId !== "ceruledge") return null;
+
+  const stacks = state.attackerPassiveStacks;
+  if (stacks <= 0) return null;
+
+  const base = calculateDamage(
+    { multiplier: 35, levelCoef: 0, constant: 40 },
+    atkStats.atk,
+    defStats.def,
+    state.attackerLevel,
+    false,
+    "ceruledge",
+    1.0,
+    globalDamageMult
+  );
+
+  let totalMult = 1;
+  if (stacks > 1) totalMult += (stacks - 1) * 0.5;
+
+  const ticks = 6;
+  const total = Math.floor(base * totalMult * ticks);
+
+  return {
+    perTick: Math.floor((base * totalMult)),
+    total
+  };
+}
+
+function getBuzzwoleMuscleMultiplier(moveName, damageName) {
+  if (state.currentAttacker?.pokemonId !== "buzzwole") return 1;
+
+  const stacks = state.attackerPassiveStacks;
+  if (stacks <= 0) return 1;
+
+  if (moveName === "Fell Stinger") {
+    return 1 + 0.125 * stacks;
   }
 
-  if (state.currentDefender?.pokemonId === "aegislash") {
-    const isSword = state.defenderStance === 'sword';
-    const line = document.createElement("div");
-    line.className = "global-bonus-line";
-    line.innerHTML = `
-      <div style="margin:12px 0;padding:10px;background:#3a2a2a;border-radius:8px;border-left:4px solid #e67e22;display:flex;align-items:center;gap:12px;">
-        <img src="assets/moves/aegislash/stance_change.png" style="width:40px;height:40px;border-radius:6px;" onerror="this.src='assets/moves/missing.png'">
-        <div style="flex:1;">
-          <strong style="color:#e67e22;">Stance Change</strong><br>
-          Forme: <strong style="color:${isSword?'#e74c3c':'#3498db'};">${isSword?'Blade':'Shield'}</strong><br>
-          <button class="stance-toggle" style="margin-top:8px;padding:8px 16px;background:${isSword?'#3498db':'#e74c3c'};color:white;border:none;border-radius:6px;cursor:pointer;">
-            Switch to ${isSword?'Shield':'Blade'} Forme
-          </button>
-        </div>
-      </div>
-    `;
-    line.querySelector('.stance-toggle').onclick = () => { state.defenderStance = isSword ? 'shield' : 'sword'; updateDamages(); };
-    defenderCard.appendChild(line);
+  if (moveName === "Superpower") {
+    return 1 + 0.125 * stacks;
   }
 
-  if (state.currentAttacker?.pokemonId === "armarouge") {
-    const exampleDef = state.currentAttacker.style === "special" ? defStats.sp_def : defStats.def;
-    const passive = state.currentAttacker.passive || { extraAutoMultiplier: 60, extraAutoConstant: 120 };
-    const flashBonus = calculateDamage({ multiplier: passive.extraAutoMultiplier, levelCoef: 0, constant: passive.extraAutoConstant }, atkStats.sp_atk, exampleDef, state.attackerLevel, false);
-
-    const line = document.createElement("div");
-    line.className = "global-bonus-line";
-    line.innerHTML = `
-      <div style="margin:12px 0;padding:10px;background:#2a2a3a;border-radius:8px;border-left:4px solid #ff9500;display:flex;align-items:center;gap:12px;">
-        <img src="assets/moves/armarouge/flash_fire.png" style="width:40px;height:40px;border-radius:6px;" onerror="this.src='assets/moves/missing.png'">
-        <div style="flex:1;">
-          <strong style="color:#ff9500;">Flash Fire</strong><br>
-          Next AA: <strong style="color:${state.attackerFlashFireActive?'#88ff88':'#ff6666'};">${state.attackerFlashFireActive?'Active':'Inactive'}</strong> (+${flashBonus.toLocaleString()} dmg)<br>
-          <button class="flashfire-toggle" style="margin-top:8px;padding:8px 16px;background:${state.attackerFlashFireActive?'#27ae60':'#7f8c8d'};color:white;border:none;border-radius:6px;cursor:pointer;">
-            ${state.attackerFlashFireActive?'Deactivate':'Activate'} proc
-          </button>
-        </div>
-      </div>
-    `;
-    line.querySelector('.flashfire-toggle').onclick = () => { state.attackerFlashFireActive = !state.attackerFlashFireActive; updateDamages(); };
-    attackerCard.appendChild(line);
+  if (moveName === "Leech Life" && damageName.includes("per Tick")) {
+    return 1 + 0.015 * stacks;
   }
 
-  if (state.currentDefender?.pokemonId === "armarouge") {
-    const line = document.createElement("div");
-    line.className = "global-bonus-line";
-    line.innerHTML = `
-      <div style="margin:12px 0;padding:10px;background:#3a2a2a;border-radius:8px;border-left:4px solid #ff9500;display:flex;align-items:center;gap:12px;">
-        <img src="assets/moves/armarouge/flash_fire.png" style="width:40px;height:40px;border-radius:6px;" onerror="this.src='assets/moves/missing.png'">
-        <div style="flex:1;">
-          <strong style="color:#ff9500;">Flash Fire</strong><br>
-          Damage Reduction: <strong style="color:${state.defenderFlashFireActive?'#88ff88':'#ff6666'};">${state.defenderFlashFireActive?'20%':'0%'}</strong><br>
-          <button class="flashfire-toggle" style="margin-top:8px;padding:8px 16px;background:${state.defenderFlashFireActive?'#27ae60':'#7f8c8d'};color:white;border:none;border-radius:6px;cursor:pointer;">
-            ${state.defenderFlashFireActive?'Deactivate':'Activate'} reduction
-          </button>
-        </div>
-      </div>
-    `;
-    line.querySelector('.flashfire-toggle').onclick = () => { state.defenderFlashFireActive = !state.defenderFlashFireActive; updateDamages(); };
-    defenderCard.appendChild(line);
-  }
+  return 1;
 }
 
 function displayMoves(atkStats, defStats, effects, currentDefHP) {
@@ -318,6 +411,14 @@ function displayMoves(atkStats, defStats, effects, currentDefHP) {
 
       let normal = calculateDamage(dmg, relevantAtk, effectiveDef, state.attackerLevel, false, state.currentAttacker.pokemonId, 1.0, globalDamageMult);
       let crit = calculateDamage(dmg, relevantAtk, effectiveDef, state.attackerLevel, true, state.currentAttacker.pokemonId, scopeCritBonus, globalDamageMult);
+
+      const muscleMult = getBuzzwoleMuscleMultiplier(move.name, dmg.name);
+      normal = Math.floor(normal * muscleMult);
+      crit = Math.floor(crit * muscleMult);
+
+      const ceruledgeMult = getCeruledgeWoundMultiplier();
+      normal = Math.floor(normal * ceruledgeMult);
+      crit = Math.floor(crit * ceruledgeMult);
 
       if (move.name === "Auto-attack" && state.attackerFlashFireActive && state.currentAttacker.pokemonId === "armarouge") {
         const passive = state.currentAttacker.passive || { extraAutoMultiplier: 60, extraAutoConstant: 120 };
@@ -398,6 +499,24 @@ function displayMoves(atkStats, defStats, effects, currentDefHP) {
         const line = document.createElement("div");
         line.className = "damage-line";
         line.innerHTML = `<span class="dmg-name">Razor Claw bonus (next AA after move)</span><div class="dmg-values"><span class="dmg-crit">+ ${razorExtra.toLocaleString()}</span></div>`;
+        card.appendChild(line);
+      }
+    }
+
+    if (move.name === "Weak Armor (Passive)") {
+      const weakArmor = getCeruledgeWeakArmorDamage(atkStats, defStats, globalDamageMult);
+      if (weakArmor) {
+        const line = document.createElement("div");
+        line.className = "damage-line";
+        line.innerHTML = `
+          <span class="dmg-name">Weak Armor DoT (${state.attackerPassiveStacks} stacks)</span>
+          <div class="dmg-values">
+            <span class="dmg-normal">
+              ${weakArmor.perTick.toLocaleString()} × 6
+              <span style="opacity:.7">(${weakArmor.total.toLocaleString()})</span>
+            </span>
+          </div>
+        `;
         card.appendChild(line);
       }
     }

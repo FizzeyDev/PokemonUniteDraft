@@ -30,6 +30,11 @@ export const state = {
   defenderStance: 'shield',
   attackerFlashFireActive: false,
   defenderFlashFireActive: false,
+  attackerMoldBreakerActive: false,
+  defenderMoldBreakerActive: false,
+  attackerZardBlaze: false,
+  attackerZardDrought: false,
+  defenderZardToughClaw: false,
 
   // Buffs attaquant
   attackerRegisteelBuff: false,

@@ -765,12 +765,6 @@
 		]
 		},
 		{
-		"name": "Helping Hand",
-		"can_crit": "false",
-		"image": "assets/moves/blissey/helping_hand.png",
-		"damages": []
-		},
-		{
 		"name": "Bliss Assistance (Unite)",
 		"can_crit": "false",
 		"image": "assets/moves/blissey/bliss_assistance.png",
@@ -802,6 +796,14 @@
         {"level": 14, "hp": 7236, "atk": 417, "def": 453, "sp_atk": 103, "sp_def": 343, "crit": 20},
         {"level": 15, "hp": 7800, "atk": 452, "def": 500, "sp_atk": 115, "sp_def": 380, "crit": 20}
     ],
+    "passive": {
+      "name": "Beast Boost",
+      "image": "assets/moves/buzzwole/beast_boost.png",
+      "stackable": true,
+      "maxStacks": 6,
+      "ignorePerStack": 0.025,
+      "description": "Each time Buzzwole hits an enemy with basic attacks, Mega Punch, Lunge, or Smack Down - muscle gauge increases"
+    },
     "moves": [
         {
             "name": "Auto-attack",
@@ -911,6 +913,22 @@
                 {"name": "Basic", "multiplier": 100, "levelCoef": 0, "constant": 0, "dealDamage": true},
                 {"name": "Boosted (Charcadet)", "multiplier": 130, "levelCoef": 0, "constant": 0, "dealDamage": true},
                 {"name": "Boosted (Ceruledge - per hit x2)", "multiplier": 75, "levelCoef": 0, "constant": 0, "dealDamage": true, "notes": "20% lifesteal on all attacks post-evolution"}
+            ]
+        },
+        {
+            "name": "Flame Body (Passive)",
+            "can_crit": "true",
+            "image": "assets/moves/ceruledge/flame_body.png",
+            "damages": [
+                {"name": "Damage", "multiplier": 100, "levelCoef": 0, "constant": 0, "dealDamage": true}
+            ]
+        },
+        {
+            "name": "Weak Armor (Passive)",
+            "can_crit": "true",
+            "image": "assets/moves/ceruledge/flame_body.png",
+            "damages": [
+                {"name": "Damage", "multiplier": 100, "levelCoef": 0, "constant": 0, "dealDamage": true}
             ]
         },
         {
@@ -1211,6 +1229,13 @@
         {"level": 14, "hp": 7009, "atk": 416, "def": 349, "sp_atk": 100, "sp_def": 279, "crit": 30},
         {"level": 15, "hp": 7700, "atk": 462, "def": 400, "sp_atk": 115, "sp_def": 320, "crit": 30}
     ],
+    "passive": {
+      "name": "Tough Claw",
+      "image": "assets/moves/mega_charizard_x/tough_claws.png",
+      "description": "Charizard's passive ability changes to Tough Claws when it Mega Evolves, increasing Defense and Special Defense by 30%",
+      "bonusPercentDef": 30,
+      "bonusPercentSpDef": 30
+    },
     "moves": [
         {
             "name": "Auto-attack",
@@ -3922,6 +3947,15 @@
       {"level": 14, "hp": 6516, "atk": 368, "def": 404, "sp_atk": 103, "sp_def": 310, "crit": 20},
       {"level": 15, "hp": 7000, "atk": 400, "def": 450, "sp_atk": 115, "sp_def": 345, "crit": 20}
     ],
+    "passive": {
+      "name": "Mold Breaker",
+      "image": "assets/moves/mega_gyarados/mold_breaker.png",
+      "description": "Gyarados' passive changes upon mega evolving. Gain 10% Atk, 30% Def Penetration, 10% Def, and 10% SpDef.",
+      "bonusPercentAtk": 10,
+      "bonusPercentDef": 10,
+      "bonusPercentSpDef": 10,
+      "bonusDefPen": 30
+    },
     "moves": [
       {
         "name": "Auto-attack",
@@ -3931,18 +3965,6 @@
           {"name": "Basic", "multiplier": 100, "levelCoef": 0, "constant": 0, "dealDamage": true},
           {"name": "Boosted", "multiplier": 140, "levelCoef": 0, "constant": 0, "dealDamage": true}
         ]
-      },
-      {
-        "name": "Swift Swim (Passive)",
-        "can_crit": "false",
-        "image": "assets/moves/mega_gyarados/swift_swim.png",
-        "damages": []
-      },
-      {
-        "name": "Intimidate (Passive)",
-        "can_crit": "false",
-        "image": "assets/moves/mega_gyarados/intimidate.png",
-        "damages": []
       },
       {
         "name": "Mold Breaker (Passive)",
