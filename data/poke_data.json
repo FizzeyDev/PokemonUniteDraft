@@ -801,7 +801,6 @@
       "image": "assets/moves/buzzwole/beast_boost.png",
       "stackable": true,
       "maxStacks": 6,
-      "ignorePerStack": 0.025,
       "description": "Each time Buzzwole hits an enemy with basic attacks, Mega Punch, Lunge, or Smack Down - muscle gauge increases"
     },
     "moves": [
@@ -904,6 +903,14 @@
         {"level": 14, "hp": 7221, "atk": 389, "def": 287, "sp_atk": 103, "sp_def": 337, "crit": 20},
         {"level": 15, "hp": 7850, "atk": 430, "def": 320, "sp_atk": 116, "sp_def": 380, "crit": 20}
     ],
+    "passive": {
+      "name": "Weak Armor",
+      "image": "assets/moves/ceruledge/weak_armor.png",
+      "description": "If the effect stacks 6 times on an enemy, that Pokémon takes 15% increased damage from Ceruledge.",
+      "multBoost": "15%",
+      "stackable": true,
+      "maxStacks": 6
+    },
     "moves": [
         {
             "name": "Auto-attack",
@@ -1417,6 +1424,13 @@
         {"level": 14, "hp": 5539, "atk": 375, "def": 235, "sp_atk": 104, "sp_def": 201, "crit": 30},
         {"level": 15, "hp": 6000, "atk": 418, "def": 268, "sp_atk": 119, "sp_def": 232, "crit": 30}
     ],
+    "passive": {
+      "name": "Blaze",
+      "image": "assets/moves/cinderace/blaze.png",
+      "lowHpThreshold": 50,
+      "bonusCrit": 10,
+      "description": "While at 50% max HP or below, this Pokémon's critical-hit rate is increased by 10%."
+    },
     "moves": [
         {
             "name": "Auto-attack",
@@ -1487,7 +1501,7 @@
             ]
         },
         {
-            "name": "Blaze",
+            "name": "Blaze (Passive)",
             "can_crit": "false",
             "image": "assets/moves/cinderace/blaze.png",
             "damages": [
@@ -1814,6 +1828,24 @@
         {"level": 14, "hp": 8998, "atk": 321, "def": 566, "sp_atk": 103, "sp_def": 406, "crit": 0},
         {"level": 15, "hp": 9900, "atk": 344, "def": 640, "sp_atk": 116, "sp_def": 460, "crit": 0}
     ],
+    "passive": {
+      "name": "Sturdy",
+      "image": "assets/moves/crustle/sturdy.png",
+      "type": "missing_hp_stacks",
+      "stack": {
+        "missingHpPercentPerStack": 7,
+        "maxStacks": 10
+      },
+      "scaling": {
+        "def": {
+          "formula": "2 * (level - 1) + 6"
+        },
+        "sp_def": {
+          "formula": "2 * (level - 1) + 6"
+        }
+      },
+      "description": "For every 7% missing HP, this Pokémon's Defense and Sp. Def are increased (up to 10 times; maximum at 70% missing HP or more)."
+    },
     "moves": [
         {
             "name": "Auto-attack",
@@ -1920,6 +1952,15 @@
             ]
         },
         {
+            "name": "Bad Dreams (Passive)",
+            "can_crit": "false",
+            "image": "assets/moves/darkrai/bad_dreams.png",
+            "damages": [
+                {"name": "Damage", "multiplier": 50, "levelCoef": 0, "constant": 0, "dealDamage": true},
+                {"name": "Damage - DoT", "multiplier": 0, "levelCoef": 0, "constant": 0, "dealDamage": true, "notes": "2% max HP every 0.5s"}
+            ]
+        },
+        {
             "name": "Hypnosis",
             "can_crit": "false",
             "image": "assets/moves/darkrai/hypnosis.png",
@@ -1987,15 +2028,6 @@
                 {"name": "Damage - DoT (21 Ticks)", "multiplier": 0, "levelCoef": 0, "constant": 0, "dealDamage": true, "notes": "3% max HP every 0.5s"},
                 {"name": "Shield (Buff)", "multiplier": 0, "levelCoef": 0, "constant": 0, "shield": true, "notes": "20% max HP"}
             ]
-        },
-        {
-            "name": "Bad Dreams",
-            "can_crit": "false",
-            "image": "assets/moves/darkrai/bad_dreams.png",
-            "damages": [
-                {"name": "Damage", "multiplier": 50, "levelCoef": 0, "constant": 0, "dealDamage": true},
-                {"name": "Damage - DoT", "multiplier": 0, "levelCoef": 0, "constant": 0, "dealDamage": true, "notes": "2% max HP every 0.5s"}
-            ]
         }
     ]
   },
@@ -2021,6 +2053,12 @@
       {"level": 14, "hp": 5570, "atk": 400, "def": 236, "sp_atk": 130, "sp_def": 291, "crit": 30},
       {"level": 15, "hp": 6000, "atk": 450, "def": 270, "sp_atk": 150, "sp_def": 330, "crit": 30}
     ],
+    "passive": {
+      "name": "Long Reach",
+      "image": "assets/moves/decidueye/long_reach.png",
+      "description": "Increases Decidueye's auto attack and move damage by 20% to distant enemies.",
+      "multBoost": "20%"
+    },
     "moves": [
         {
             "name": "Auto-attack",
@@ -2133,6 +2171,14 @@
             ]
         },
         {
+            "name": "Blaze (Passive Proc)",
+            "can_crit": "false",
+            "image": "assets/moves/delphox/blaze.png",
+            "damages": [
+                {"name": "Damage - Fireball", "multiplier": 81, "levelCoef": 0, "constant": 325, "dealDamage": true, "notes": "Triggers below 50% HP, 15s CD"}
+            ]
+        },
+        {
             "name": "Ember",
             "can_crit": "false",
             "image": "assets/moves/delphox/ember.png",
@@ -2186,14 +2232,6 @@
             ]
         },
         {
-            "name": "Blaze (Passive Proc)",
-            "can_crit": "false",
-            "image": "assets/moves/delphox/blaze.png",
-            "damages": [
-                {"name": "Damage - Fireball", "multiplier": 81, "levelCoef": 0, "constant": 325, "dealDamage": true, "notes": "Triggers below 50% HP, 15s CD"}
-            ]
-        },
-        {
             "name": "Fanciful Fireworks (Unite)",
             "can_crit": "false",
             "image": "assets/moves/delphox/fanciful_fireworks.png",
@@ -2233,6 +2271,16 @@
             "image": "assets/moves/basic_attack.png",
             "damages": [
                 {"name": "Basic", "multiplier": 100, "levelCoef": 0, "constant": 0, "dealDamage": true}
+            ]
+        },
+        {
+            "name": "Steelworker (Passive)",
+            "can_crit": "false",
+            "image": "assets/moves/dhelmise/steelworker.png",
+            "damages": [
+                {"name": "Damage - Additional (Stacked Basic)", "multiplier": 140, "levelCoef": 0, "constant": 0, "dealDamage": true, "notes": "Per stack, up to 3"},
+                {"name": "Shield", "multiplier": 240, "levelCoef": 0, "constant": 360, "shield": true},
+                {"name": "Healing", "multiplier": 0, "levelCoef": 0, "constant": 0, "heal": true, "notes": "20% of remaining shield on expire"}
             ]
         },
         {
@@ -2287,16 +2335,6 @@
             "damages": [
                 {"name": "Damage - First Hit", "multiplier": 180, "levelCoef": 0, "constant": 270, "dealDamage": true},
                 {"name": "Damage - Second Hit", "multiplier": 180, "levelCoef": 0, "constant": 270, "dealDamage": true}
-            ]
-        },
-        {
-            "name": "Steelworker (Passive)",
-            "can_crit": "false",
-            "image": "assets/moves/dhelmise/steelworker.png",
-            "damages": [
-                {"name": "Damage - Additional (Stacked Basic)", "multiplier": 140, "levelCoef": 0, "constant": 0, "dealDamage": true, "notes": "Per stack, up to 3"},
-                {"name": "Shield", "multiplier": 240, "levelCoef": 0, "constant": 360, "shield": true},
-                {"name": "Healing", "multiplier": 0, "levelCoef": 0, "constant": 0, "heal": true, "notes": "20% of remaining shield on expire"}
             ]
         },
         {
@@ -2743,6 +2781,15 @@
             ]
         },
         {
+            "name": "Cotton Down (Passive)",
+            "can_crit": "false",
+            "image": "assets/moves/eldegoss/cotton_down.png",
+            "damages": [
+                {"name": "Damage - Revenge", "multiplier": 35, "levelCoef": 0, "constant": 150, "dealDamage": true},
+                {"name": "Healing - Revenge", "multiplier": 65, "levelCoef": 0, "constant": 165, "heal": true}
+            ]
+        },
+        {
             "name": "Leafage",
             "can_crit": "false",
             "image": "assets/moves/eldegoss/leafage.png",
@@ -2792,15 +2839,6 @@
             "image": "assets/moves/eldegoss/cotton_spore.png",
             "damages": [
                 {"name": "Damage", "multiplier": 148, "levelCoef": 0, "constant": 350, "dealDamage": true}
-            ]
-        },
-        {
-            "name": "Cotton Down (Passive)",
-            "can_crit": "false",
-            "image": "assets/moves/eldegoss/cotton_down.png",
-            "damages": [
-                {"name": "Damage - Revenge", "multiplier": 35, "levelCoef": 0, "constant": 150, "dealDamage": true},
-                {"name": "Healing - Revenge", "multiplier": 65, "levelCoef": 0, "constant": 165, "heal": true}
             ]
         },
         {
@@ -3742,6 +3780,13 @@
       {"level": 14, "hp": 5048, "atk": 446, "def": 219, "sp_atk": 104, "sp_def": 131, "crit": 30},
       {"level": 15, "hp": 5420, "atk": 500, "def": 250, "sp_atk": 119, "sp_def": 149, "crit": 30}
     ],
+    "passive": {
+      "name": "Torrent",
+      "image": "assets/moves/greninja/torrent.png",
+      "lowHpThreshold": 50,
+      "bonusPercentAtk": 5,
+      "description": "While at 50% max HP or below, increases Attack by 5% and movement speed by 12%."
+    },
     "moves": [
       {
         "name": "Auto-attack",
@@ -3752,12 +3797,6 @@
           {"name": "Boosted (Ranged)", "multiplier": 120, "levelCoef": 0, "constant": 0, "dealDamage": true},
           {"name": "Close Range Bonus", "multiplier": 0, "levelCoef": 0, "constant": 0, "dealDamage": true, "notes": "+5% missing HP (basic), +10% missing HP (boosted)"}
         ]
-      },
-      {
-        "name": "Torrent (Passive)",
-        "can_crit": "false",
-        "image": "assets/moves/greninja/torrent.png",
-        "damages": []
       },
       {
         "name": "Bubble",

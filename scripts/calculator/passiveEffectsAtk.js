@@ -84,6 +84,63 @@ function applyChandelureAttacker(atkStats, defStats, card) {
   card.appendChild(line);
 }
 
+function applyDarkraiAttacker(atkStats, defStats, card) {
+  const asleep = state.attackerDarkraiSleep || false;
+
+  const line = document.createElement("div");
+  line.className = "global-bonus-line";
+  line.innerHTML = `
+    <div style="margin:12px 0;padding:10px;background:#2a2a3a;border-radius:8px;border-left:4px solid #bb86fc;display:flex;align-items:center;gap:12px;">
+      <img src="assets/moves/darkrai/bad_dreams.png" style="width:40px;height:40px;border-radius:6px;" onerror="this.src='assets/moves/missing.png'">
+      <div style="flex:1;">
+        <strong style="color:#bb86fc;">Bad Dreams</strong><br>
+        Status: <strong style="color:${asleep ? '#3498db' : '#e74c3c'};">${asleep ? 'Active' : 'Inactive'}</strong><br>
+        <button class="sleep-toggle" style="margin-top:8px;padding:6px 14px;background:${asleep ? '#3498db' : '#e74c3c'};color:white;border:none;border-radius:6px;cursor:pointer;">
+          ${asleep ? 'Asleep' : 'Awake'}
+        </button>
+      </div>
+    </div>
+  `;
+
+  line.querySelector('.sleep-toggle').onclick = () => {
+    if (!asleep) {
+      state.attackerDarkraiSleep = true;
+    } else {
+      state.attackerDarkraiSleep = false;
+    }
+    updateDamages();
+  };
+  card.appendChild(line);
+}
+
+function applyDecidueyeAttacker(atkStats, defStats, card) {
+  const distant = state.attackerDecidueyeDistant || false;
+
+  const line = document.createElement("div");
+  line.className = "global-bonus-line";
+  line.innerHTML = `
+    <div style="margin:12px 0;padding:10px;background:#1f2f24;border-radius:8px;border-left:4px solid #6fcf97;display:flex;align-items:center;gap:12px;">
+      <img src="assets/moves/decidueye/long_reach.png" style="width:40px;height:40px;border-radius:6px;" onerror="this.src='assets/moves/missing.png'">
+      <div style="flex:1;">
+        <strong style="color:#6fcf97;">Long Reach</strong><br>
+        Target: <strong style="color:${distant ? '#6fcf97' : '#e67e22'};">${distant ? 'Distant' : 'Close'}</strong><br>
+        Damage bonus: <strong>+20%</strong><br>
+        <button class="distance-toggle"
+          style="margin-top:8px;padding:6px 14px;background:${distant ? '#6fcf97' : '#e67e22'};color:white;border:none;border-radius:6px;cursor:pointer;">
+          ${distant ? 'Distant' : 'Close'}
+        </button>
+      </div>
+    </div>
+  `;
+
+  line.querySelector('.distance-toggle').onclick = () => {
+    state.attackerDecidueyeDistant = !distant;
+    updateDamages();
+  };
+
+  card.appendChild(line);
+}
+
 function applyZardyAttacker(atkStats, defStats, card) {
   const blazeActive = state.attackerBlazeActive || false;
   const droughtActive = state.attackerDroughtActive || false;
@@ -192,12 +249,25 @@ function applyArmarougeAttacker(atkStats, defStats, card) {
   card.appendChild(line);
 }
 
-function applyGyaradosAttacker(atkStats, defStats, card) {
+function applyMegaGyaradosAttacker(atkStats, defStats, card) {
   const passive = state.currentAttacker.passive;
+  const evolve = state.attackerMegaGyaradosEvolve;
 
   const line = document.createElement("div");
   line.className = "global-bonus-line";
   line.innerHTML = `
+    <div style="margin:12px 0;padding:10px;background:#2a2a3a;border-radius:8px;border-left:4px solid #3498db;display:flex;align-items:center;gap:12px;">
+      <img src="assets/moves/mega_gyarados/intimidate.png" style="width:40px;height:40px;border-radius:6px;">
+      <div style="flex:1;">
+        <strong style="color:#3498db;">Intimidate</strong><br>
+        HP +1200, Atk +100<br>
+        <button class="intimidate-toggle"
+          style="margin-top:8px;padding:8px 16px;background:${state.attackerMegaGyaradosEvolve ? '#27ae60' : '#7f8c8d'};color:white;border:none;border-radius:6px;cursor:pointer;">
+          ${state.attackerMegaGyaradosEvolve ? 'Gyarados' : 'Magikarp'}
+        </button>
+      </div>
+    </div>
+
     <div style="margin:12px 0;padding:10px;background:#2a2a3a;border-radius:8px;border-left:4px solid #3498db;display:flex;align-items:center;gap:12px;">
       <img src="${passive.image}" style="width:40px;height:40px;border-radius:6px;">
       <div style="flex:1;">
@@ -210,8 +280,37 @@ function applyGyaradosAttacker(atkStats, defStats, card) {
       </div>
     </div>
   `;
+  line.querySelector('.intimidate-toggle').onclick = () => {
+    state.attackerMegaGyaradosEvolve = !state.attackerMegaGyaradosEvolve;
+    updateDamages();
+  };
+
   line.querySelector('.moldbreaker-toggle').onclick = () => {
     state.attackerMoldBreakerActive = !state.attackerMoldBreakerActive;
+    updateDamages();
+  };
+  card.appendChild(line);
+}
+
+function applyGyaradosAttacker(atkStats, defStats, card) {
+  const line = document.createElement("div");
+
+  line.className = "global-bonus-line";
+  line.innerHTML = `
+    <div style="margin:12px 0;padding:10px;background:#2a2a3a;border-radius:8px;border-left:4px solid #3498db;display:flex;align-items:center;gap:12px;">
+      <img src="assets/moves/gyarados/moxie.png" style="width:40px;height:40px;border-radius:6px;">
+      <div style="flex:1;">
+        <strong style="color:#3498db;">Moxie</strong><br>
+        HP +1200, Atk +100<br>
+        <button class="moxie-toggle"
+          style="margin-top:8px;padding:8px 16px;background:${state.attackerGyaradosEvolve ? '#27ae60' : '#7f8c8d'};color:white;border:none;border-radius:6px;cursor:pointer;">
+          ${state.attackerGyaradosEvolve ? 'Gyarados' : 'Magikarp'}
+        </button>
+      </div>
+    </div>
+  `;
+  line.querySelector('.moxie-toggle').onclick = () => {
+    state.attackerGyaradosEvolve = !state.attackerGyaradosEvolve;
     updateDamages();
   };
   card.appendChild(line);
@@ -222,8 +321,11 @@ export {
   applyBuzzwoleAttacker,
   applyCeruledgeAttacker,
   applyChandelureAttacker,
+  applyDarkraiAttacker,
+  applyDecidueyeAttacker,
   applyZardyAttacker,
   applyAegislashAttacker,
   applyArmarougeAttacker,
+  applyMegaGyaradosAttacker,
   applyGyaradosAttacker
 };

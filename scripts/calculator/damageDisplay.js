@@ -9,9 +9,12 @@ import {
   applyBuzzwoleAttacker,
   applyCeruledgeAttacker,
   applyChandelureAttacker,
+  applyDarkraiAttacker,
+  applyDecidueyeAttacker,
   applyZardyAttacker,
   applyAegislashAttacker,
   applyArmarougeAttacker,
+  applyMegaGyaradosAttacker,
   applyGyaradosAttacker
 } from './passiveEffectsAtk.js';
 
@@ -19,7 +22,10 @@ import {
   applyAegislashDefender,
   applyArmarougeDefender,
   applyZardxDefender,
-  applyGyaradosDefender
+  applyMegaGyaradosDefender,
+  applyGyaradosDefender,
+  applyCrustleDefender,
+  applyDragoniteDefender
 } from './passiveEffectsDef.js';
 
 
@@ -56,16 +62,15 @@ export function updateDamages() {
     );
   }
 
-  if (
-    state.currentDefender?.pokemonId === "mega-gyarados" &&
-    state.defenderMoldBreakerActive
-  ) {
-    defStats.def = Math.floor(
-      defStats.def * (1 + state.currentDefender.passive.bonusPercentDef / 100)
-    );
-    defStats.sp_def = Math.floor(
-      defStats.sp_def * (1 + state.currentDefender.passive.bonusPercentSpDef / 100)
-    );
+  if (state.currentDefender?.pokemonId === "mega-gyarados") {
+    if (state.defenderMoldBreakerActive) {
+      defStats.def = Math.floor(
+        defStats.def * (1 + state.currentDefender.passive.bonusPercentDef / 100)
+      );
+      defStats.sp_def = Math.floor(
+        defStats.sp_def * (1 + state.currentDefender.passive.bonusPercentSpDef / 100)
+      );
+    }
   }
 
   if (
@@ -90,6 +95,15 @@ export function updateDamages() {
 
     atkStats.sp_atk = Math.floor(
       atkStats.sp_atk * (1 + state.currentAttacker.passive.bonusPercentSpAtk / 100)
+    );
+  }
+
+  if (
+    state.currentAttacker?.pokemonId === "greninja" &&
+    state.attackerHPPercent <= state.currentAttacker.passive.lowHpThreshold
+  ) {
+    atkStats.atk = Math.floor(
+      atkStats.atk * (1 + state.currentAttacker.passive.bonusPercentAtk / 100)
     );
   }
 
@@ -130,10 +144,10 @@ export function updateDamages() {
   totalCritChance = Math.min(100, totalCritChance);
 
   if (
-    state.currentAttacker?.pokemonId === "charizard" &&
+    ["charizard", "cinderace"].includes(state.currentAttacker?.pokemonId) &&
     state.attackerHPPercent <= state.currentAttacker.passive.lowHpThreshold
   ) {
-    totalCritChance += 20;
+    totalCritChance += state.currentAttacker.passive.bonusCrit;
   }
 
   document.getElementById('attackerCritChance').textContent = `${totalCritChance}%`;
@@ -142,6 +156,7 @@ export function updateDamages() {
 
   const itemEffects = applyItemsAndGlobalEffects(atkStats, defStats);
   applyPassiveEffects(atkStats, defStats);
+  updateDefenderStatsUI(defStats);
 
   let defenderDamageMult = 1.0;
   if (state.defenderEldegossBuff) defenderDamageMult *= 0.85;
@@ -152,6 +167,8 @@ export function updateDamages() {
   if (state.defenderBlisseyRedirectionBuff) defenderDamageMult *= 0.50;
   if (state.defenderHoOhRedirectionBuff) defenderDamageMult *= 0.40;
   if (state.defenderDhelmiseAnchorShotPlus) defenderDamageMult *= 1.50;
+
+  if (state.currentDefender?.pokemonId === "dragonite" && state.defenderMultiscaleActive) defenderDamageMult *= 0.70;
 
   const finalEffects = {
     ...itemEffects,
@@ -174,6 +191,18 @@ export function updateDamages() {
 
   displayMoves(atkStats, defStats, finalEffects, currentDefHP);
   updateHPDisplays();
+}
+
+function updateDefenderStatsUI(defStats) {
+  const isCustom = state.currentDefender?.pokemonId === "custom-doll";
+
+  if (isCustom) {
+    document.getElementById('defenderDefCustom').textContent = defStats.def.toLocaleString();
+    document.getElementById('defenderSpDefCustom').textContent = defStats.sp_def.toLocaleString();
+  } else {
+    document.getElementById('defenderDef').textContent = defStats.def.toLocaleString();
+    document.getElementById('defenderSpDef').textContent = defStats.sp_def.toLocaleString();
+  }
 }
 
 function applyItemsAndGlobalEffects(atkStats, defStats) {
@@ -280,10 +309,13 @@ function applyAttackerPassive(pokemonId, atkStats, defStats, card) {
     buzzwole: applyBuzzwoleAttacker,
     ceruledge: applyCeruledgeAttacker,
     chandelure: applyChandelureAttacker,
+    darkrai: applyDarkraiAttacker,
+    decidueye: applyDecidueyeAttacker,
     "mega-charizard-y": applyZardyAttacker,
     aegislash: applyAegislashAttacker,
     armarouge: applyArmarougeAttacker,
-    "mega-gyarados": applyGyaradosAttacker
+    gyarados: applyGyaradosAttacker,
+    "mega-gyarados": applyMegaGyaradosAttacker
   };
 
   handlers[pokemonId]?.(atkStats, defStats, card);
@@ -294,7 +326,10 @@ function applyDefenderPassive(pokemonId, atkStats, defStats, card) {
     aegislash: applyAegislashDefender,
     armarouge: applyArmarougeDefender,
     "mega-charizard-x": applyZardxDefender,
-    "mega-gyarados": applyGyaradosDefender
+    "mega-gyarados": applyMegaGyaradosDefender,
+    gyarados: applyGyaradosDefender,
+    crustle: applyCrustleDefender,
+    dragonite: applyDragoniteDefender
   };
 
   handlers[pokemonId]?.(atkStats, defStats, card);
@@ -313,11 +348,29 @@ function applyPassiveEffects(atkStats, defStats) {
   }
 }
 
-function getCeruledgeWoundMultiplier() {
-  if (state.currentAttacker?.pokemonId !== "ceruledge") return 1;
-  if (state.attackerPassiveStacks < 6) return 1;
-  return 1.15;
+function getAttackerWoundMultiplier() {
+  let mult = 1;
+
+  const attacker = state.currentAttacker;
+  if (!attacker) return 1;
+
+  switch (attacker.pokemonId) {
+    case "ceruledge":
+      if (state.attackerPassiveStacks >= 6) mult *= 1.15;
+      break;
+
+    case "darkrai":
+      if (state.attackerDarkraiSleep) mult *= 1.10;
+      break;
+
+    case "decidueye":
+      if (state.attackerDecidueyeDistant) mult *= 1.20;
+      break;
+  }
+
+  return mult;
 }
+
 
 function getCeruledgeWeakArmorDamage(atkStats, defStats, globalDamageMult) {
   if (state.currentAttacker?.pokemonId !== "ceruledge") return null;
@@ -416,9 +469,10 @@ function displayMoves(atkStats, defStats, effects, currentDefHP) {
       normal = Math.floor(normal * muscleMult);
       crit = Math.floor(crit * muscleMult);
 
-      const ceruledgeMult = getCeruledgeWoundMultiplier();
-      normal = Math.floor(normal * ceruledgeMult);
-      crit = Math.floor(crit * ceruledgeMult);
+      // Pokemon Mult Damage
+      const woundMult = getAttackerWoundMultiplier();
+      normal = Math.floor(normal * woundMult);
+      crit = Math.floor(crit * woundMult);
 
       if (move.name === "Auto-attack" && state.attackerFlashFireActive && state.currentAttacker.pokemonId === "armarouge") {
         const passive = state.currentAttacker.passive || { extraAutoMultiplier: 60, extraAutoConstant: 120 };

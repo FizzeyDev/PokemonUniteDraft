@@ -31,10 +31,19 @@ export const state = {
   attackerFlashFireActive: false,
   defenderFlashFireActive: false,
   attackerMoldBreakerActive: false,
+  attackerGyaradosEvolve: true,
+  attackerMegaGyaradosEvolve: true,
+  defenderGyaradosEvolve: true,
+  defenderMegaGyaradosEvolve: true,
   defenderMoldBreakerActive: false,
   attackerZardBlaze: false,
   attackerZardDrought: false,
   defenderZardToughClaw: false,
+  attackerDarkraiSleep: false,
+  attackerDecidueyeDistant: false,
+  defenderMarvelScaleActive: false,
+  defenderMultiscaleActive: false,
+
 
   // Buffs attaquant
   attackerRegisteelBuff: false,
