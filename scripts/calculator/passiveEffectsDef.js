@@ -237,6 +237,52 @@ function applyDragoniteDefender(atkStats, defStats, card) {
   card.appendChild(line);
 }
 
+function applyLaprasDefender(atkStats, defStats, card) {
+  const passive = state.currentDefender.passive;
+
+  const line = document.createElement("div");
+  line.className = "global-bonus-line";
+  line.innerHTML = `
+    <div style="margin:12px 0;padding:10px;background:#24362e;border-radius:8px;border-left:4px solid #7fdc9f;display:flex;align-items:center;gap:12px;">
+      <img src="${passive.image}" style="width:40px;height:40px;border-radius:6px;">
+      <div style="flex:1;">
+        <strong style="color:#7fdc9f;">${passive.name}</strong><br>
+        ${passive.description}
+      </div>
+    </div>
+  `;
+
+  card.appendChild(line);
+}
+
+function applyMamoswineDefender(atkStats, defStats, card) {
+  const passive = state.currentDefender.passive;
+
+  const line = document.createElement("div");
+  line.className = "global-bonus-line";
+  line.innerHTML = `
+    <div style="margin:12px 0;padding:10px;background:#2a2a3a;border-radius:8px;border-left:4px solid #bb86fc;display:flex;align-items:center;gap:12px;">
+      <img src="${passive.image}" style="width:40px;height:40px;border-radius:6px;" onerror="this.src='assets/moves/missing.png'">
+      <div style="flex:1;">
+        <strong style="color:#bb86fc;">${passive.name}</strong><br>
+        Stacks: <button class="stack-btn minus">-</button> <strong style="color:#a0d8ff;">${state.defenderPassiveStacks}</strong>/3 <button class="stack-btn plus">+</button>
+      </div>
+    </div>
+  `;
+  line.querySelector('.minus').onclick = () => {
+    if (state.defenderPassiveStacks > 0) {
+      state.defenderPassiveStacks--;
+      updateDamages();
+    }
+  };
+  line.querySelector('.plus').onclick = () => {
+    if (state.defenderPassiveStacks < 3) {
+      state.defenderPassiveStacks++;
+      updateDamages();
+    }
+  };
+  card.appendChild(line);
+}
 
 // Export pour le fichier damageDisplay.js
 export {
@@ -246,5 +292,7 @@ export {
   applyMegaGyaradosDefender,
   applyGyaradosDefender,
   applyCrustleDefender,
-  applyDragoniteDefender
+  applyDragoniteDefender,
+  applyLaprasDefender,
+  applyMamoswineDefender
 };

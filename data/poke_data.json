@@ -1391,14 +1391,6 @@
           {"name": "% Max HP Damage", "multiplier": 0, "levelCoef": 0, "constant": 0, "dealDamage": true, "notes": "+8% of each enemy max HP"},
           {"name": "Unite Basic Burn (2 ticks)", "multiplier": 20, "levelCoef": 0, "constant": 0, "dealDamage": true, "notes": "Burn from basics during flight; triggers Mega Evolution into Mega Charizard Y, flight duration 20s"}
         ]
-      },
-      {
-        "name": "Drought (Mega Passive)",
-        "can_crit": "false",
-        "image": "assets/moves/mega_charizard_y/drought.png",
-        "damages": [
-          {"name": "Damage Boost", "multiplier": 0, "levelCoef": 0, "constant": 0, "dealDamage": false, "notes": "+10% damage dealt while inside the sunny area created upon Mega Evolution"}
-        ]
       }
     ]
   },
@@ -2629,12 +2621,6 @@
             ]
         },
         {
-            "name": "Multiscale (Passive)",
-            "can_crit": "false",
-            "image": "assets/moves/dragonite/multiscale.png",
-            "damages": []
-        },
-        {
             "name": "Draco Impact (Unite)",
             "can_crit": "false",
             "image": "assets/moves/dragonite/draco_impact.png",
@@ -2728,12 +2714,6 @@
                 {"name": "Damage - per Tick (up to 4)", "multiplier": 28, "levelCoef": 0, "constant": 80, "dealDamage": true},
                 {"name": "Shield - per Trigger", "multiplier": 60, "levelCoef": 0, "constant": 250, "shield": true}
             ]
-        },
-        {
-            "name": "Heavy Metal (Passive)",
-            "can_crit": "false",
-            "image": "assets/moves/duraludon/heavy_metal.png",
-            "damages": []
         },
         {
             "name": "Revolving Ruin (Unite)",
@@ -2941,12 +2921,6 @@
             "damages": [
                 {"name": "Damage", "multiplier": 200, "levelCoef": 0, "constant": 300, "dealDamage": true}
             ]
-        },
-        {
-            "name": "Torrent (Passive)",
-            "can_crit": "false",
-            "image": "assets/moves/empoleon/torrent.png",
-            "damages": []
         },
         {
             "name": "Sovereign Slide (Unite)",
@@ -3491,12 +3465,6 @@
         ]
       },
       {
-        "name": "Snow Cloak (Passive)",
-        "can_crit": "false",
-        "image": "assets/moves/glaceon/snow_cloak.png",
-        "damages": []
-      },
-      {
         "name": "Swift",
         "can_crit": "false",
         "image": "assets/moves/glaceon/swift.png",
@@ -3888,18 +3856,6 @@
         ]
       },
       {
-        "name": "Rattled (Passive)",
-        "can_crit": "false",
-        "image": "assets/moves/gyarados/rattled.png",
-        "damages": []
-      },
-      {
-        "name": "Moxie (Passive)",
-        "can_crit": "false",
-        "image": "assets/moves/gyarados/moxie.png",
-        "damages": []
-      },
-      {
         "name": "Flail",
         "can_crit": "false",
         "image": "assets/moves/gyarados/flail.png",
@@ -4006,12 +3962,6 @@
         ]
       },
       {
-        "name": "Mold Breaker (Passive)",
-        "can_crit": "false",
-        "image": "assets/moves/mega_gyarados/mold_breaker.png",
-        "damages": []
-      },
-      {
         "name": "Flail",
         "can_crit": "false",
         "image": "assets/moves/mega_gyarados/flail.png",
@@ -4088,12 +4038,6 @@
           {"name": "Basic", "multiplier": 100, "levelCoef": 0, "constant": 0, "dealDamage": true},
           {"name": "Boosted", "multiplier": 150, "levelCoef": 0, "constant": 0, "dealDamage": true, "notes": "+4% max HP heal per enemy hit"}
         ]
-      },
-      {
-        "name": "Regenerator (Passive)",
-        "can_crit": "false",
-        "image": "assets/moves/hooh/regenerator.png",
-        "damages": []
       },
       {
         "name": "Safeguard",
@@ -4279,12 +4223,6 @@
         ]
       },
       {
-        "name": "Sniper (Passive)",
-        "can_crit": "false",
-        "image": "assets/moves/inteleon/sniper.png",
-        "damages": []
-      },
-      {
         "name": "Tearful Look",
         "can_crit": "false",
         "image": "assets/moves/inteleon/tearful_look.png",
@@ -4362,6 +4300,11 @@
       {"level": 14, "hp": 8994, "atk": 291, "def": 559, "sp_atk": 388, "sp_def": 460, "crit": 0},
       {"level": 15, "hp": 9800, "atk": 310, "def": 625, "sp_atk": 430, "sp_def": 512, "crit": 0}
     ],
+    "passive": {
+      "name": "Shell Armor",
+      "image": "assets/moves/lapras/shell_armor.png",
+      "description": "If damage > 10% max HP, damage reduced by 20%."
+    },
     "moves": [
       {
         "name": "Auto-attack",
@@ -4371,12 +4314,6 @@
           {"name": "Basic", "multiplier": 100, "levelCoef": 0, "constant": 0, "dealDamage": true, "scaling": "physical"},
           {"name": "Boosted (x3)", "multiplier": 20, "levelCoef": 3, "constant": 60, "dealDamage": true, "scaling": "special", "notes": "+3.5% max HP heal per tick"}
         ]
-      },
-      {
-        "name": "Shell Armor (Passive)",
-        "can_crit": "false",
-        "image": "assets/moves/lapras/shell_armor.png",
-        "damages": []
       },
       {
         "name": "Whirlpool",
@@ -4469,12 +4406,6 @@
         "damages": [
           {"name": "Basic", "multiplier": 25, "levelCoef": 5, "constant": 100, "dealDamage": true}
         ]
-      },
-      {
-        "name": "Levitate (Passive)",
-        "can_crit": "false",
-        "image": "assets/moves/latias/levitate.png",
-        "damages": []
       },
       {
         "name": "Confusion",
@@ -4571,12 +4502,6 @@
         ]
       },
       {
-        "name": "Levitate (Passive)",
-        "can_crit": "false",
-        "image": "assets/moves/latios/levitate.png",
-        "damages": []
-      },
-      {
         "name": "Confusion",
         "can_crit": "false",
         "image": "assets/moves/latios/confusion.png",
@@ -4667,12 +4592,6 @@
           {"name": "Basic", "multiplier": 100, "levelCoef": 0, "constant": 0, "dealDamage": true},
           {"name": "Boosted (Chlorophyll)", "multiplier": 150, "levelCoef": 0, "constant": 0, "dealDamage": true, "notes": "+40 Atk additional damage (cannot crit)"}
         ]
-      },
-      {
-        "name": "Run Away / Chlorophyll (Passive)",
-        "can_crit": "false",
-        "image": "assets/moves/leafeon/chlorophyll.png",
-        "damages": []
       },
       {
         "name": "Swift",
@@ -4774,14 +4693,6 @@
         ]
       },
       {
-        "name": "Steadfast (Passive)",
-        "can_crit": "false",
-        "image": "assets/moves/lucario/steadfast.png",
-        "damages": [
-          {"name": "Shield", "multiplier": 250, "levelCoef": 50, "constant": 50, "shield": true}
-        ]
-      },
-      {
         "name": "Quick Attack",
         "can_crit": "false",
         "image": "assets/moves/lucario/quick_attack.png",
@@ -4866,6 +4777,22 @@
       {"level": 14, "hp": 6753, "atk": 396, "def": 351, "sp_atk": 103, "sp_def": 270, "crit": 20},
       {"level": 15, "hp": 7249, "atk": 429, "def": 390, "sp_atk": 115, "sp_def": 300, "crit": 20}
     ],
+    "passive1": {
+      "name": "Justified",
+      "image": "assets/moves/mega_lucario/justified.png",
+      "stackable": true,
+      "maxStacks": 4,
+      "bonusPercentAtk": 8,
+      "description": "When the user is damaged, their attack stat increases by 8% for 4s up to 4 times."
+    },
+    "passive2": {
+      "name": "Adaptability",
+      "image": "assets/moves/mega_lucario/adaptability.png",
+      "stackable": true,
+      "maxStacks": 10,
+      "bonusPercentAtk": 5,
+      "description": "When the user deals damage with moves, their attack stat increases by 5% for 4s up to 10 times."
+    },
     "moves": [
       {
         "name": "Auto-attack",
@@ -4875,12 +4802,6 @@
           {"name": "Basic", "multiplier": 100, "levelCoef": 0, "constant": 0, "dealDamage": true},
           {"name": "Boosted (2nd Hit)", "multiplier": 30, "levelCoef": 0, "constant": 0, "dealDamage": true}
         ]
-      },
-      {
-        "name": "Justified / Adaptability (Passive)",
-        "can_crit": "false",
-        "image": "assets/moves/mega_lucario/justified.png",
-        "damages": []
       },
       {
         "name": "Quick Attack",
@@ -4950,6 +4871,12 @@
       {"level": 14, "hp": 6974, "atk": 431, "def": 447, "sp_atk": 99, "sp_def": 307, "crit": 20},
       {"level": 15, "hp": 7650, "atk": 479, "def": 510, "sp_atk": 114, "sp_def": 350, "crit": 20}
     ],
+    "passive": {
+      "name": "Guts",
+      "image": "assets/moves/machamp/guts.png",
+      "bonusPercentAtk": 10,
+      "description": "Attack +10% when afflicted by any debuff."
+    },
     "moves": [
       {
         "name": "Auto-attack",
@@ -4959,12 +4886,6 @@
           {"name": "Basic", "multiplier": 100, "levelCoef": 0, "constant": 0, "dealDamage": true},
           {"name": "Boosted", "multiplier": 150, "levelCoef": 0, "constant": 0, "dealDamage": true}
         ]
-      },
-      {
-        "name": "Guts (Passive)",
-        "can_crit": "false",
-        "image": "assets/moves/machamp/guts.png",
-        "damages": []
       },
       {
         "name": "Karate Chop",
@@ -5046,6 +4967,11 @@
       {"level": 14, "hp": 8669, "atk": 301, "def": 445, "sp_atk": 101, "sp_def": 331, "crit": 0},
       {"level": 15, "hp": 9648, "atk": 325, "def": 510, "sp_atk": 116, "sp_def": 379, "crit": 0}
     ],
+    "passive": {
+      "name": "Thick Fat",
+      "image": "assets/moves/mamoswine/thick_fat.png",
+      "description": "When Mamoswine deals damage, Def and Sp.Def are increased, up to 3 times"
+    },
     "moves": [
       {
         "name": "Auto-attack",
@@ -5055,14 +4981,6 @@
           {"name": "Basic", "multiplier": 100, "levelCoef": 0, "constant": 0, "dealDamage": true},
           {"name": "Boosted", "multiplier": 57, "levelCoef": 8, "constant": 150, "dealDamage": true},
           {"name": "Damage - Frozen Bonus", "multiplier": 19, "levelCoef": 3, "constant": 50, "dealDamage": true}
-        ]
-      },
-      {
-        "name": "Thick Fat (Passive)",
-        "can_crit": "false",
-        "image": "assets/moves/mamoswine/thick_fat.png",
-        "damages": [
-          {"name": "Defense & Sp. Defense", "multiplier": 0, "levelCoef": 10, "constant": 20, "shield": true}
         ]
       },
       {
@@ -5152,6 +5070,12 @@
       {"level": 14, "hp": 5970, "atk": 558, "def": 295, "sp_atk": 99, "sp_def": 201, "crit": 10},
       {"level": 15, "hp": 6490, "atk": 630, "def": 340, "sp_atk": 114, "sp_def": 230, "crit": 10}
     ],
+    "passive": {
+      "name": "Overgrow",
+      "image": "assets/moves/meowscarada/overgrow.png",
+      "description": "Damage +15% when Overgrow trigger.",
+      "multBoost": "15%"
+    },
     "moves": [
       {
         "name": "Auto-attack",
@@ -6189,12 +6113,6 @@
         ]
       },
       {
-        "name": "Static (Passive)",
-        "can_crit": "false",
-        "image": "assets/moves/pikachu/static.png",
-        "damages": []
-      },
-      {
         "name": "Thunder Shock",
         "can_crit": "false",
         "image": "assets/moves/pikachu/thunder_shock.png",
@@ -6283,12 +6201,6 @@
         "damages": [
           {"name": "Basic", "multiplier": 100, "levelCoef": 0, "constant": 0, "dealDamage": true, "scaling": "physical"}
         ]
-      },
-      {
-        "name": "Swift Swim (Passive)",
-        "can_crit": "false",
-        "image": "assets/moves/psyduck/swift_swim.png",
-        "damages": []
       },
       {
         "name": "Confusion",
@@ -6386,18 +6298,6 @@
         ]
       },
       {
-        "name": "Static (Passive)",
-        "can_crit": "false",
-        "image": "assets/moves/raichu/static.png",
-        "damages": []
-      },
-      {
-        "name": "Surge Surfer (Passive)",
-        "can_crit": "false",
-        "image": "assets/moves/raichu/surge_surfer.png",
-        "damages": []
-      },
-      {
         "name": "Thunder Shock",
         "can_crit": "false",
         "image": "assets/moves/raichu/thunder_shock.png",
@@ -6490,12 +6390,6 @@
         ]
       },
       {
-        "name": "Pastel Veil (Passive)",
-        "can_crit": "false",
-        "image": "assets/moves/rapidash/pastel_veil.png",
-        "damages": []
-      },
-      {
         "name": "Confusion",
         "can_crit": "false",
         "image": "assets/moves/rapidash/confusion.png",
@@ -6583,12 +6477,6 @@
           {"name": "Basic", "multiplier": 100, "levelCoef": 0, "constant": 0, "dealDamage": true},
           {"name": "Boosted", "multiplier": 150, "levelCoef": 0, "constant": 0, "dealDamage": true}
         ]
-      },
-      {
-        "name": "Prankster (Passive)",
-        "can_crit": "false",
-        "image": "assets/moves/sableye/prankster.png",
-        "damages": []
       },
       {
         "name": "Thief",
@@ -6683,12 +6571,6 @@
         ]
       },
       {
-        "name": "Technician (Passive)",
-        "can_crit": "true",
-        "image": "assets/moves/scizor/technician.png",
-        "damages": []
-      },
-      {
         "name": "Fury Cutter",
         "can_crit": "false",
         "image": "assets/moves/scizor/fury_cutter.png",
@@ -6774,12 +6656,6 @@
         ]
       },
       {
-        "name": "Technician (Passive)",
-        "can_crit": "true",
-        "image": "assets/moves/scyther/technician.png",
-        "damages": []
-      },
-      {
         "name": "Fury Cutter",
         "can_crit": "false",
         "image": "assets/moves/scyther/fury_cutter.png",
@@ -6863,12 +6739,6 @@
           {"name": "Basic", "multiplier": 100, "levelCoef": 0, "constant": 0, "dealDamage": true, "scaling": "physical"},
           {"name": "Boosted", "multiplier": 110, "levelCoef": 9, "constant": 180, "dealDamage": true, "scaling": "special"}
         ]
-      },
-      {
-        "name": "Oblivious (Passive)",
-        "can_crit": "false",
-        "image": "assets/moves/slowbro/oblivious.png",
-        "damages": []
       },
       {
         "name": "Water Gun",
@@ -6957,12 +6827,6 @@
           {"name": "Basic", "multiplier": 100, "levelCoef": 0, "constant": 0, "dealDamage": true},
           {"name": "Boosted", "multiplier": 86, "levelCoef": 9, "constant": 170, "dealDamage": true}
         ]
-      },
-      {
-        "name": "Gluttony (Passive)",
-        "can_crit": "false",
-        "image": "assets/moves/snorlax/gluttony.png",
-        "damages": []
       },
       {
         "name": "Tackle",
@@ -7153,12 +7017,6 @@
         ]
       },
       {
-        "name": "Pixilate (Passive)",
-        "can_crit": "false",
-        "image": "assets/moves/sylveon/pixilate.png",
-        "damages": []
-      },
-      {
         "name": "Swift",
         "can_crit": "false",
         "image": "assets/moves/sylveon/swift.png",
@@ -7246,12 +7104,6 @@
           {"name": "Basic", "multiplier": 100, "levelCoef": 0, "constant": 0, "dealDamage": true},
           {"name": "Boosted", "multiplier": 125, "levelCoef": 0, "constant": 0, "dealDamage": true}
         ]
-      },
-      {
-        "name": "Gale Wings (Passive)",
-        "can_crit": "false",
-        "image": "assets/moves/talonflame/gale_wings.png",
-        "damages": []
       },
       {
         "name": "Peck",
@@ -7342,12 +7194,6 @@
           {"name": "Basic", "multiplier": 100, "levelCoef": 0, "constant": 0, "dealDamage": true},
           {"name": "Boosted", "multiplier": 180, "levelCoef": 60, "constant": 0, "dealDamage": true}
         ]
-      },
-      {
-        "name": "Mold Breaker (Passive)",
-        "can_crit": "false",
-        "image": "assets/moves/tinkaton/mold_breaker.png",
-        "damages": []
       },
       {
         "name": "Rock Smash",
@@ -7445,12 +7291,6 @@
         ]
       },
       {
-        "name": "Natural Cure (Passive)",
-        "can_crit": "false",
-        "image": "assets/moves/trevenant/natural_cure.png",
-        "damages": []
-      },
-      {
         "name": "Will-o-Wisp",
         "can_crit": "false",
         "image": "assets/moves/trevenant/will_o_wisp.png",
@@ -7541,12 +7381,6 @@
           {"name": "Basic", "multiplier": 100, "levelCoef": 0, "constant": 0, "dealDamage": true},
           {"name": "Boosted", "multiplier": 130, "levelCoef": 0, "constant": 0, "dealDamage": true}
         ]
-      },
-      {
-        "name": "Queenly Majesty (Passive)",
-        "can_crit": "false",
-        "image": "assets/moves/tsareena/queenly_majesty.png",
-        "damages": []
       },
       {
         "name": "Razor Leaf",
@@ -7748,12 +7582,6 @@
         ]
       },
       {
-        "name": "Inner Focus (Passive)",
-        "can_crit": "false",
-        "image": "assets/moves/umbreon/inner_focus.png",
-        "damages": []
-      },
-      {
         "name": "Swift",
         "can_crit": "false",
         "image": "assets/moves/umbreon/swift.png",
@@ -7844,12 +7672,6 @@
           {"name": "Boosted (Single Strike)", "multiplier": 150, "levelCoef": 0, "constant": 0, "dealDamage": true},
           {"name": "Boosted (Rapid Strike, 2x)", "multiplier": 60, "levelCoef": 0, "constant": 0, "dealDamage": true}
         ]
-      },
-      {
-        "name": "Unseen Fist (Passive)",
-        "can_crit": "false",
-        "image": "assets/moves/urshifu/unseen_fist.png",
-        "damages": []
       },
       {
         "name": "Rock Smash",
@@ -8161,12 +7983,6 @@
         ]
       },
       {
-        "name": "Cute Charm (Passive)",
-        "can_crit": "false",
-        "image": "assets/moves/wigglytuff/cute_charm.png",
-        "damages": []
-      },
-      {
         "name": "Pound",
         "can_crit": "false",
         "image": "assets/moves/wigglytuff/pound.png",
@@ -8252,12 +8068,6 @@
           {"name": "Stage Three", "multiplier": 130, "levelCoef": 0, "constant": 0, "dealDamage": true},
           {"name": "Stage Four", "multiplier": 160, "levelCoef": 0, "constant": 0, "dealDamage": true}
         ]
-      },
-      {
-        "name": "Intrepid Sword (Passive)",
-        "can_crit": "false",
-        "image": "assets/moves/zacian/intrepid_sword.png",
-        "damages": []
       },
       {
         "name": "Slash",
@@ -8354,12 +8164,6 @@
         ]
       },
       {
-        "name": "Volt Absorb (Passive)",
-        "can_crit": "false",
-        "image": "assets/moves/zeraora/volt_absorb.png",
-        "damages": []
-      },
-      {
         "name": "Agility",
         "can_crit": "false",
         "image": "assets/moves/zeraora/agility.png",
@@ -8450,12 +8254,6 @@
           {"name": "Basic", "multiplier": 100, "levelCoef": 0, "constant": 0, "dealDamage": true},
           {"name": "Boosted", "multiplier": 130, "levelCoef": 0, "constant": 0, "dealDamage": true}
         ]
-      },
-      {
-        "name": "Illusion (Passive)",
-        "can_crit": "false",
-        "image": "assets/moves/zoroark/illusion.png",
-        "damages": []
       },
       {
         "name": "Slash",

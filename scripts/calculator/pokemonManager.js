@@ -38,6 +38,12 @@ export function selectAttacker(id) {
   state.attackerAlcreamieBuff = false;
   state.attackerMiraidonBuff = false;
 
+  if (id === "mega-lucario") {
+    state.attackerLucarioForm = "normal"
+    state.attackerLucarioJustifiedStacks = 0
+    state.attackerLucarioAdaptabilityStacks = 0
+  }
+
   const attackerCheckboxes = [
     'registeelBuffAttacker', 'groudonBuffAttacker', 'rayquazaBuffAttacker',
     'xattackBuffAttacker', 'blisseyUltBuffAttacker', 'blisseyHandBuffAttacker',

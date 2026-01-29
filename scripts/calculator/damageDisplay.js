@@ -15,7 +15,10 @@ import {
   applyAegislashAttacker,
   applyArmarougeAttacker,
   applyMegaGyaradosAttacker,
-  applyGyaradosAttacker
+  applyMegaLucarioAttacker,
+  applyGyaradosAttacker,
+  applyMachampAttacker,
+  applyMeowscaradaAttacker
 } from './passiveEffectsAtk.js';
 
 import {
@@ -25,7 +28,9 @@ import {
   applyMegaGyaradosDefender,
   applyGyaradosDefender,
   applyCrustleDefender,
-  applyDragoniteDefender
+  applyDragoniteDefender,
+  applyLaprasDefender,
+  applyMamoswineDefender
 } from './passiveEffectsDef.js';
 
 
@@ -73,6 +78,15 @@ export function updateDamages() {
     }
   }
 
+  if (state.currentDefender?.pokemonId === "mamoswine") {
+    const stacks = Math.min(state.defenderPassiveStacks, 3); 
+    if (stacks > 0) {
+      const levelBonus = 10 * (state.defenderLevel - 1) + 20;
+      defStats.def = Math.floor(defStats.def + stacks * levelBonus);
+      defStats.sp_def = Math.floor(defStats.sp_def + stacks * levelBonus);
+    }
+  }
+
   if (
     state.currentDefender?.pokemonId === "mega-charizard-x" &&
     state.defenderZardToughClaw
@@ -95,6 +109,26 @@ export function updateDamages() {
 
     atkStats.sp_atk = Math.floor(
       atkStats.sp_atk * (1 + state.currentAttacker.passive.bonusPercentSpAtk / 100)
+    );
+  }
+
+  if (state.currentAttacker?.pokemonId === "mega-lucario") {
+    if (state.attackerLucarioForm === "normal") {
+      atkStats.atk += Math.floor(
+        atkStats.atk * 0.08 * state.attackerLucarioJustifiedStacks
+      )
+    }
+
+    if (state.attackerLucarioForm === "mega") {
+      atkStats.atk += Math.floor(
+        atkStats.atk * 0.05 * state.attackerLucarioAdaptabilityStacks
+      )
+    }
+  }
+
+  if (state.currentAttacker?.pokemonId === "machamp" && state.attackerMachampActive) {
+    atkStats.atk = Math.floor(
+      atkStats.atk * (1 + state.currentAttacker.passive.bonusPercentAtk / 100)
     );
   }
 
@@ -315,7 +349,10 @@ function applyAttackerPassive(pokemonId, atkStats, defStats, card) {
     aegislash: applyAegislashAttacker,
     armarouge: applyArmarougeAttacker,
     gyarados: applyGyaradosAttacker,
-    "mega-gyarados": applyMegaGyaradosAttacker
+    machamp: applyMachampAttacker,
+    "mega-gyarados": applyMegaGyaradosAttacker,
+    "mega-lucario": applyMegaLucarioAttacker,
+    meowscarada: applyMeowscaradaAttacker
   };
 
   handlers[pokemonId]?.(atkStats, defStats, card);
@@ -329,7 +366,9 @@ function applyDefenderPassive(pokemonId, atkStats, defStats, card) {
     "mega-gyarados": applyMegaGyaradosDefender,
     gyarados: applyGyaradosDefender,
     crustle: applyCrustleDefender,
-    dragonite: applyDragoniteDefender
+    dragonite: applyDragoniteDefender,
+    lapras: applyLaprasDefender,
+    mamoswine: applyMamoswineDefender
   };
 
   handlers[pokemonId]?.(atkStats, defStats, card);
@@ -348,7 +387,7 @@ function applyPassiveEffects(atkStats, defStats) {
   }
 }
 
-function getAttackerWoundMultiplier() {
+function getAttackerWoundMultiplier(attackerHp) {
   let mult = 1;
 
   const attacker = state.currentAttacker;
@@ -365,6 +404,14 @@ function getAttackerWoundMultiplier() {
 
     case "decidueye":
       if (state.attackerDecidueyeDistant) mult *= 1.20;
+      break;
+
+    case "meowscarada":
+      if (state.attackerMeowscaradaActive) mult *= 1.15;
+      break;
+
+    case "venusaur":
+      if (state.attackerHPPercent <= 30) mult *= 1.20;
       break;
   }
 
@@ -386,7 +433,8 @@ function getCeruledgeWeakArmorDamage(atkStats, defStats, globalDamageMult) {
     false,
     "ceruledge",
     1.0,
-    globalDamageMult
+    globalDamageMult,
+    defStats.hp
   );
 
   let totalMult = 1;
@@ -462,8 +510,8 @@ function displayMoves(atkStats, defStats, effects, currentDefHP) {
       if (infiltratorIgnore > 0) effectiveDef = Math.floor(effectiveDef * (1 - infiltratorIgnore));
       if (defenderFlashFireReduction > 0) effectiveDef = Math.floor(effectiveDef / (1 - defenderFlashFireReduction));
 
-      let normal = calculateDamage(dmg, relevantAtk, effectiveDef, state.attackerLevel, false, state.currentAttacker.pokemonId, 1.0, globalDamageMult);
-      let crit = calculateDamage(dmg, relevantAtk, effectiveDef, state.attackerLevel, true, state.currentAttacker.pokemonId, scopeCritBonus, globalDamageMult);
+      let normal = calculateDamage(dmg, relevantAtk, effectiveDef, state.attackerLevel, false, state.currentAttacker.pokemonId, 1.0, globalDamageMult, defStats.hp);
+      let crit = calculateDamage(dmg, relevantAtk, effectiveDef, state.attackerLevel, true, state.currentAttacker.pokemonId, scopeCritBonus, globalDamageMult, defStats.hp);
 
       const muscleMult = getBuzzwoleMuscleMultiplier(move.name, dmg.name);
       normal = Math.floor(normal * muscleMult);
@@ -548,7 +596,7 @@ function displayMoves(atkStats, defStats, effects, currentDefHP) {
 
       if (hasRazorClaw && razorBonusPercent > 0) {
         const razorExtraBase = Math.floor(atkStats.atk * razorBonusPercent) + 20;
-        let razorExtra = calculateDamage({ constant: razorExtraBase, multiplier: 0, levelCoef: 0 }, atkStats.atk, defStats.def, state.attackerLevel, false, null, 1.0, globalDamageMult);
+        let razorExtra = calculateDamage({ constant: razorExtraBase, multiplier: 0, levelCoef: 0 }, atkStats.atk, defStats.def, state.attackerLevel, false, null, 1.0, globalDamageMult, defStats.hp);
         razorExtra = Math.floor(razorExtra * defenderDamageMult);
         const line = document.createElement("div");
         line.className = "damage-line";

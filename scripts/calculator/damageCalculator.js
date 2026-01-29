@@ -163,7 +163,7 @@ function applyDebuffs(pokemon, stats) {
   // Débuffs des défenseurs
   if (pokemon===state.currentDefender) {
     let defMult=1.0, spDefMult=1.0;
-    // Ici on peut continuer à ajouter tous les debuffs défenseur comme avant
+
     def = Math.floor(def*defMult);
     sp_def = Math.floor(sp_def*spDefMult);
   }
@@ -186,35 +186,50 @@ export function getModifiedStats(pokemon, level, items, stacksArray, activatedAr
   };
 }
 
-export function calculateDamage(dmg, atkStat, defStat, level, crit = false, pokemonId = null, extraCritMult = 1.0, globalDamageMult = 1.0) {
-  const atkScaling = Math.floor(atkStat * (dmg.multiplier / 100));
-  const levelScaling = (level - 1) * dmg.levelCoef;
-  let baseDamage = dmg.constant + atkScaling + levelScaling;
+function applyDefenderDamagePassives(damage, defenderId, defenderMaxHP) {
+  if (defenderId === "lapras" && defenderMaxHP !== null) {
+    const threshold = defenderMaxHP * 0.10
+    console.log(threshold, defenderMaxHP, damage);
+    if (damage > threshold) return Math.floor(damage * 0.8)
+  }
+  return damage
+}
 
-  let effectiveDef = defStat;
+export function calculateDamage(dmg, atkStat, defStat, level, crit = false, pokemonId = null, extraCritMult = 1.0, globalDamageMult = 1.0, defenderMaxHP = null) {
+  const atkScaling = Math.floor(atkStat * (dmg.multiplier / 100))
+  const levelScaling = (level - 1) * dmg.levelCoef
+  let baseDamage = dmg.constant + atkScaling + levelScaling
+
+  let effectiveDef = defStat
 
   if (state.currentDefender?.pokemonId === "armarouge" && state.defenderFlashFireActive) {
-    effectiveDef = Math.floor(effectiveDef / (1 - 0.20));
+    effectiveDef = Math.floor(effectiveDef / (1 - 0.20))
   }
 
-  const defReduction = 100 / (100 + effectiveDef * 0.165);
-  let finalDamage = Math.floor(baseDamage * defReduction);
+  const defReduction = 100 / (100 + effectiveDef * 0.165)
+  let finalDamage = Math.floor(baseDamage * defReduction)
 
   if (crit) {
-    let baseCritMult = 2.0;
-    if (pokemonId === "azumarill") baseCritMult = 1.7;
-    else if (pokemonId === "inteleon") baseCritMult = 2.5;
+    let baseCritMult = 2.0
+    if (pokemonId === "azumarill") baseCritMult = 1.7
+    else if (pokemonId === "inteleon") baseCritMult = 2.5
 
     if (state.currentDefender?.pokemonId === "falinks") {
-      baseCritMult *= 0.5;
+      baseCritMult *= 0.5
     }
 
-    finalDamage = Math.floor(finalDamage * baseCritMult * extraCritMult);
+    finalDamage = Math.floor(finalDamage * baseCritMult * extraCritMult)
   }
 
-  finalDamage = Math.floor(finalDamage * globalDamageMult);
+  finalDamage = Math.floor(finalDamage * globalDamageMult)
 
-  return Math.max(1, finalDamage);
+  finalDamage = applyDefenderDamagePassives(
+    finalDamage,
+    state.currentDefender?.pokemonId,
+    defenderMaxHP
+  )
+
+  return Math.max(1, finalDamage)
 }
 
 export function getAutoAttackResults(atkStats, defStats, currentDefHP, globalDamageMult = 1.0) {
@@ -239,7 +254,8 @@ export function getAutoAttackResults(atkStats, defStats, currentDefHP, globalDam
     false,
     state.currentAttacker.pokemonId,
     1.0,
-    globalDamageMult
+    globalDamageMult,
+    defStats.hp
   );
 
   let scopeCritBonus = 1.0;
@@ -261,7 +277,8 @@ export function getAutoAttackResults(atkStats, defStats, currentDefHP, globalDam
     true,
     state.currentAttacker.pokemonId,
     scopeCritBonus,
-    globalDamageMult
+    globalDamageMult,
+    defStats.hp
   );
 
   state.attackerItems.forEach(item => {
@@ -279,7 +296,8 @@ export function getAutoAttackResults(atkStats, defStats, currentDefHP, globalDam
         false,
         null,
         1.0,
-        globalDamageMult
+        globalDamageMult,
+        defStats.hp
       );
 
       results.muscleTotalNormal = results.normal + results.muscleExtra;
@@ -303,7 +321,8 @@ export function getAutoAttackResults(atkStats, defStats, currentDefHP, globalDam
         false,
         null,
         1.0,
-        globalDamageMult
+        globalDamageMult,
+        defStats.hp
       );
 
       results.totalCritWithScope = results.crit + results.scopeExtra;

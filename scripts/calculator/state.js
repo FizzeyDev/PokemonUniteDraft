@@ -26,6 +26,11 @@ export const state = {
   defenderHPPercent: 100,
 
   attackerPassiveStacks: 0,
+  defenderPassiveStacks: 0,
+  attackerLucarioForm: "normal",
+  attackerZardyForm: "normal",
+  attackerLucarioJustifiedStacks: 0,
+  attackerLucarioAdaptabilityStacks: 0,
   attackerStance: 'shield',
   defenderStance: 'shield',
   attackerFlashFireActive: false,
@@ -43,7 +48,8 @@ export const state = {
   attackerDecidueyeDistant: false,
   defenderMarvelScaleActive: false,
   defenderMultiscaleActive: false,
-
+  attackerMachampActive: false,
+  attackerMeowscaradaActive: false,
 
   // Buffs attaquant
   attackerRegisteelBuff: false,

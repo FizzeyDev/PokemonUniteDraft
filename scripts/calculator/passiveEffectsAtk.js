@@ -65,7 +65,7 @@ function applyChandelureAttacker(atkStats, defStats, card) {
       <div style="flex:1;">
         <strong style="color:#bb86fc;">Infiltrator</strong><br>
         Stacks: <button class="stack-btn minus">-</button> <strong style="color:#a0d8ff;">${state.attackerPassiveStacks}</strong>/8 <button class="stack-btn plus">+</button>
-        → Ignore ${(state.attackerPassiveStacks * 2.5).toFixed(1)}% Sp. Def
+        <br>→ Ignore ${(state.attackerPassiveStacks * 2.5).toFixed(1)}% Sp. Def
       </div>
     </div>
   `;
@@ -142,54 +142,89 @@ function applyDecidueyeAttacker(atkStats, defStats, card) {
 }
 
 function applyZardyAttacker(atkStats, defStats, card) {
-  const blazeActive = state.attackerBlazeActive || false;
-  const droughtActive = state.attackerDroughtActive || false;
+  const isMega = state.attackerZardyForm === "mega";
+  const blazeActive = state.attackerBlazeActive ?? false;
+  const droughtActive = state.attackerDroughtActive ?? false;
 
   const line = document.createElement("div");
   line.className = "global-bonus-line";
   line.innerHTML = `
-    <div style="margin:12px 0;padding:10px;background:#2a2a3a;border-radius:8px;border-left:4px solid #e67e22;display:flex;align-items:center;gap:12px;">
-      <img src="assets/moves/mega_charizard_y/blaze.png" style="width:40px;height:40px;border-radius:6px;" onerror="this.src='assets/moves/missing.png'">
-      <div style="flex:1;">
-        <strong style="color:#e67e22;">Blaze</strong><br>
-        Status: <strong style="color:${blazeActive ? '#3498db' : '#e74c3c'};">${blazeActive ? 'Active' : 'Inactive'}</strong><br>
-        <button class="blaze-toggle" style="margin-top:8px;padding:6px 14px;background:${blazeActive ? '#3498db' : '#e74c3c'};color:white;border:none;border-radius:6px;cursor:pointer;">
-          ${blazeActive ? 'Remove Blaze' : 'Trigger Blaze'}
-        </button>
-      </div>
-    </div>
+    <div style="margin:12px 0;padding:10px;background:#2a2a3a;border-radius:8px;border-left:4px solid #e67e22;display:flex;flex-direction:column;gap:12px;">
 
-    <div style="margin:12px 0;padding:10px;background:#2a2a3a;border-radius:8px;border-left:4px solid #f1c40f;display:flex;align-items:center;gap:12px;">
-      <img src="assets/moves/mega_charizard_y/drought.png" style="width:40px;height:40px;border-radius:6px;" onerror="this.src='assets/moves/missing.png'">
-      <div style="flex:1;">
-        <strong style="color:#f1c40f;">Drought</strong><br>
-        Sunny Area: <strong style="color:${droughtActive ? '#3498db' : '#e74c3c'};">${droughtActive ? 'Active' : 'Inactive'}</strong><br>
-        <button class="drought-toggle" style="margin-top:8px;padding:6px 14px;background:${droughtActive ? '#3498db' : '#e74c3c'};color:#222;border:none;border-radius:6px;cursor:pointer;">
-          ${droughtActive ? 'Disable Sun' : 'Enable Sun'}
+      <div style="display:flex;gap:8px;">
+        <button class="zardy-normal"
+          style="padding:6px 14px;border:none;border-radius:6px;cursor:pointer;
+          background:${!isMega ? '#7f8c8d' : '#27ae60'};color:white;"
+          ${!isMega ? 'disabled' : ''}>
+          Normal
+        </button>
+
+        <button class="zardy-mega"
+          style="padding:6px 14px;border:none;border-radius:6px;cursor:pointer;
+          background:${isMega ? '#7f8c8d' : '#27ae60'};color:white;"
+          ${isMega ? 'disabled' : ''}>
+          Méga
         </button>
       </div>
+
+      ${
+        !isMega
+          ? `
+        <div style="display:flex;align-items:center;gap:12px;">
+          <img src="assets/moves/mega_charizard_y/blaze.png" style="width:40px;height:40px;border-radius:6px;">
+          <div style="flex:1;">
+            <strong style="color:#e67e22;">Blaze</strong><br>
+            Status: <strong style="color:${blazeActive ? '#3498db' : '#e74c3c'};">${blazeActive ? 'Active' : 'Inactive'}</strong><br>
+            <button class="blaze-toggle"
+              style="margin-top:8px;padding:8px 16px;background:${blazeActive ? '#27ae60' : '#7f8c8d'};color:white;border:none;border-radius:6px;cursor:pointer;">
+              ${blazeActive ? 'Deactivate' : 'Activate'}
+            </button>
+          </div>
+        </div>
+        `
+          : `
+        <div style="display:flex;align-items:center;gap:12px;">
+          <img src="assets/moves/mega_charizard_y/drought.png" style="width:40px;height:40px;border-radius:6px;">
+          <div style="flex:1;">
+            <strong style="color:#f1c40f;">Drought</strong><br>
+            Sunny Area: <strong style="color:${droughtActive ? '#3498db' : '#e74c3c'};">${droughtActive ? 'Active' : 'Inactive'}</strong><br>
+            <button class="drought-toggle"
+              style="margin-top:8px;padding:8px 16px;background:${droughtActive ? '#27ae60' : '#7f8c8d'};color:white;border:none;border-radius:6px;cursor:pointer;">
+              ${droughtActive ? 'Deactivate' : 'Activate'}
+            </button>
+          </div>
+        </div>
+        `
+      }
+
     </div>
   `;
 
-  line.querySelector('.blaze-toggle').onclick = () => {
-    if (!blazeActive) {
-      state.attackerBlazeActive = true;
-      state.attackerDroughtActive = false;
-    } else {
-      state.attackerBlazeActive = false;
-    }
+  // Boutons de forme
+  line.querySelector(".zardy-normal").onclick = () => {
+    state.attackerZardyForm = "normal";
+    state.attackerDroughtActive = false; // reset du passif méga
     updateDamages();
   };
 
-  line.querySelector('.drought-toggle').onclick = () => {
-    if (!droughtActive) {
-      state.attackerDroughtActive = true;
-      state.attackerBlazeActive = false;
-    } else {
-      state.attackerDroughtActive = false;
-    }
+  line.querySelector(".zardy-mega").onclick = () => {
+    state.attackerZardyForm = "mega";
+    state.attackerBlazeActive = false; // reset du passif normal
     updateDamages();
   };
+
+  // Toggles du passif (conditionnels)
+  if (!isMega) {
+    line.querySelector(".blaze-toggle").onclick = () => {
+      state.attackerBlazeActive = !state.attackerBlazeActive;
+      updateDamages();
+    };
+  } else {
+    line.querySelector(".drought-toggle").onclick = () => {
+      state.attackerDroughtActive = !state.attackerDroughtActive;
+      updateDamages();
+    };
+  }
 
   card.appendChild(line);
 }
@@ -292,6 +327,106 @@ function applyMegaGyaradosAttacker(atkStats, defStats, card) {
   card.appendChild(line);
 }
 
+function applyMegaLucarioAttacker(atkStats, defStats, card) {
+  const isMega = state.attackerLucarioForm === "mega"
+
+  const line = document.createElement("div")
+  line.className = "global-bonus-line"
+  line.innerHTML = `
+    <div style="margin:12px 0;padding:10px;background:#2a2a3a;border-radius:8px;border-left:4px solid #bb86fc;display:flex;flex-direction:column;gap:12px;">
+      <div style="display:flex;gap:8px;">
+        <button class="lucario-normal"
+          style="padding:6px 14px;border:none;border-radius:6px;cursor:pointer;
+          background:${!isMega ? '#7f8c8d' : '#27ae60'};color:white;"
+          ${!isMega ? 'disabled' : ''}>
+          Normal
+        </button>
+
+        <button class="lucario-mega"
+          style="padding:6px 14px;border:none;border-radius:6px;cursor:pointer;
+          background:${isMega ? '#7f8c8d' : '#27ae60'};color:white;"
+          ${isMega ? 'disabled' : ''}>
+          Méga
+        </button>
+      </div>
+
+      ${
+        !isMega
+          ? `
+        <div style="display:flex;align-items:center;gap:12px;">
+          <img src="assets/moves/mega_lucario/justified.png" style="width:40px;height:40px;border-radius:6px;">
+          <div style="flex:1;">
+            <strong style="color:#bb86fc;">Justified</strong><br>
+            Stacks:
+            <button class="stack-btn minus just-minus">-</button>
+            <strong style="color:#a0d8ff;">${state.attackerLucarioJustifiedStacks}</strong>/4
+            <button class="stack-btn plus just-plus">+</button>
+            <br>→ Atk +${state.attackerLucarioJustifiedStacks * 8}%
+          </div>
+        </div>
+        `
+          : `
+        <div style="display:flex;align-items:center;gap:12px;">
+          <img src="assets/moves/mega_lucario/adaptability.png" style="width:40px;height:40px;border-radius:6px;">
+          <div style="flex:1;">
+            <strong style="color:#bb86fc;">Adaptability</strong><br>
+            Stacks:
+            <button class="stack-btn minus adapt-minus">-</button>
+            <strong style="color:#a0d8ff;">${state.attackerLucarioAdaptabilityStacks}</strong>/10
+            <button class="stack-btn plus adapt-plus">+</button>
+            <br>→ Atk +${state.attackerLucarioAdaptabilityStacks * 5}%
+          </div>
+        </div>
+        `
+      }
+
+    </div>
+  `
+  line.querySelector(".lucario-normal").onclick = () => {
+    state.attackerLucarioForm = "normal"
+    state.attackerLucarioAdaptabilityStacks = 0
+    updateDamages()
+  }
+
+  line.querySelector(".lucario-mega").onclick = () => {
+    state.attackerLucarioForm = "mega"
+    state.attackerLucarioJustifiedStacks = 0
+    updateDamages()
+  }
+
+  if (!isMega) {
+    line.querySelector(".just-minus").onclick = () => {
+      if (state.attackerLucarioJustifiedStacks > 0) {
+        state.attackerLucarioJustifiedStacks--
+        updateDamages()
+      }
+    }
+
+    line.querySelector(".just-plus").onclick = () => {
+      if (state.attackerLucarioJustifiedStacks < 4) {
+        state.attackerLucarioJustifiedStacks++
+        updateDamages()
+      }
+    }
+  } else {
+    line.querySelector(".adapt-minus").onclick = () => {
+      if (state.attackerLucarioAdaptabilityStacks > 0) {
+        state.attackerLucarioAdaptabilityStacks--
+        updateDamages()
+      }
+    }
+
+    line.querySelector(".adapt-plus").onclick = () => {
+      if (state.attackerLucarioAdaptabilityStacks < 10) {
+        state.attackerLucarioAdaptabilityStacks++
+        updateDamages()
+      }
+    }
+  }
+
+  card.appendChild(line)
+}
+
 function applyGyaradosAttacker(atkStats, defStats, card) {
   const line = document.createElement("div");
 
@@ -316,6 +451,58 @@ function applyGyaradosAttacker(atkStats, defStats, card) {
   card.appendChild(line);
 }
 
+function applyMachampAttacker(atkStats, defStats, card) {
+  const passive = state.currentAttacker.passive;
+
+  const line = document.createElement("div");
+  line.className = "global-bonus-line";
+  line.innerHTML = `
+    <div style="margin:12px 0;padding:10px;background:#2a2a3a;border-radius:8px;border-left:4px solid #3498db;display:flex;align-items:center;gap:12px;">
+      <img src="${passive.image}" style="width:40px;height:40px;border-radius:6px;">
+      <div style="flex:1;">
+        <strong style="color:#3498db;">${passive.name}</strong><br>
+        ${passive.description}<br>
+        <button class="guts-toggle"
+          style="margin-top:8px;padding:8px 16px;background:${state.attackerMachampActive ? '#27ae60' : '#7f8c8d'};color:white;border:none;border-radius:6px;cursor:pointer;">
+          ${state.attackerMachampActive ? 'Debuff' : 'Not debuff'}
+        </button>
+      </div>
+    </div>
+  `;
+  line.querySelector('.guts-toggle').onclick = () => {
+    state.attackerMachampActive = !state.attackerMachampActive;
+    updateDamages();
+  };
+
+  card.appendChild(line);
+}
+
+function applyMeowscaradaAttacker(atkStats, defStats, card) {
+  const passive = state.currentAttacker.passive;
+
+  const line = document.createElement("div");
+  line.className = "global-bonus-line";
+  line.innerHTML = `
+    <div style="margin:12px 0;padding:10px;background:#2a2a3a;border-radius:8px;border-left:4px solid #3498db;display:flex;align-items:center;gap:12px;">
+      <img src="${passive.image}" style="width:40px;height:40px;border-radius:6px;">
+      <div style="flex:1;">
+        <strong style="color:#3498db;">${passive.name}</strong><br>
+        ${passive.description}<br>
+        <button class="overgrow-toggle"
+          style="margin-top:8px;padding:8px 16px;background:${state.attackerMeowscaradaActive ? '#27ae60' : '#7f8c8d'};color:white;border:none;border-radius:6px;cursor:pointer;">
+          ${state.attackerMeowscaradaActive ? 'Activate' : 'Deactivate'}
+        </button>
+      </div>
+    </div>
+  `;
+  line.querySelector('.overgrow-toggle').onclick = () => {
+    state.attackerMeowscaradaActive = !state.attackerMeowscaradaActive;
+    updateDamages();
+  };
+
+  card.appendChild(line);
+}
+
 // Export pour le fichier damageDisplay.js
 export {
   applyBuzzwoleAttacker,
@@ -327,5 +514,8 @@ export {
   applyAegislashAttacker,
   applyArmarougeAttacker,
   applyMegaGyaradosAttacker,
-  applyGyaradosAttacker
+  applyMegaLucarioAttacker,
+  applyGyaradosAttacker,
+  applyMachampAttacker,
+  applyMeowscaradaAttacker
 };
