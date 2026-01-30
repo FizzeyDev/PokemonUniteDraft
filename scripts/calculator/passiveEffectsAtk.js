@@ -503,6 +503,201 @@ function applyMeowscaradaAttacker(atkStats, defStats, card) {
   card.appendChild(line);
 }
 
+function applyMegaMewtwoAttacker(atkStats, hpStats, card) {
+  const isMega = state.attackerMewtwoForm === "mega";
+  const stacks = state.attackerMewtwoPressureStacks;
+
+  const line = document.createElement("div");
+  line.className = "global-bonus-line";
+  line.innerHTML = `
+    <div style="margin:12px 0;padding:10px;background:#2a2a3a;border-radius:8px;border-left:4px solid #bb86fc;display:flex;flex-direction:column;gap:12px;">
+      
+      <div style="display:flex;gap:8px;">
+        <button class="mewtwo-normal"
+          style="padding:6px 14px;border:none;border-radius:6px;cursor:pointer;
+          background:${!isMega ? '#7f8c8d' : '#27ae60'};color:white;"
+          ${!isMega ? 'disabled' : ''}>
+          Normal
+        </button>
+
+        <button class="mewtwo-mega"
+          style="padding:6px 14px;border:none;border-radius:6px;cursor:pointer;
+          background:${isMega ? '#7f8c8d' : '#27ae60'};color:white;"
+          ${isMega ? 'disabled' : ''}>
+          Méga
+        </button>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:12px;">
+        <img src="assets/moves/mega_mewtwo_x/pressure.png" style="width:40px;height:40px;border-radius:6px;">
+        <div style="flex:1;">
+          <strong style="color:#bb86fc;">Pressure</strong><br>
+          Stacks:
+          <button class="stack-btn minus pressure-minus">-</button>
+          <strong style="color:#a0d8ff;">${stacks}</strong>/10
+          <button class="stack-btn plus pressure-plus">+</button>
+          <br>
+          → Atk +${stacks * 2}%
+          ${isMega ? `<br>→ Méga bonus: Atk +18% | HP +10%` : ""}
+        </div>
+      </div>
+
+    </div>
+  `
+
+  line.querySelector(".mewtwo-normal").onclick = () => {
+    state.attackerMewtwoForm = "normal"
+    updateDamages()
+  }
+
+  line.querySelector(".mewtwo-mega").onclick = () => {
+    state.attackerMewtwoForm = "mega"
+    updateDamages()
+  }
+
+  line.querySelector(".pressure-minus").onclick = () => {
+    if (state.attackerMewtwoPressureStacks > 0) {
+      state.attackerMewtwoPressureStacks--
+      updateDamages()
+    }
+  }
+
+  line.querySelector(".pressure-plus").onclick = () => {
+    if (state.attackerMewtwoPressureStacks < 10) {
+      state.attackerMewtwoPressureStacks++
+      updateDamages()
+    }
+  }
+
+  card.appendChild(line)
+}
+
+function applyMegaMewtwoYAttacker(atkStats, hpStats, card) {
+  const isMega = state.attackerMewtwoYForm === "mega";
+  const stacks = state.attackerMewtwoYPressureStacks;
+
+  const line = document.createElement("div");
+  line.className = "global-bonus-line";
+  line.innerHTML = `
+    <div style="margin:12px 0;padding:10px;background:#2a2a3a;border-radius:8px;border-left:4px solid #bb86fc;display:flex;flex-direction:column;gap:12px;">
+      
+      <div style="display:flex;gap:8px;">
+        <button class="mewtwo-y-normal"
+          style="padding:6px 14px;border:none;border-radius:6px;cursor:pointer;
+          background:${!isMega ? '#7f8c8d' : '#27ae60'};color:white;"
+          ${!isMega ? 'disabled' : ''}>
+          Normal
+        </button>
+
+        <button class="mewtwo-y-mega"
+          style="padding:6px 14px;border:none;border-radius:6px;cursor:pointer;
+          background:${isMega ? '#7f8c8d' : '#27ae60'};color:white;"
+          ${isMega ? 'disabled' : ''}>
+          Méga
+        </button>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:12px;">
+        <img src="assets/moves/mega_mewtwo_x/pressure.png" style="width:40px;height:40px;border-radius:6px;">
+        <div style="flex:1;">
+          <strong style="color:#bb86fc;">Pressure</strong><br>
+          Stacks:
+          <button class="stack-btn minus pressure-minus">-</button>
+          <strong style="color:#a0d8ff;">${stacks}</strong>/10
+          <button class="stack-btn plus pressure-plus">+</button>
+          <br>
+          → Sp.Atk +${stacks * 1.5}%
+          ${isMega ? `<br>→ Méga bonus: Sp.Atk +10% | HP +10%` : ""}
+        </div>
+      </div>
+
+    </div>
+  `
+
+  line.querySelector(".mewtwo-y-normal").onclick = () => {
+    state.attackerMewtwoYForm = "normal"
+    updateDamages()
+  }
+
+  line.querySelector(".mewtwo-y-mega").onclick = () => {
+    state.attackerMewtwoYForm = "mega"
+    updateDamages()
+  }
+
+  line.querySelector(".pressure-minus").onclick = () => {
+    if (state.attackerMewtwoYPressureStacks > 0) {
+      state.attackerMewtwoYPressureStacks--
+      updateDamages()
+    }
+  }
+
+  line.querySelector(".pressure-plus").onclick = () => {
+    if (state.attackerMewtwoYPressureStacks < 10) {
+      state.attackerMewtwoYPressureStacks++
+      updateDamages()
+    }
+  }
+
+  card.appendChild(line)
+}
+
+function applyMimikyuAttacker(atkStats, defStats, card) {
+  const passive = state.currentAttacker.passive;
+
+  const line = document.createElement("div");
+  line.className = "global-bonus-line";
+  line.innerHTML = `
+    <div style="margin:12px 0;padding:10px;background:#2a2a3a;border-radius:8px;border-left:4px solid #3498db;display:flex;align-items:center;gap:12px;">
+      <img src="${passive.image}" style="width:40px;height:40px;border-radius:6px;">
+      <div style="flex:1;">
+        <strong style="color:#3498db;">${passive.name}</strong><br>
+        ${passive.description}<br>
+        <button class="disguise-toggle"
+          style="margin-top:8px;padding:8px 16px;background:${state.attackerMimikyuActive ? '#27ae60' : '#7f8c8d'};color:white;border:none;border-radius:6px;cursor:pointer;">
+          ${state.attackerMimikyuActive ? 'Activate' : 'Deactivate'}
+        </button>
+      </div>
+    </div>
+  `;
+  line.querySelector('.disguise-toggle').onclick = () => {
+    state.attackerMimikyuActive = !state.attackerMimikyuActive;
+    updateDamages();
+  };
+
+  card.appendChild(line);
+}
+
+function applyRapidashAttacker(atkStats, defStats, card) {
+  const passive = state.currentAttacker.passive;
+
+  const line = document.createElement("div");
+  line.className = "global-bonus-line";
+  line.innerHTML = `
+    <div style="margin:12px 0;padding:10px;background:#2a2a3a;border-radius:8px;border-left:4px solid #bb86fc;display:flex;align-items:center;gap:12px;">
+      <img src="${passive.image}" style="width:40px;height:40px;border-radius:6px;" onerror="this.src='assets/moves/missing.png'">
+      <div style="flex:1;">
+        <strong style="color:#bb86fc;">${passive.name}</strong><br>
+        ${passive.description}<br>
+        Stacks: <button class="stack-btn minus">-</button> <strong style="color:#a0d8ff;">${state.attackerRapidashStacks}</strong>/5 <button class="stack-btn plus">+</button>
+      </div>
+    </div>
+  `;
+  line.querySelector('.minus').onclick = () => {
+    if (state.attackerRapidashStacks > 0) {
+      state.attackerRapidashStacks--;
+      updateDamages();
+    }
+  };
+  line.querySelector('.plus').onclick = () => {
+    if (state.attackerRapidashStacks < 6) {
+      state.attackerRapidashStacks++;
+      updateDamages();
+    }
+  };
+  card.appendChild(line);
+}
+
+
 // Export pour le fichier damageDisplay.js
 export {
   applyBuzzwoleAttacker,
@@ -517,5 +712,9 @@ export {
   applyMegaLucarioAttacker,
   applyGyaradosAttacker,
   applyMachampAttacker,
-  applyMeowscaradaAttacker
+  applyMeowscaradaAttacker,
+  applyMegaMewtwoAttacker,
+  applyMegaMewtwoYAttacker,
+  applyMimikyuAttacker,
+  applyRapidashAttacker
 };

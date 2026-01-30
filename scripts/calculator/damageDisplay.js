@@ -18,7 +18,11 @@ import {
   applyMegaLucarioAttacker,
   applyGyaradosAttacker,
   applyMachampAttacker,
-  applyMeowscaradaAttacker
+  applyMeowscaradaAttacker,
+  applyMegaMewtwoAttacker,
+  applyMegaMewtwoYAttacker,
+  applyMimikyuAttacker,
+  applyRapidashAttacker
 } from './passiveEffectsAtk.js';
 
 import {
@@ -30,7 +34,10 @@ import {
   applyCrustleDefender,
   applyDragoniteDefender,
   applyLaprasDefender,
-  applyMamoswineDefender
+  applyMamoswineDefender,
+  applyMegaMewtwoDefender,
+  applyMegaMewtwoYDefender,
+  applyMimeDefender
 } from './passiveEffectsDef.js';
 
 
@@ -126,6 +133,43 @@ export function updateDamages() {
     }
   }
 
+  // Mewtwo X
+  if (state.currentAttacker?.pokemonId === "mewtwo_x") {
+    atkStats.atk = Math.floor(
+      atkStats.atk *
+      (1 +
+        state.attackerMewtwoPressureStacks * 0.02 +
+        (state.attackerMewtwoForm === "mega" ? 0.18 : 0))
+    )
+  }
+
+  if (state.currentDefender?.pokemonId === "mewtwo_x") {
+    defStats.def = Math.floor(
+      defStats.def *
+      (1 +
+        state.defenderMewtwoPressureStacks * 0.02 +
+        (state.defenderMewtwoForm === "mega" ? 0.18 : 0))
+    )
+
+    defStats.sp_def = Math.floor(
+      defStats.sp_def *
+      (1 +
+        state.defenderMewtwoPressureStacks * 0.02 +
+        (state.defenderMewtwoForm === "mega" ? 0.18 : 0))
+    )
+  }
+
+  // Mewtwo Y
+  if (state.currentAttacker?.pokemonId === "mewtwo_y") {
+    atkStats.sp_atk = Math.floor(
+      atkStats.sp_atk *
+      (1 +
+        state.attackerMewtwoYPressureStacks * 0.015 +
+        (state.attackerMewtwoYForm === "mega" ? 0.10 : 0))
+    )
+  }
+
+  // Machamp
   if (state.currentAttacker?.pokemonId === "machamp" && state.attackerMachampActive) {
     atkStats.atk = Math.floor(
       atkStats.atk * (1 + state.currentAttacker.passive.bonusPercentAtk / 100)
@@ -203,6 +247,7 @@ export function updateDamages() {
   if (state.defenderDhelmiseAnchorShotPlus) defenderDamageMult *= 1.50;
 
   if (state.currentDefender?.pokemonId === "dragonite" && state.defenderMultiscaleActive) defenderDamageMult *= 0.70;
+  if (state.defenderMimeActive) defenderDamageMult *= 0.90;
 
   const finalEffects = {
     ...itemEffects,
@@ -352,7 +397,11 @@ function applyAttackerPassive(pokemonId, atkStats, defStats, card) {
     machamp: applyMachampAttacker,
     "mega-gyarados": applyMegaGyaradosAttacker,
     "mega-lucario": applyMegaLucarioAttacker,
-    meowscarada: applyMeowscaradaAttacker
+    meowscarada: applyMeowscaradaAttacker,
+    "mewtwo_x": applyMegaMewtwoAttacker,
+    "mewtwo_y": applyMegaMewtwoYAttacker,
+    mimikyu: applyMimikyuAttacker,
+    rapidash: applyRapidashAttacker
   };
 
   handlers[pokemonId]?.(atkStats, defStats, card);
@@ -368,7 +417,11 @@ function applyDefenderPassive(pokemonId, atkStats, defStats, card) {
     crustle: applyCrustleDefender,
     dragonite: applyDragoniteDefender,
     lapras: applyLaprasDefender,
-    mamoswine: applyMamoswineDefender
+    mamoswine: applyMamoswineDefender,
+    "mewtwo_x": applyMegaMewtwoDefender,
+    "mewtwo_y": applyMegaMewtwoYDefender,
+    "mr_mime": applyMimeDefender
+
   };
 
   handlers[pokemonId]?.(atkStats, defStats, card);
@@ -410,8 +463,20 @@ function getAttackerWoundMultiplier(attackerHp) {
       if (state.attackerMeowscaradaActive) mult *= 1.15;
       break;
 
+    case "mimikyu":
+      if (state.attackerMimikyuActive) mult *= 1.10;
+      break;
+
     case "venusaur":
       if (state.attackerHPPercent <= 30) mult *= 1.20;
+      break;
+    
+    case "rapidash":
+      if (state.attackerRapidashStacks >= 5) mult *= 1.60;
+      else if (state.attackerRapidashStacks === 4) mult *= 1.50;
+      else if (state.attackerRapidashStacks === 3) mult *= 1.35;
+      else if (state.attackerRapidashStacks === 2) mult *= 1.20;
+      else if (state.attackerRapidashStacks === 1) mult *= 1.05;
       break;
   }
 

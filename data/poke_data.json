@@ -5220,8 +5220,8 @@
             "can_crit": "false",
             "image": "assets/moves/meowth/feint_attack.png",
             "damages": [
-                {"name": "Damage", "multiplier": 260, "levelCoef": 0, "constant": 390, "dealDamage": true, "notes": "Stun 0.6s, next AA boosted"},
-                {"name": "Shield", "multiplier": 192, "levelCoef": 0, "constant": 288, "dealDamage": false}
+                {"name": "Damage", "multiplier": 160, "levelCoef": 0, "constant": 390, "dealDamage": true, "notes": "Stun 0.6s, next AA boosted"},
+                {"name": "Shield", "multiplier": 140, "levelCoef": 0, "constant": 288, "dealDamage": false}
             ]
         },
         {
@@ -5449,6 +5449,16 @@
       {"level": 14, "hp": 7632, "atk": 479, "def": 434, "sp_atk": 103, "sp_def": 355, "crit": 10},
       {"level": 15, "hp": 8200, "atk": 520, "def": 480, "sp_atk": 115, "sp_def": 390, "crit": 10}
     ],
+    "passive": {
+      "name": "Pressure",
+      "image": "assets/moves/mewtwo_x/pressure.png",
+      "description": "Passive",
+      "bonusPercentStack": 2,
+      "bonusPercentHp": 10,
+      "bonusPercentMega": 18,
+      "stackable": true,
+      "maxStacks": 10
+    },
     "moves": [
       {
         "name": "Auto-attack",
@@ -5622,6 +5632,12 @@
       {"level": 14, "hp": 6873, "atk": 387, "def": 360, "sp_atk": 103, "sp_def": 324, "crit": 20},
       {"level": 15, "hp": 7400, "atk": 420, "def": 400, "sp_atk": 115, "sp_def": 360, "crit": 20}
     ],
+    "passive": {
+      "name": "Disguise",
+      "image": "assets/moves/mimikyu/disguise.png",
+      "description": "Damage +10% on the marked opponent.",
+      "multBoost": "10%"
+    },
     "moves": [
       {
         "name": "Auto-attack",
@@ -5808,6 +5824,12 @@
       {"level": 14, "hp": 8450, "atk": 275, "def": 429, "sp_atk": 401, "sp_def": 375, "crit": 0},
       {"level": 15, "hp": 9200, "atk": 293, "def": 480, "sp_atk": 450, "sp_def": 420, "crit": 0}
     ],
+    "passive": {
+      "name": "Filter",
+      "image": "assets/moves/mr_mime/filter.png",
+      "description": "Damage -10% when using move.",
+      "dmgReduc": "10%"
+    },
     "moves": [
       {
         "name": "Auto-attack",
@@ -6380,6 +6402,14 @@
       {"level": 14, "hp": 7109, "atk": 291, "def": 289, "sp_atk": 623, "sp_def": 316, "crit": 0},
       {"level": 15, "hp": 7800, "atk": 320, "def": 330, "sp_atk": 720, "sp_def": 361, "crit": 0}
     ],
+    "passive": {
+      "name": "Pastel Veil",
+      "image": "assets/moves/rapidash/pastel_veil.png",
+      "description": "Damage dealt by moves +5/20/35/50/60%",
+      "multBoost": "5/20/35/50/60%",
+      "stackable": true,
+      "maxStacks": 5
+    },
     "moves": [
       {
         "name": "Auto-attack",
@@ -6571,6 +6601,14 @@
         ]
       },
       {
+        "name": "Technician (Passive)",
+        "can_crit": "false",
+        "image": "assets/moves/scizor/technician.png",
+        "damages": [
+          {"name": "Second Hit", "multiplier": 50, "levelCoef": 0, "constant": 0, "dealDamage": true}
+        ]
+      },
+      {
         "name": "Fury Cutter",
         "can_crit": "false",
         "image": "assets/moves/scizor/fury_cutter.png",
@@ -6653,6 +6691,15 @@
         "damages": [
           {"name": "Basic (First Hit)", "multiplier": 100, "levelCoef": 0, "constant": 0, "dealDamage": true},
           {"name": "Boosted (Second Hit)", "multiplier": 50, "levelCoef": 0, "constant": 0, "dealDamage": true}
+        ]
+      },
+      {
+        "name": "Technician (Passive)",
+        "can_crit": "false",
+        "image": "assets/moves/scyther/technician.png",
+        "damages": [
+          {"name": "Second Hit (Basic)", "multiplier": 50, "levelCoef": 0, "constant": 0, "dealDamage": true},
+          {"name": "Second Hit (Boosted)", "multiplier": 100, "levelCoef": 0, "constant": 0, "dealDamage": true}
         ]
       },
       {

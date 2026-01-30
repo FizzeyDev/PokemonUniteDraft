@@ -27,10 +27,23 @@ export const state = {
 
   attackerPassiveStacks: 0,
   defenderPassiveStacks: 0,
+  
+  // Mewtwo X
+  attackerMewtwoPressureStacks: 0,
+  attackerMewtwoForm: "normal",
+  defenderMewtwoPressureStacks: 0,
+  defenderMewtwoForm: "normal",
+  
+  // Mewtwo Y
+  attackerMewtwoYPressureStacks: 0,
+  attackerMewtwoYForm: "normal",
+  defenderMewtwoYForm: "normal",
+
   attackerLucarioForm: "normal",
   attackerZardyForm: "normal",
   attackerLucarioJustifiedStacks: 0,
   attackerLucarioAdaptabilityStacks: 0,
+  attackerRapidashStacks: 0,
   attackerStance: 'shield',
   defenderStance: 'shield',
   attackerFlashFireActive: false,
@@ -50,6 +63,8 @@ export const state = {
   defenderMultiscaleActive: false,
   attackerMachampActive: false,
   attackerMeowscaradaActive: false,
+  attackerMimikyuActive: false,
+  defenderMimeActive: false,
 
   // Buffs attaquant
   attackerRegisteelBuff: false,

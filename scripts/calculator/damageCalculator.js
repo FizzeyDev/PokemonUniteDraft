@@ -101,6 +101,8 @@ function applyPokemonBuffs(pokemon, stats) {
     }
     if (pokemon?.pokemonId === "gyarados" && state.attackerGyaradosEvolve) { atk += 100; hp += 1200; }
     if (pokemon?.pokemonId === "mega-gyarados" && state.attackerMegaGyaradosEvolve) { atk += 100; hp += 1200; }
+    if (pokemon?.pokemonId === "mewtwo_x" && state.attackerMewtwoForm === "mega") { hp = Math.floor(hp * 1.10); }
+    if (pokemon?.pokemonId === "mewtwo_y" && state.attackerMewtwoYForm === "mega") { hp = Math.floor(hp * 1.10); }
   }
 
   // Buffs spécifiques au défenseur
@@ -108,6 +110,8 @@ function applyPokemonBuffs(pokemon, stats) {
     if (state.defenderRegirockBuff) { def += Math.floor(stats.def*0.30); sp_def += Math.floor(stats.sp_def*0.25); }
     if (pokemon?.pokemonId === "gyarados" && state.defenderGyaradosEvolve) hp += 1200;
     if (pokemon?.pokemonId === "mega-gyarados" && state.defenderMegaGyaradosEvolve) hp += 1200;
+    if (pokemon?.pokemonId === "mewtwo_x" && state.defenderMewtwoForm === "mega") { hp = Math.floor(hp * 1.10); }
+    if (pokemon?.pokemonId === "mewtwo_y" && state.defenderMewtwoYForm === "mega") { hp = Math.floor(hp * 1.10); }
   }
 
   // Cas Aegislash

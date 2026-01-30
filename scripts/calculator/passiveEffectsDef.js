@@ -284,6 +284,130 @@ function applyMamoswineDefender(atkStats, defStats, card) {
   card.appendChild(line);
 }
 
+function applyMegaMewtwoDefender(atkStats, hpStats, card) {
+  const isMega = state.defenderMewtwoForm === "mega";
+  const stacks = state.defenderMewtwoPressureStacks;
+
+  const line = document.createElement("div");
+  line.className = "global-bonus-line";
+  line.innerHTML = `
+    <div style="margin:12px 0;padding:10px;background:#2a2a3a;border-radius:8px;border-left:4px solid #bb86fc;display:flex;flex-direction:column;gap:12px;">
+      
+      <div style="display:flex;gap:8px;">
+        <button class="mewtwo-normal"
+          style="padding:6px 14px;border:none;border-radius:6px;cursor:pointer;
+          background:${!isMega ? '#7f8c8d' : '#27ae60'};color:white;"
+          ${!isMega ? 'disabled' : ''}>
+          Normal
+        </button>
+
+        <button class="mewtwo-mega"
+          style="padding:6px 14px;border:none;border-radius:6px;cursor:pointer;
+          background:${isMega ? '#7f8c8d' : '#27ae60'};color:white;"
+          ${isMega ? 'disabled' : ''}>
+          Méga
+        </button>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:12px;">
+        <img src="assets/moves/mega_mewtwo_x/pressure.png" style="width:40px;height:40px;border-radius:6px;">
+        <div style="flex:1;">
+          <strong style="color:#bb86fc;">Pressure</strong><br>
+          Stacks:
+          <button class="stack-btn minus pressure-minus">-</button>
+          <strong style="color:#a0d8ff;">${stacks}</strong>/10
+          <button class="stack-btn plus pressure-plus">+</button>
+          <br>
+          → Def / Sp.Def +${stacks * 2}%
+          ${isMega ? `<br>→ Méga bonus: Def / Sp.Def +18% | HP +10%` : ""}
+        </div>
+      </div>
+
+    </div>
+  `
+
+  line.querySelector(".mewtwo-normal").onclick = () => {
+    state.defenderMewtwoForm = "normal"
+    updateDamages()
+  }
+
+  line.querySelector(".mewtwo-mega").onclick = () => {
+    state.defenderMewtwoForm = "mega"
+    updateDamages()
+  }
+
+  line.querySelector(".pressure-minus").onclick = () => {
+    if (state.defenderMewtwoPressureStacks > 0) {
+      state.defenderMewtwoPressureStacks--
+      updateDamages()
+    }
+  }
+
+  line.querySelector(".pressure-plus").onclick = () => {
+    if (state.defenderMewtwoPressureStacks < 10) {
+      state.defenderMewtwoPressureStacks++
+      updateDamages()
+    }
+  }
+
+  card.appendChild(line)
+}
+
+function applyMegaMewtwoYDefender(atkStats, hpStats, card) {
+  const isMega = state.defenderMewtwoYForm === "mega";
+
+  const line = document.createElement("div");
+  line.className = "global-bonus-line";
+  line.innerHTML = `
+    <div style="margin:12px 0;padding:10px;background:#2a2a3a;border-radius:8px;border-left:4px solid #bb86fc;display:flex;align-items:center;gap:12px;">
+      <img src="assets/moves/mega_mewtwo_y/pressure.png" style="width:40px;height:40px;border-radius:6px;">
+      <div style="flex:1;">
+        <strong style="color:#bb86fc;">Pressure</strong><br>
+        Forme: <strong style="color:${isMega ? '#27ae60' : '#7f8c8d'};">${isMega ? 'Mega' : 'Normal'}</strong><br>
+        ${isMega ? 'HP +10%' : 'No bonus'}
+        <br>
+        <button class="mewtwoy-toggle"
+          style="margin-top:8px;padding:8px 16px;background:${isMega ? '#27ae60' : '#7f8c8d'};color:white;border:none;border-radius:6px;cursor:pointer;">
+          ${isMega ? 'Normal' : 'Méga Evolution'}
+        </button>
+      </div>
+    </div>
+  `;
+
+  line.querySelector(".mewtwoy-toggle").onclick = () => {
+    state.defenderMewtwoYForm = isMega ? "normal" : "mega";
+    updateDamages();
+  };
+
+  card.appendChild(line);
+}
+
+function applyMimeDefender(atkStats, defStats, card) {
+  const passive = state.currentDefender.passive;
+
+  const line = document.createElement("div");
+  line.className = "global-bonus-line";
+  line.innerHTML = `
+    <div style="margin:12px 0;padding:10px;background:#2a2a3a;border-radius:8px;border-left:4px solid #3498db;display:flex;align-items:center;gap:12px;">
+      <img src="${passive.image}" style="width:40px;height:40px;border-radius:6px;">
+      <div style="flex:1;">
+        <strong style="color:#3498db;">${passive.name}</strong><br>
+        ${passive.description}<br>
+        <button class="filter-toggle"
+          style="margin-top:8px;padding:8px 16px;background:${state.defenderMimeActive ? '#27ae60' : '#7f8c8d'};color:white;border:none;border-radius:6px;cursor:pointer;">
+          ${state.defenderMimeActive ? 'Activate' : 'Deactivate'}
+        </button>
+      </div>
+    </div>
+  `;
+  line.querySelector('.filter-toggle').onclick = () => {
+    state.defenderMimeActive = !state.defenderMimeActive;
+    updateDamages();
+  };
+
+  card.appendChild(line);
+}
+
 // Export pour le fichier damageDisplay.js
 export {
   applyAegislashDefender,
@@ -294,5 +418,8 @@ export {
   applyCrustleDefender,
   applyDragoniteDefender,
   applyLaprasDefender,
-  applyMamoswineDefender
+  applyMamoswineDefender,
+  applyMegaMewtwoDefender,
+  applyMegaMewtwoYDefender,
+  applyMimeDefender
 };
