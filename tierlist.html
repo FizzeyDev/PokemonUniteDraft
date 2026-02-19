@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pokémon Unite Tier List</title>
+  <title>Unite Tools - Tier List</title>
 
-  <!-- ✅ chemins relatifs -->
   <link rel="stylesheet" href="./css/navbar.css">
   <link rel="stylesheet" href="./css/tierlist.css">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
@@ -25,12 +24,26 @@
   <div id="tierlist-wrapper"></div>
 
   <div class="selection-panel">
+    <!-- Categories -->
     <div class="category-tabs">
       <button class="category-tab active" data-category="pokemon">Pokémon</button>
       <button class="category-tab" data-category="items">Items</button>
       <button class="category-tab" data-category="battle_items">Battle Items</button>
     </div>
 
+    <!-- Search Bar -->
+    <div class="gallery-search-wrapper">
+      <span class="search-icon">🔍</span>
+      <input
+        type="text"
+        id="gallery-search"
+        placeholder="Search Pokémon, items..."
+        autocomplete="off"
+        spellcheck="false"
+      />
+    </div>
+
+    <!-- Roles Filters -->
     <div id="filters" class="pokemon-filters">
       <button class="filter-btn active" data-role="unknown">All</button>
       <button class="filter-btn" data-role="all">All-Rounder</button>
@@ -43,18 +56,19 @@
     <div class="gallery" id="gallery"></div>
   </div>
 
-  <!-- Modals -->
+  <!-- Selection Move Modal -->
   <div id="move-modal" class="modal">
-    <div class="modal-content">
-      <h3>Select Moves</h3>
+    <div class="modal-content modal-content--moves">
+      <h3 id="move-modal-title">Select Moves</h3>
       <div id="move-options"></div>
       <div class="modal-actions">
-        <button id="move-save">Save</button>
         <button id="move-cancel">Cancel</button>
+        <button id="move-save">Save</button>
       </div>
     </div>
   </div>
 
+  <!-- Edition Tier Modal -->
   <div id="tier-modal" class="modal">
     <div class="modal-content">
       <h3>Edit Tier</h3>
@@ -72,8 +86,7 @@
     <p>Created by Fizzey — Pokémon Unite Tierlist</p>
   </footer>
 
-  <!-- ✅ chemins relatifs pour compatibilité GitHub Pages + Live Server -->
-  <script src="./scripts/tierlist.js"></script>
+  <script type="module" src="./scripts/tierlists/main.js"></script>
   <script src="./scripts/navbar.js"></script>
 </body>
 </html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-lang="title">Unite Tools - Draft</title>
+  <link rel="stylesheet" href="css/navbar.css" />
+  <link rel="stylesheet" href="css/draft.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="navbar-container"></div>
+
+  <h1 id="title" data-lang="title">Pokémon Unite Draft Simulator</h1>
+
+  <!-- Draft Controls -->
+  <div id="draft-controls" class="draft-controls">
+    <button class="mode-btn" data-mode="swap" data-lang="mode_swap">Swap Ban Mode</button>
+    <button class="mode-btn" data-mode="tournament" data-lang="mode_tournament">Tournament Mode - 2 Bans</button>
+    <button class="mode-btn" data-mode="classic" data-lang="mode_classic">Tournament Mode - 3 Bans</button>
+    <button class="mode-btn" data-mode="reban" data-lang="mode_reban">Reban Mode</button>
+  </div>
+
+  <!-- Mode description -->
+  <div id="mode-description" class="mode-description">
+    <div id="mode-title" data-lang="select_mode_title"></div>
+    <div id="mode-text" data-lang="select_mode_text"></div>
+  </div>
+
+  <!-- Map selection -->
+  <div id="map-selection" class="map-selection">
+    <p data-lang="tooltip_maps"></p>
+    <div class="map-buttons">
+      <button class="map-btn" data-map="groudon">
+        <img src="assets/maps/spawn/groudon.png" alt="Groudon">
+        <span>Groudon</span>
+      </button>
+      <button class="map-btn" data-map="kyogre">
+        <img src="assets/maps/spawn/kyogre.png" alt="Kyogre">
+        <span>Kyogre</span>
+      </button>
+      <button class="map-btn" data-map="rayquaza">
+        <img src="assets/maps/spawn/rayquaza.png" alt="Rayquaza">
+        <span>Rayquaza</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Start + Reset -->
+  <div class="start-reset-controls">
+    <button id="start-draft" class="draft-btn" data-lang="start_draft" disabled>Start Draft</button>
+    <button id="reset-draft" class="draft-btn" data-lang="reset" style="display:none;">Reset Draft</button>
+  </div>
+
+  <button id="backBtn" data-lang="cancel" style="display:none;">⏪ Cancel</button>
+
+  <!-- Draft Container -->
+  <div class="draft-container">
+    <div class="team" id="teamA">
+      <h2 data-lang="teamA">Purple Team</h2>
+      <div class="slots bans">
+        <div class="slot ban"></div>
+        <div class="slot ban"></div>
+        <div class="slot ban"></div>
+      </div>
+      <div class="slots picks">
+        <div class="slot" data-lang="pick">Pick</div>
+        <div class="slot" data-lang="pick">Pick</div>
+        <div class="slot" data-lang="pick">Pick</div>
+        <div class="slot" data-lang="pick">Pick</div>
+        <div class="slot" data-lang="pick">Pick</div>
+      </div>
+    </div>
+
+    <div class="middle-bubble" id="middle-bubble">
+      <div id="map-display"></div>
+      <div id="turn-display"></div>
+
+      <label class="switch">
+        <input type="checkbox" id="enable-timer">
+        <span class="slider"></span>
+        <span class="switch-label" data-lang="enable_timer">Timer</span>
+      </label>
+
+      <div id="timer-settings">
+        <input type="number" id="timer-value" value="20" min="5" max="120">
+      </div>
+
+      <label class="switch">
+        <input type="checkbox" id="fearless-checkbox">
+        <span class="slider"></span>
+        <span class="switch-label">Fearless Mode (Infinite)</span>
+      </label>
+
+      <div id="bubble-timer">Waiting...</div>
+    </div>
+
+    <div class="team" id="teamB">
+      <h2 data-lang="teamB">Orange Team</h2>
+      <div class="slots bans">
+        <div class="slot ban"></div>
+        <div class="slot ban"></div>
+        <div class="slot ban"></div>
+      </div>
+      <div class="slots picks">
+        <div class="slot" data-lang="pick">Pick</div>
+        <div class="slot" data-lang="pick">Pick</div>
+        <div class="slot" data-lang="pick">Pick</div>
+        <div class="slot" data-lang="pick">Pick</div>
+        <div class="slot" data-lang="pick">Pick</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters & Sort -->
+  <div id="filters" style="display:none;">
+    <button data-role="def" class="filter-btn" data-lang="role_def">Defender</button>
+    <button data-role="atk" class="filter-btn" data-lang="role_atk">Attacker</button>
+    <button data-role="sup" class="filter-btn" data-lang="role_sup">Supporter</button>
+    <button data-role="spe" class="filter-btn" data-lang="role_spe">Speedster</button>
+    <button data-role="all" class="filter-btn" data-lang="role_all">All-Rounder</button>
+    <button data-role="unknown" class="filter-btn" data-lang="role_unknown">Unknown</button>
+  </div>
+  <div id="sort-options" style="display:none; text-align:center; margin:15px 0;">
+    <label id="sort-label" for="sort-select" style="margin-right:8px;" data-lang="sort_by">Sort by:</label>
+    <select id="sort-select">
+      <option value="dex" id="sort-dex" data-lang="pokedex_nb">Pokédex Number</option>
+      <option value="name" id="sort-name" data-lang="pkmn_name">Pokemon Name</option>
+    </select>
+    <input 
+        type="text" 
+        id="search-input" 
+        placeholder="Search Pokemon ..." 
+        class="search-input"
+    >
+  </div>
+
+  <!-- Gallery -->
+  <section id="gallery" class="gallery"></section>
+
+  <!-- Final Draft Result -->
+  <div id="final-draft" class="final-draft">
+    <h2 data-lang="final_draft_title">Final Draft Result</h2>
+    <div id="final-draft-teams"></div>
+  </div>
+
+  <!-- Fearless series -->
+  <div id="fearless-series" class="fearless-series">
+    <h2>Fearless Series Recaps</h2>
+    <div id="series-recaps"></div>
+    <div id="fearless-controls">
+      <button id="next-draft-btn" class="draft-btn">Next Draft</button>
+      <button id="end-series-btn" class="draft-btn">End Series</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div id="footer-signature" data-lang="footer_signature"></div>
+    <div id="footer-legal" data-lang="footer_legal"></div>
+  </footer>
+
+  <script src="scripts/navbar.js"></script>
+  <script type="module" src="scripts/drafts/main.js"></script>
+</body>
+</html>

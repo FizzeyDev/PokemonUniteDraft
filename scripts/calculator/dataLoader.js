@@ -15,7 +15,7 @@ export async function loadData() {
       fetch('data/poke_data.json'),
       fetch('data/items.json'),
       fetch('data/items_data.json'),
-      fetch('data/mons.json')
+      fetch('data/pokemons.json')
     ]);
 
     const pokeData = await pokeRes.json();

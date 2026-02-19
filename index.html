@@ -1,150 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title data-lang="title">Pokémon Unite Draft Simulator</title>
-  <link rel="stylesheet" href="css/navbar.css" />
-  <link rel="stylesheet" href="css/main.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-  <style>
-    @media (min-width: 769px) {
-      body {
-        padding-left: 260px;
-      }
-    }
-  </style>
+  <title data-lang="page_title">Unite Tools - Accueil</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/navbar.css">
 </head>
 <body>
-  <div id="navbar-container"></div>
+    <div id="navbar-container"></div>
 
-  <h1 id="title" data-lang="title">Pokémon Unite Draft Simulator</h1>
+    <main>
+        <section class="hero">
+            <h1 data-lang="hero_title">Unite Tools</h1>
+            <p class="hero-subtitle" data-lang="hero_subtitle">La suite d'outils ultime pour dominer Pokémon Unite</p>
+            <p class="hero-desc" data-lang="hero_desc">Drafts compétitifs, timers de map, calculs de dégâts précis et création de tier lists — tout ce qu'il vous faut pour progresser.</p>
+        </section>
 
-  <!-- Draft Controls -->
-  <div id="draft-controls" style="display:flex; justify-content:center; gap:10px; margin-bottom:10px;">
-    <button class="mode-btn" data-mode="swap-ban" data-lang="mode_swap">Swap Ban Mode</button>
-    <button class="mode-btn" data-mode="tournament" data-lang="mode_tournament">Tournament Mode - 2 Bans</button>
-    <button class="mode-btn" data-mode="classic" data-lang="mode_classic">Tournament Mode - 3 Bans</button>
-    <button class="mode-btn" data-mode="reban" data-lang="mode_reban">Reban Mode</button>
-  </div>
+        <section class="tools-grid">
+            <!-- Draft Simulator Card -->
+            <div class="tool-card draft">
+                <div class="card-image-wrapper">
+                    <img src="https://i.redd.it/zt7zbh76kiuc1.png" alt="Draft Simulator">
+                </div>
+                <h2 data-lang="draft_title">Draft Simulator</h2>
+                <p data-lang="draft_desc">Simulez des drafts réalistes avec timer, bans, picks et filtres par rôle. Idéal pour vous entraîner aux phases de sélection compétitives.</p>
+                <a href="/draft.html" class="tool-btn" data-lang="draft_btn">Accéder au Draft</a>
+            </div>
 
-  <!-- Mode description bubble -->
-  <div id="mode-description" style="
-    text-align:center;
-    margin-bottom:20px;
-    font-size:1rem;
-    background:#2c3e50;
-    color:#ecf0f1;
-    padding:15px 20px;
-    border-radius:12px;
-    width:60%;
-    max-width:600px;
-    margin-left:auto;
-    margin-right:auto;
-  ">
-    <div id="mode-title" style="font-size:1.2rem; font-weight:bold; margin-bottom:8px;" data-lang="select_mode_title"></div>
-    <div id="mode-text" data-lang="select_mode_text"></div>
-  </div>
+            <!-- Map Timer Card -->
+            <div class="tool-card map">
+                <div class="card-image-wrapper">
+                    <img src="https://static0.thegamerimages.com/wordpress/wp-content/uploads/2022/09/Pokemon-Unite-Theia-Sky-Ruins-Map.jpg" alt="Map Timer">
+                </div>
+                <h2 data-lang="map_title">Map Timer</h2>
+                <p data-lang="map_desc">Suivez précisément les timers d'apparitions des objectifs (Regieleki, Rayquaza, etc.) pour optimiser votre stratégie de map control.</p>
+                <a href="/map_timer.html" class="tool-btn" data-lang="map_btn">Accéder au Timer</a>
+            </div>
 
-  <!-- Start + Reset -->
-  <div style="display:flex; justify-content:center; align-items:center; gap:20px; margin-bottom:20px;">
-    <button id="start-draft" class="draft-btn" data-lang="start_draft" disabled>Start Draft</button>
-    <button id="reset-draft" class="draft-btn" data-lang="reset" style="display:none;">Reset Draft</button>
-  </div>
+            <!-- Damage Calculator Card -->
+            <div class="tool-card calc">
+                <div class="card-image-wrapper">
+                    <img src="https://preview.redd.it/13opxrkb1ue91.png?width=976&format=png&auto=webp&s=02f8fc5065e91e6eb21977c83c7599842e1b6ae1" alt="Damage Calculator">
+                </div>
+                <h2 data-lang="calc_title">Calculateur de Dégâts</h2>
+                <p data-lang="calc_desc">Calculez précisément chaque move avec items, niveaux, buffs/debuffs et stacks. L'outil indispensable pour optimiser vos builds.</p>
+                <a href="/damage-calc.html" class="tool-btn" data-lang="calc_btn">Accéder au Calculateur</a>
+            </div>
 
-  <button id="backBtn" data-lang="cancel" style="display:none;">⏪ Cancel</button>
+            <!-- Create Tierlist Card -->
+            <div class="tool-card tierlist">
+                <div class="card-image-wrapper">
+                    <img src="https://preview.redd.it/what-my-unite-fun-ranking-tierlist-says-about-me-v0-pv0lax9mpefe1.png?auto=webp&s=b0dc12ad1a0370dedfd0e55ff1bb9daee03403e0" alt="Create Tierlist">
+                </div>
+                <h2 data-lang="tierlist_title">Create Tierlist</h2>
+                <p data-lang="tierlist_desc">Créez et partagez vos propres tier lists personnalisées. Classez les Pokémon selon vos critères et comparez avec la communauté.</p>
+                <a href="/tierlist.html" class="tool-btn" data-lang="tierlist_btn">Créer une Tierlist</a>
+            </div>
+        </section>
+    </main>
 
-  <!-- Draft Container -->
-  <div class="draft-container">
-    <div class="team" id="teamA">
-      <h2 id="teamA-name" style="color: #9f53ec;" data-lang="teamA">Purple Team</h2>
-      <div class="slots bans">
-        <div class="slot ban"></div>
-        <div class="slot ban"></div>
-        <div class="slot ban"></div>
-      </div>
-      <div class="slots picks">
-        <div class="slot" data-lang="pick">Pick</div>
-        <div class="slot" data-lang="pick">Pick</div>
-        <div class="slot" data-lang="pick">Pick</div>
-        <div class="slot" data-lang="pick">Pick</div>
-        <div class="slot" data-lang="pick">Pick</div>
-      </div>
-    </div>
-
-    <!-- Middle bubble -->
-    <div class="middle-bubble" id="middle-bubble">
-      <label class="switch">
-        <input type="checkbox" id="enable-timer">
-        <span class="slider"></span>
-        <span id="timer-label" class="switch-label" data-lang="enable_timer">Timer</span>
-      </label>
-
-      <div id="timer-settings" style="display:none; flex-direction:column; align-items:center; gap:5px;">
-        <input type="number" id="timer-value" value="20" min="5" max="120" />
-      </div>
-
-      <!-- Timer affiché pendant la draft -->
-      <div id="bubble-timer" style="color:#f1c40f; font-weight:bold; font-size:1.2rem;" data-lang="waiting">Waiting...</div>
-    </div>
-
-    <!-- Résumé final -->
-    <div id="draft-summary" style="display:none; margin-top:30px; text-align:center;">
-      <h2 style="margin-bottom:15px;" data-lang="draft_recap">Draft Recap</h2>
-      <div id="summary-teams" style="display:flex; justify-content:space-around; gap:20px; flex-wrap:wrap;"></div>
-    </div>
-
-    <div class="team" id="teamB">
-      <h2 id="teamB-name" style="color: #ffa500;" data-lang="teamB">Orange Team</h2>
-      <div class="slots bans">
-        <div class="slot ban"></div>
-        <div class="slot ban"></div>
-        <div class="slot ban"></div>
-      </div>
-      <div class="slots picks">
-        <div class="slot" data-lang="pick">Pick</div>
-        <div class="slot" data-lang="pick">Pick</div>
-        <div class="slot" data-lang="pick">Pick</div>
-        <div class="slot" data-lang="pick">Pick</div>
-        <div class="slot" data-lang="pick">Pick</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Roles Filters -->
-  <div id="filters" style="display:none;">
-    <button data-role="def" class="filter-btn" data-lang="role_def">Defender</button>
-    <button data-role="atk" class="filter-btn" data-lang="role_atk">Attacker</button>
-    <button data-role="sup" class="filter-btn" data-lang="role_sup">Supporter</button>
-    <button data-role="spe" class="filter-btn" data-lang="role_spe">Speedster</button>
-    <button data-role="all" class="filter-btn" data-lang="role_all">All-Rounder</button>
-    <button data-role="unknown" class="filter-btn" data-lang="role_unknown">Unknown</button>
-  </div>
-
-  <!-- Sort Options -->
-  <div id="sort-options" style="display:none; text-align:center; margin:15px 0;">
-    <label id="sort-label" for="sort-select" style="margin-right:8px;" data-lang="sort_by">Sort by:</label>
-    <select id="sort-select">
-      <option value="dex" id="sort-dex" data-lang="pokedex_nb">Pokédex Number</option>
-      <option value="name" id="sort-name" data-lang="pkmn_name">Pokemon Name</option>
-    </select>
-  </div>
-
-  <!-- Gallery -->
-  <section id="gallery" class="gallery" style="display:none;"></section>
-
-  <!-- Final Draft Result -->
-  <div id="final-draft" style="display:none; margin-top:30px; text-align:center;">
-    <h2 id="final-draft-title" style="margin-bottom:15px;" data-lang="final_draft_title">Final Draft Result</h2>
-    <div id="final-draft-teams" style="display:flex; justify-content:center; gap:40px; flex-wrap:wrap;"></div>
-  </div>
-
-  <!-- Footer -->
-  <footer style="text-align:center; margin-top:40px; font-size:0.85rem; color:#aaa;">
-    <div id="footer-signature" data-lang="footer_signature"></div>
-    <div id="footer-legal" style="margin-top:4px; font-size:0.7rem;" data-lang="footer_legal"></div>
-  </footer>
-  <script src="scripts/draft.js"></script>
-  <script src="scripts/navbar.js"></script>
+    <script src="scripts/navbar.js"></script>
 </body>
 </html>
