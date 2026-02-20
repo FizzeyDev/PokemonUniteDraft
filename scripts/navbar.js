@@ -4,7 +4,7 @@ let currentLang = localStorage.getItem('lang') || 'fr';
 document.addEventListener("DOMContentLoaded", () => {
   const isLocal = ["localhost", "127.0.0.1", "0.0.0.0"].includes(window.location.hostname);
   const basePath = isLocal ? "./" : "/PokemonUniteDraft/";
-  
+
   const navbarPath = `${basePath}components/navbar.html`;
 
   fetch(navbarPath)
@@ -23,13 +23,42 @@ function initNavbar(basePath) {
   const toggle = document.getElementById("toggle-sidebar");
   const sidebar = document.getElementById("sidebar");
   const header = document.querySelector(".sidebar-header");
+  const hideBtn = document.getElementById("hide-sidebar-btn");
 
-  if (toggle && sidebar) {
-    toggle.addEventListener("click", () => {
-      sidebar.classList.toggle("active");
+  // --- Fonction centralisée pour synchroniser l'état de la sidebar ---
+  function syncSidebarState(hidden) {
+    sidebar.classList.toggle("hidden", hidden);
+    document.body.classList.toggle("sidebar-collapsed", hidden);
+    if (toggle) toggle.classList.toggle("sidebar-hidden", hidden);
+    if (hideBtn) hideBtn.textContent = hidden ? "▶" : "◀";
+    localStorage.setItem("sidebarHidden", hidden);
+  }
+
+  // Applique l'état sauvegardé dès le chargement
+  const isHidden = localStorage.getItem("sidebarHidden") === "true";
+  syncSidebarState(isHidden);
+
+  // Bouton hide (desktop)
+  if (hideBtn && sidebar) {
+    hideBtn.addEventListener("click", () => {
+      const nowHidden = !sidebar.classList.contains("hidden");
+      syncSidebarState(nowHidden);
     });
   }
 
+  // Bouton toggle (mobile)
+  if (toggle && sidebar) {
+    toggle.addEventListener("click", () => {
+      const isMobile = window.innerWidth <= 768;
+      if (isMobile) {
+        sidebar.classList.toggle("active");
+      } else {
+        syncSidebarState(false);
+      }
+    });
+  }
+
+  // Clic sur le header → retour à l'accueil
   if (header) {
     header.style.cursor = "pointer";
     header.addEventListener("click", () => {
@@ -37,6 +66,7 @@ function initNavbar(basePath) {
     });
   }
 
+  // Correction des liens de la sidebar
   document.querySelectorAll("#sidebar a").forEach(link => {
     const href = link.getAttribute("href");
     if (href && (href.startsWith("/") || href.startsWith("../"))) {
@@ -45,6 +75,7 @@ function initNavbar(basePath) {
     }
   });
 
+  // Correction des images de la sidebar
   document.querySelectorAll("#sidebar img").forEach(img => {
     const src = img.getAttribute("src");
     if (src && src.startsWith("/UniteTools")) {
@@ -52,8 +83,10 @@ function initNavbar(basePath) {
     }
   });
 
+  // Chargement des traductions
   loadAllTranslations(basePath);
 
+  // Changement de langue
   document.body.addEventListener("click", e => {
     const btn = e.target.closest(".lang-btn");
     if (btn && btn.dataset.lang) {
@@ -66,6 +99,7 @@ function initNavbar(basePath) {
     }
   });
 
+  // Lien actif selon la page courante
   function normalizePath(url) {
     try {
       const path = new URL(url, window.location.origin).pathname;
@@ -76,7 +110,6 @@ function initNavbar(basePath) {
   }
 
   const currentNormalized = normalizePath(window.location.href);
-
   document.querySelectorAll("#sidebar a").forEach(link => {
     if (normalizePath(link.href) === currentNormalized) {
       link.classList.add("active");

@@ -4,6 +4,46 @@ import { state } from './state.js';
 import { specialHeldItems, stackableItems } from './constants.js';
 import { updateDamages } from './damageDisplay.js';
 
+// Groupes de stacks liés
+const STACK_GROUPS = {
+  scoring: ['Attack Weight', 'Sp. Atk Specs', 'Aeos Cookie'],
+  kill:    ['Drive Lens', 'Accel Bracer'],
+};
+
+function getStackGroup(itemName) {
+  for (const [group, items] of Object.entries(STACK_GROUPS)) {
+    if (items.includes(itemName)) return group;
+  }
+  return null;
+}
+
+function syncLinkedStacks(side, changedSlot, newValue) {
+  const itemsArray  = side === 'attacker' ? state.attackerItems : state.defenderItems;
+  const stacksArray = side === 'attacker' ? state.attackerItemStacks : state.defenderItemStacks;
+
+  const changedItem = itemsArray[changedSlot];
+  if (!changedItem) return;
+
+  const group = getStackGroup(changedItem.name);
+  if (!group) return;
+
+  const groupItems = STACK_GROUPS[group];
+
+  itemsArray.forEach((item, slot) => {
+    if (slot === changedSlot) return;
+    if (item && groupItems.includes(item.name)) {
+      stacksArray[slot] = newValue;
+      // Mettre à jour l'affichage de la carte
+      const grid = side === 'attacker' ? document.getElementById('itemsEquippedAttacker') : document.getElementById('itemsEquippedDefender');
+      const card = grid.querySelector(`[data-slot="${slot}"]`);
+      if (card) {
+        const valueSpan = card.querySelector('.stack-value');
+        if (valueSpan) valueSpan.textContent = newValue;
+      }
+    }
+  });
+}
+
 export function populateItemGrid() {
   const grid = document.getElementById("itemGrid");
   if (!grid) return;
@@ -32,6 +72,7 @@ export function setupItemSearch() {
   search.addEventListener('input', () => {
     const term = search.value.toLowerCase();
     document.querySelectorAll('#itemGrid .item-grid-item').forEach(el => {
+      if (el.classList.contains('equipped-elsewhere')) return; // déjà caché
       const name = (el.querySelector('span')?.textContent || '').toLowerCase();
       el.style.display = name.includes(term) ? 'block' : 'none';
     });
@@ -58,6 +99,20 @@ export function setupItemSelection() {
 function openItemSelector(side, slot) {
   state.currentSlotTarget = { side, slot };
   document.getElementById('itemSelectorModal').style.display = 'flex';
+  filterItemGridForSide(side);
+}
+
+function filterItemGridForSide(side) {
+  const itemsArray = side === 'attacker' ? state.attackerItems : state.defenderItems;
+  const equippedNames = new Set(
+    itemsArray.filter(Boolean).map(i => i.name)
+  );
+
+  document.querySelectorAll('#itemGrid .item-grid-item').forEach(el => {
+    const spanText = el.querySelector('span')?.textContent;
+    const item = state.allItems.find(i => (i.display_name || i.name) === spanText);
+    el.classList.toggle('equipped-elsewhere', !!(item && equippedNames.has(item.name)));
+  });
 }
 
 export function updateItemCard(side, slot, item = null) {
@@ -180,6 +235,12 @@ function selectItemForSlot(item) {
 
   updateItemCard(side, slot, item);
 
+  const itemSearch = document.getElementById('itemSearch');
+  if (itemSearch) {
+    itemSearch.value = '';
+    itemSearch.dispatchEvent(new Event('input'));
+  }
+
   document.getElementById('itemSelectorModal').style.display = 'none';
   updateDamages();
 }
@@ -202,6 +263,7 @@ function attachStackButtons(side, slot) {
     if (stacksArray[slot] > 0) {
       stacksArray[slot]--;
       valueSpan.textContent = stacksArray[slot];
+      syncLinkedStacks(side, slot, stacksArray[slot]); // ← ajout
       updateDamages();
     }
   };
@@ -211,12 +273,14 @@ function attachStackButtons(side, slot) {
     if (stacksArray[slot] < max) {
       stacksArray[slot]++;
       valueSpan.textContent = stacksArray[slot];
+      syncLinkedStacks(side, slot, stacksArray[slot]); // ← ajout
       updateDamages();
     }
   };
 }
 
 export function resetItems(side) {
+  console.log("zizi");
   const itemsArray = side === 'attacker' ? state.attackerItems : state.defenderItems;
   const stacksArray = side === 'attacker' ? state.attackerItemStacks : state.defenderItemStacks;
   const activatedArray = side === 'attacker' ? state.attackerItemActivated : state.defenderItemActivated;
@@ -270,7 +334,7 @@ export function disableItemSlots(side) {
   cards.forEach(card => {
     card.style.opacity = '0.5';
     card.style.pointerEvents = 'none';
-    card.title = "Les items sont désactivés sur la Substitute Doll";
+    card.title = "Items are deactivate for this character.";
   });
 }
 

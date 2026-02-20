@@ -4,6 +4,7 @@ export const specialHeldItems = {
   "mega-charizard-x": "Charizardite X",
   "mega-charizard-y": "Charizardite Y",
   "mega-lucario": "Lucarionite",
+  "mega-gyarados": "Gyaradosite",
   "mewtwo_x": "Mewtwonite X",
   "mewtwo_y": "Mewtwonite Y",
   "zacian": "Rusted Sword"

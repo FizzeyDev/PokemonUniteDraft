@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Pokémon UNITE Damage Calculator</title>
+  <title>Unite Tools - Damage Calculator</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./css/navbar.css">
   <link rel="stylesheet" href="css/damage-calc.css" />
@@ -50,11 +50,6 @@
 
       <div class="pokemon-grid-wrapper">
         <div id="pokemonGridAttacker" class="pokemon-grid"></div>
-      </div>
-
-      <div class="level-section">
-        <label>Level: <span id="levelValueAttacker">15</span></label>
-        <input type="range" id="levelSliderAttacker" min="1" max="15" value="15">
       </div>
 
       <div class="items-section">
@@ -106,7 +101,7 @@
             </div>
           </div>
         </div>
-        <button class="reset-items-btn" onclick="resetItems('attacker')">Reset Items</button>
+        <button class="reset-items-btn" data-side="attacker">Reset Items</button>
       </div>
       <div class="additional-effects">
         <h3>Universal Offensive Buffs</h3>
@@ -297,11 +292,6 @@
         <div id="pokemonGridDefender" class="pokemon-grid"></div>
       </div>
 
-      <div class="level-section">
-        <label>Level: <span id="levelValueDefender">15</span></label>
-        <input type="range" id="levelSliderDefender" min="1" max="15" value="15">
-      </div>
-
       <div class="items-section">
         <h3>Equiped Items</h3>
         <div class="items-equipped-grid" id="itemsEquippedDefender">
@@ -351,7 +341,7 @@
             </div>
           </div>
         </div>
-        <button class="reset-items-btn" onclick="resetItems('defender')">Reset Items</button>
+        <button class="reset-items-btn" data-side="defender">Reset Items</button>
       </div>
       <div class="additional-effects">
         <h3>Universal Defensive Buffs</h3>
@@ -524,14 +514,23 @@
     <div class="stats-card attacker-stats">
       <h3>Attacker</h3>
       <div class="pokemon-name-header">
+        <img id="resultsAttackerImg" class="stats-pokemon-img" src="assets/items/none.png" alt="">
         <span id="resultsAttackerName">Select an attacker</span>
       </div>
       <div class="stats-grid">
         <div class="stat-item">
           <span class="stat-label">HP</span>
-          <div class="hp-slider-container">
+          <!-- HP -->
+          <div class="slider-block">
+            <label>HP <span id="hpValueAttacker">0 / 0</span></label>
             <input type="range" id="hpSliderAttacker" min="0" max="100" value="100" class="hp-slider">
-            <span id="hpValueAttacker">0 / 0</span>
+          </div>
+
+          <!-- Level -->
+           <span class="stat-label">Level</span>
+          <div class="slider-block">
+            <label>Level <span id="levelValueAttacker">15</span></label>
+            <input type="range" id="levelSliderAttacker" min="1" max="15" value="15">
           </div>
         </div>
         <div class="stat-item">
@@ -560,14 +559,22 @@
       <h3>Defender</h3>
       <div class="pokemon-name-header">
         <span id="resultsDefenderName">Select a defender</span>
+        <img id="resultsDefenderImg" class="stats-pokemon-img" src="assets/items/none.png" alt="">
       </div>
       <div class="stats-grid">
         <!-- HP avec slider (toujours visible) -->
         <div class="stat-item">
           <span class="stat-label">HP</span>
-          <div class="hp-slider-container">
+          <div class="slider-block">
+            <label>HP <span id="hpValueDefender">0 / 0</span></label>
             <input type="range" id="hpSliderDefender" min="0" max="100" value="100" class="hp-slider">
-            <span id="hpValueDefender">0 / 0</span>
+          </div>
+
+          <!-- Level -->
+           <span class="stat-label">Level</span>
+          <div class="slider-block">
+            <label>Level <span id="levelValueDefender">15</span></label>
+            <input type="range" id="levelSliderDefender" min="1" max="15" value="15">
           </div>
         </div>
 
@@ -636,6 +643,9 @@
         <br><p><strong>Planned features:</strong></p>
         <ul>
           <li>Shield and healing calculations (with linked item implementation)</li>
+          <li>Execute Damage</li>
+          <li>Dot combo selection</li>
+          <li>Move combo damage (able to click to select multiples moves to show global damage)</li>
         </ul>
       </div>
     </div>

@@ -6,6 +6,13 @@ import { populateItemGrid, setupItemSearch, setupItemSelection } from './itemMan
 import { selectAttacker, selectDefender } from './pokemonManager.js';
 import { setupBuffListeners, setupDebuffListeners, setupStackableDebuffs } from './events.js';
 import { updateDamages } from './damageDisplay.js';
+import { resetItems } from './itemManager.js';
+
+document.querySelectorAll('.reset-items-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    resetItems(btn.dataset.side)
+  })
+})
 
 async function initApp() {
   const success = await loadData();

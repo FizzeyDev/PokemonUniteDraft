@@ -8,9 +8,8 @@
   --orange: #ff9d00;
   --orange-glow: rgba(255, 157, 0, 0.5);
   --blue: #58a6ff;
-  --blue-glow: rgba(88, 166, 255, 0.5);
   --green: #3fb950;
-  --green-glow: rgba(63, 185, 80, 0.5);
+  --red: #f85149;
   --yellow: #f1c40f;
   --card-bg: rgba(22, 27, 34, 0.8);
 }
@@ -19,12 +18,17 @@
 
 body {
   font-family: 'Roboto', sans-serif;
-  background: linear-gradient(to bottom, #0a0e13, var(--bg-dark));
-  color: var(--text-light);
+  background: #1c2526;
+  color: #d9e6e8;
   min-height: 100vh;
+  margin: auto;
   padding: 2rem;
   margin-left: 250px;
   transition: margin-left 0.3s ease;
+}
+
+body.sidebar-collapsed {
+  margin-left: 0;
 }
 
 .hero {

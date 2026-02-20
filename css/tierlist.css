@@ -1,10 +1,34 @@
+:root {
+  --bg-dark: #0d1117;
+  --panel-dark: #161b22;
+  --text-light: #c9d1d9;
+  --text-white: #ffffff;
+  --violet: #bb86fc;
+  --violet-glow: rgba(187, 134, 252, 0.5);
+  --orange: #ff9d00;
+  --orange-glow: rgba(255, 157, 0, 0.5);
+  --blue: #58a6ff;
+  --green: #3fb950;
+  --red: #f85149;
+  --yellow: #f1c40f;
+  --card-bg: rgba(22, 27, 34, 0.8);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
 body {
   font-family: 'Roboto', sans-serif;
   background: #1c2526;
   color: #d9e6e8;
-  max-width: 1400px;
-  margin: 0 auto;
+  min-height: 100vh;
+  margin: auto;
   padding: 2rem;
+  margin-left: 250px;
+  transition: margin-left 0.3s ease;
+}
+
+body.sidebar-collapsed {
+  margin-left: 0;
 }
 
 h1 {

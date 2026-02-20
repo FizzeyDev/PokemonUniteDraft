@@ -15,7 +15,7 @@ fetch(`lang/${currentLang}.json`)
     state.langData = data;
     updateDynamicContent();
   });
-
+  
 fetch("data/pokemons.json")
   .then(res => res.json())
   .then(data => {

@@ -5,7 +5,6 @@
   "nav_maps_title": "Maps",
   "nav_tools_title": "Tools",
 
-  "page_title": "Unite Tools - Home",
   "hero_title": "Unite Tools",
   "hero_subtitle": "The ultimate tool suite for Pokémon Unite",
   "hero_desc": "Competitive drafts, map timers, precise damage calculations, and tier list creation. Everything you need to improve.",
@@ -22,7 +21,6 @@
   "tierlist_desc": "Create and share your own custom tier lists. Rank Pokémon based on your criteria and compare with the community.",
   "tierlist_btn": "Create Tierlist",
 
-  "title": "Pokémon Unite Draft Simulator",
   "reset": "Reset Draft",
   "nav_draft_simulator": "Draft Simulator",
   "nav_tierlist_simulator": "Tierlist",

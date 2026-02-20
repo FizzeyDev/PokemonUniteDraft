@@ -1,7 +1,6 @@
 // uiManager.js - Gestion de l'interface utilisateur
 
 import { state } from './state.js';
-import { specialHeldItems, stackableItems } from './constants.js';
 import { selectAttacker, selectDefender } from './pokemonManager.js';
 import { updateDamages } from './damageDisplay.js';
 import { getModifiedStats } from './damageCalculator.js';
@@ -21,7 +20,7 @@ export function populateGrids() {
     grid.innerHTML = "";
 
     state.allPokemon.forEach(poke => {
-      if (isAttacker && poke.pokemonId === "substitute-doll") return;
+      if (isAttacker && (poke.category === 'mob' || poke.category === 'other')) return
 
       const div = document.createElement("div");
       div.className = "pokemon-grid-item";

@@ -13,6 +13,7 @@ export function selectAttacker(id) {
   if (state.currentAttacker) {
     document.getElementById('attackerName').textContent = state.currentAttacker.displayName;
     document.getElementById('attackerImage').innerHTML = `<img src="${state.currentAttacker.image}" alt="${state.currentAttacker.displayName}">`;
+    document.getElementById('resultsAttackerImg').src = state.currentAttacker.image || 'assets/items/none.png'; // ← ajout
     highlightGridSelection(pokemonGridAttacker, id);
   }
 
@@ -74,6 +75,7 @@ export function selectDefender(id) {
   if (state.currentDefender) {
     document.getElementById('defenderName').textContent = state.currentDefender.displayName;
     document.getElementById('defenderImage').innerHTML = `<img src="${state.currentDefender.image}" alt="${state.currentDefender.displayName}">`;
+    document.getElementById('resultsDefenderImg').src = state.currentDefender.image || 'assets/items/none.png';
     highlightGridSelection(pokemonGridDefender, id);
   }
 
@@ -109,7 +111,8 @@ export function selectDefender(id) {
   // Reset debuffs
   resetDefenderDebuffs();
 
-  if (id === 'substitute-doll') {
+  const isMobOrDoll = state.currentDefender?.category === 'mob' || id === 'substitute-doll';
+  if (isMobOrDoll) {
     disableItemSlots('defender');
   } else {
     enableItemSlots('defender');
@@ -126,6 +129,21 @@ export function selectDefender(id) {
     document.getElementById('defenderMaxHP').textContent = state.currentDefender.customStats.hp.toLocaleString();
     document.getElementById('defenderDefCustom').textContent = state.currentDefender.customStats.def.toLocaleString();
     document.getElementById('defenderSpDefCustom').textContent = state.currentDefender.customStats.sp_def.toLocaleString();
+  }
+
+  if (isCustom) {
+    let hint = document.getElementById('customDollHint');
+    if (!hint) {
+      hint = document.createElement('p');
+      hint.id = 'customDollHint';
+      hint.className = 'custom-doll-hint';
+      hint.textContent = '✏️ Click on the stats values to edit them';
+      document.querySelector('.defender-stats .stats-grid').prepend(hint);
+    }
+    hint.style.display = 'block';
+  } else {
+    const hint = document.getElementById('customDollHint');
+    if (hint) hint.style.display = 'none';
   }
 
   updateDamages();
