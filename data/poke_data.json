@@ -6756,6 +6756,141 @@
     ]
   },
   {
+    "pokemonId": "sirfetchd",
+    "dex": 865,
+    "role": "allrounder",
+    "style": "physical",
+    "stats": [
+      {"level": 1, "hp": 3300, "atk": 140, "def": 80, "sp_atk": 20, "sp_def": 70, "crit": 0},
+      {"level": 2, "hp": 3460, "atk": 151, "def": 95, "sp_atk": 23, "sp_def": 84, "crit": 0},
+      {"level": 3, "hp": 3636, "atk": 164, "def": 111, "sp_atk": 27, "sp_def": 100, "crit": 0},
+      {"level": 4, "hp": 3830, "atk": 178, "def": 129, "sp_atk": 31, "sp_def": 117, "crit": 0},
+      {"level": 5, "hp": 4043, "atk": 193, "def": 149, "sp_atk": 36, "sp_def": 136, "crit": 10},
+      {"level": 6, "hp": 4277, "atk": 210, "def": 171, "sp_atk": 41, "sp_def": 157, "crit": 10},
+      {"level": 7, "hp": 4535, "atk": 228, "def": 195, "sp_atk": 46, "sp_def": 180, "crit": 10},
+      {"level": 8, "hp": 4819, "atk": 248, "def": 222, "sp_atk": 52, "sp_def": 205, "crit": 10},
+      {"level": 9, "hp": 5132, "atk": 270, "def": 251, "sp_atk": 59, "sp_def": 233, "crit": 20},
+      {"level": 10, "hp": 5477, "atk": 294, "def": 283, "sp_atk": 66, "sp_def": 264, "crit": 20},
+      {"level": 11, "hp": 5857, "atk": 321, "def": 319, "sp_atk": 74, "sp_def": 298, "crit": 20},
+      {"level": 12, "hp": 6275, "atk": 351, "def": 358, "sp_atk": 83, "sp_def": 335, "crit": 20},
+      {"level": 13, "hp": 6735, "atk": 384, "def": 401, "sp_atk": 93, "sp_def": 376, "crit": 20},
+      {"level": 14, "hp": 7242, "atk": 420, "def": 448, "sp_atk": 104, "sp_def": 421, "crit": 20},
+      {"level": 15, "hp": 7800, "atk": 460, "def": 500, "sp_atk": 116, "sp_def": 470, "crit": 20}
+    ],
+    "moves": [
+      {
+        "name": "Auto-attack",
+        "can_crit": "true",
+        "image": "assets/moves/basic_attack.png",
+        "damages": [
+          {"name": "Damage", "multiplier": 100, "levelCoef": 0, "constant": 0, "dealDamage": true, "notes": "No boosted attack"}
+        ]
+      },
+      {
+        "name": "Steadfast (Passive)",
+        "can_crit": "false",
+        "image": "assets/moves/sirfetchd/steadfast.png",
+        "damages": []
+      },
+      {
+        "name": "Dual Wingbeat",
+        "can_crit": "true",
+        "image": "assets/moves/sirfetchd/dual_wingbeat.png",
+        "damages": [
+          {"name": "Slash", "multiplier": 84, "levelCoef": 4, "constant": 360, "dealDamage": true},
+          {"name": "Slam", "multiplier": 126, "levelCoef": 6, "constant": 540, "dealDamage": true}
+        ]
+      },
+      {
+        "name": "Quick Attack",
+        "can_crit": "false",
+        "image": "assets/moves/sirfetchd/quick_attack.png",
+        "damages": [
+          {"name": "Damage", "multiplier": 70, "levelCoef": 9, "constant": 350, "dealDamage": true}
+        ]
+      },
+      {
+        "name": "Fury Cutter",
+        "can_crit": "true",
+        "image": "assets/moves/sirfetchd/fury_cutter.png",
+        "damages": [
+          {"name": "Flurry Hit (6x)", "multiplier": 72, "levelCoef": 0, "constant": 122, "dealDamage": true, "notes": "Damage increases by 3% per hit (up to 6% max)"},
+          {"name": "Final Hit", "multiplier": 108, "levelCoef": 0, "constant": 183, "dealDamage": true, "notes": "Stuns for 0.75s"}
+        ]
+      },
+      {
+        "name": "Fury Cutter +",
+        "can_crit": "true",
+        "image": "assets/moves/sirfetchd/fury_cutter.png",
+        "damages": [
+          {"name": "Flurry Hit (6x)", "multiplier": 83, "levelCoef": 0, "constant": 140, "dealDamage": true},
+          {"name": "Final Hit", "multiplier": 124.5, "levelCoef": 0, "constant": 210, "dealDamage": true}
+        ]
+      },
+      {
+        "name": "Leaf Blade",
+        "can_crit": "true",
+        "image": "assets/moves/sirfetchd/leaf_blade.png",
+        "damages": [
+          {"name": "Jab", "multiplier": 200, "levelCoef": 12, "constant": 240, "dealDamage": true},
+          {"name": "Slash", "multiplier": 250, "levelCoef": 15, "constant": 300, "dealDamage": true, "notes": "Throws hit Pokémon"}
+        ]
+      },
+      {
+        "name": "Leaf Blade +",
+        "can_crit": "true",
+        "image": "assets/moves/sirfetchd/leaf_blade.png",
+        "damages": [
+          {"name": "Jab", "multiplier": 230, "levelCoef": 14, "constant": 276, "dealDamage": true},
+          {"name": "Slash", "multiplier": 291, "levelCoef": 16, "constant": 345, "dealDamage": true}
+        ]
+      },
+      {
+        "name": "Brutal Swing",
+        "can_crit": "false",
+        "image": "assets/moves/sirfetchd/brutal_swing.png",
+        "damages": [
+          {"name": "Throw (per hit)", "multiplier": 90, "levelCoef": 0, "constant": 200, "dealDamage": true, "notes": "Can hit same target multiple times every 0.5s"},
+          {"name": "Slam (optional)", "multiplier": 90, "levelCoef": 0, "constant": 200, "dealDamage": true}
+        ]
+      },
+      {
+        "name": "Brutal Swing +",
+        "can_crit": "false",
+        "image": "assets/moves/sirfetchd/brutal_swing.png",
+        "damages": [
+          {"name": "Throw (per hit)", "multiplier": 90, "levelCoef": 0, "constant": 200, "dealDamage": true, "notes": "Can hit same target multiple times every 0.5s"},
+          {"name": "Slam (optional)", "multiplier": 90, "levelCoef": 0, "constant": 200, "dealDamage": true}
+        ]
+      },
+      {
+        "name": "Detect",
+        "can_crit": "false",
+        "image": "assets/moves/sirfetchd/detect.png",
+        "damages": [
+          {"name": "Dash Damage", "multiplier": 110, "levelCoef": 6, "constant": 230, "dealDamage": true}
+        ]
+      },
+      {
+        "name": "Detect +",
+        "can_crit": "false",
+        "image": "assets/moves/sirfetchd/detect.png",
+        "damages": [
+          {"name": "Dash Damage", "multiplier": 110, "levelCoef": 6, "constant": 230, "dealDamage": true}
+        ]
+      },
+      {
+        "name": "Lunging Leek Nova Blast (Unite)",
+        "can_crit": "false",
+        "image": "assets/moves/sirfetchd/lunging_leek_nova_blast.png",
+        "damages": [
+          {"name": "Charge (per hit, 5x)", "multiplier": 100, "levelCoef": 0, "constant": 200, "dealDamage": true},
+          {"name": "Explosion", "multiplier": 200, "levelCoef": 0, "constant": 400, "dealDamage": true, "notes": "Double damage, stuns 0.4s"}
+        ]
+      }
+    ]
+  },
+  {
     "pokemonId": "slowbro",
     "dex": 80,
     "role": "defender",
