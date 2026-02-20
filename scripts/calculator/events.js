@@ -205,12 +205,24 @@ export function setupDebuffListeners() {
 }
 
 export function setupStackableDebuffs() {
-  const stackableDebuffs = {
-    'umbreonSnarlDebuffAttacker': { max: 6 },
-    'sylveonMysticalFireDebuffAttacker': { max: 4 }
+  // Stackables attaquants
+  const attackerStackable = {
+    'umbreonSnarlDebuffAttacker':       { max: 6, stateKey: 'umbreonSnarlStacks' },
+    'sylveonMysticalFireDebuffAttacker': { max: 4, stateKey: 'sylveonMysticalFireStacks' }
   };
 
-  Object.entries(stackableDebuffs).forEach(([id, config]) => {
+  // Stackables défenseurs
+  const defenderStackable = {
+    'gardevoirPsychicDebuffDefender':         { max: 3,  stateKey: 'gardevoirPsychicStacks' },
+    'mimePsychicDebuffDefender':              { max: 8,  stateKey: 'mimePsychicStacks' },
+    'slowbroObliviousDebuffDefender':         { max: 5,  stateKey: 'slowbroObliviousStacks' },
+    'sylveonHyperVoiceDebuffDefender':        { max: 4,  stateKey: 'sylveonHypervoiceStacks' },
+    'alolanRaichuStoredPowerPlusDebuffDefender': { max: 3, stateKey: 'raichuStoredpowerStacks' }
+  };
+
+  const allStackable = { ...attackerStackable, ...defenderStackable };
+
+  Object.entries(allStackable).forEach(([id, config]) => {
     const checkbox = document.getElementById(id);
     if (!checkbox) return;
 
@@ -236,8 +248,7 @@ export function setupStackableDebuffs() {
     let currentStacks = 0;
 
     const updateStacks = () => {
-      if (id === 'umbreonSnarlDebuffAttacker') state.umbreonSnarlStacks = currentStacks;
-      if (id === 'sylveonMysticalFireDebuffAttacker') state.sylveonMysticalFireStacks = currentStacks;
+      state[config.stateKey] = currentStacks;
       updateDamages();
     };
 

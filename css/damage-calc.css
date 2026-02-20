@@ -57,7 +57,7 @@ h1 {
   box-shadow: 0 10px 30px rgba(0,0,0,0.6);
   border: 3px solid transparent;
   transition: border-color 0.4s, box-shadow 0.4s;
-  min-width: 0; /* prevent grid blowout */
+  min-width: 0;
 }
 
 .pokemon-panel:hover {
@@ -539,16 +539,17 @@ h1 {
 .slider-block input[type="range"] {
   -webkit-appearance: none;
   width: 100%;
-  height: 8px;
-  border-radius: 8px;
+  height: 4px;
+  border-radius: 4px;
   background: rgba(255,255,255,0.12);
   outline: none;
   cursor: pointer;
   transition: all 0.2s;
-  margin: 0;
+  margin: 6px 0;
 }
 
-/* Level slider — track attacker */
+/* ── Level slider tracks ── */
+
 .attacker-stats .slider-block input[type="range"]:not(.hp-slider)::-webkit-slider-runnable-track,
 .attacker .slider-block input[type="range"]:not(.hp-slider)::-webkit-slider-runnable-track {
   background: linear-gradient(to right,
@@ -557,11 +558,10 @@ h1 {
     rgba(255,255,255,0.12) calc((var(--value, 15) - 1) / 14 * 100%),
     rgba(255,255,255,0.12) 100%
   );
-  border-radius: 8px;
-  height: 8px;
+  border-radius: 4px;
+  height: 4px;
 }
 
-/* Level slider — track defender */
 .defender-stats .slider-block input[type="range"]:not(.hp-slider)::-webkit-slider-runnable-track,
 .defender .slider-block input[type="range"]:not(.hp-slider)::-webkit-slider-runnable-track {
   background: linear-gradient(to right,
@@ -570,51 +570,52 @@ h1 {
     rgba(255,255,255,0.12) calc((var(--value, 15) - 1) / 14 * 100%),
     rgba(255,255,255,0.12) 100%
   );
-  border-radius: 8px;
-  height: 8px;
+  border-radius: 4px;
+  height: 4px;
 }
 
-/* Level slider — thumb attacker */
+/* ── Level slider thumbs — trait fin ── */
+
 .attacker-stats .slider-block input[type="range"]:not(.hp-slider)::-webkit-slider-thumb,
 .attacker .slider-block input[type="range"]:not(.hp-slider)::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
+  width: 3px;
+  height: 18px;
+  border-radius: 2px;
   background: var(--violet);
-  border: 3px solid var(--text-white);
-  box-shadow: 0 0 10px var(--violet-glow);
+  border: none;
+  box-shadow: 0 0 6px var(--violet-glow);
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: height 0.2s, box-shadow 0.2s;
 }
 
 .attacker-stats .slider-block input[type="range"]:not(.hp-slider)::-webkit-slider-thumb:hover,
 .attacker .slider-block input[type="range"]:not(.hp-slider)::-webkit-slider-thumb:hover {
-  transform: scale(1.2);
-  box-shadow: 0 0 18px var(--violet-glow);
+  height: 24px;
+  box-shadow: 0 0 12px var(--violet-glow);
 }
 
-/* Level slider — thumb defender */
 .defender-stats .slider-block input[type="range"]:not(.hp-slider)::-webkit-slider-thumb,
 .defender .slider-block input[type="range"]:not(.hp-slider)::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
+  width: 3px;
+  height: 18px;
+  border-radius: 2px;
   background: var(--orange);
-  border: 3px solid var(--text-white);
-  box-shadow: 0 0 10px var(--orange-glow);
+  border: none;
+  box-shadow: 0 0 6px var(--orange-glow);
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: height 0.2s, box-shadow 0.2s;
 }
 
 .defender-stats .slider-block input[type="range"]:not(.hp-slider)::-webkit-slider-thumb:hover,
 .defender .slider-block input[type="range"]:not(.hp-slider)::-webkit-slider-thumb:hover {
-  transform: scale(1.2);
-  box-shadow: 0 0 18px var(--orange-glow);
+  height: 24px;
+  box-shadow: 0 0 12px var(--orange-glow);
 }
 
-/* HP slider — track dégradée */
+/* ── HP slider track ── */
+
 .hp-slider::-webkit-slider-runnable-track {
   background: linear-gradient(90deg,
     var(--red) 0%,
@@ -622,44 +623,77 @@ h1 {
     var(--green) 70%,
     var(--green) 100%
   );
-  border-radius: 8px;
-  height: 8px;
+  border-radius: 4px;
+  height: 4px;
 }
 
-/* HP slider — thumb attacker */
+/* ── HP slider thumbs — trait fin ── */
+
 .attacker-stats .hp-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
+  width: 3px;
+  height: 18px;
+  border-radius: 2px;
   background: var(--violet);
-  border: 3px solid var(--text-white);
-  box-shadow: 0 0 10px var(--violet-glow);
+  border: none;
+  box-shadow: 0 0 6px var(--violet-glow);
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: height 0.2s, box-shadow 0.2s;
 }
 
 .attacker-stats .hp-slider::-webkit-slider-thumb:hover {
-  transform: scale(1.2);
-  box-shadow: 0 0 18px var(--violet-glow);
+  height: 24px;
+  box-shadow: 0 0 12px var(--violet-glow);
 }
 
-/* HP slider — thumb defender */
 .defender-stats .hp-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
+  width: 3px;
+  height: 18px;
+  border-radius: 2px;
   background: var(--orange);
-  border: 3px solid var(--text-white);
-  box-shadow: 0 0 10px var(--orange-glow);
+  border: none;
+  box-shadow: 0 0 6px var(--orange-glow);
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: height 0.2s, box-shadow 0.2s;
 }
 
 .defender-stats .hp-slider::-webkit-slider-thumb:hover {
-  transform: scale(1.2);
-  box-shadow: 0 0 18px var(--orange-glow);
+  height: 24px;
+  box-shadow: 0 0 12px var(--orange-glow);
+}
+
+/* ── Firefox thumbs ── */
+
+.slider-block input[type="range"]::-moz-range-thumb {
+  width: 3px;
+  height: 18px;
+  border-radius: 2px;
+  border: none;
+  cursor: pointer;
+  transition: height 0.2s;
+}
+
+.attacker-stats .slider-block input[type="range"]:not(.hp-slider)::-moz-range-thumb,
+.attacker .slider-block input[type="range"]:not(.hp-slider)::-moz-range-thumb {
+  background: var(--violet);
+  box-shadow: 0 0 6px var(--violet-glow);
+}
+
+.defender-stats .slider-block input[type="range"]:not(.hp-slider)::-moz-range-thumb,
+.defender .slider-block input[type="range"]:not(.hp-slider)::-moz-range-thumb {
+  background: var(--orange);
+  box-shadow: 0 0 6px var(--orange-glow);
+}
+
+.attacker-stats .hp-slider::-moz-range-thumb {
+  background: var(--violet);
+  box-shadow: 0 0 6px var(--violet-glow);
+}
+
+.defender-stats .hp-slider::-moz-range-thumb {
+  background: var(--orange);
+  box-shadow: 0 0 6px var(--orange-glow);
 }
 
 /* Legacy */
@@ -1249,7 +1283,6 @@ h1 {
    RESPONSIVE
    ============================================= */
 
-/* Large desktop — 1400px */
 @media (max-width: 1400px) {
   .results-container {
     grid-template-columns: minmax(0, 1fr) minmax(0, 2.5fr) minmax(0, 1fr);
@@ -1262,7 +1295,6 @@ h1 {
   }
 }
 
-/* Tablet landscape — 1100px: battle container passe en colonne */
 @media (max-width: 1100px) {
   .battle-container {
     grid-template-columns: 1fr;
@@ -1291,11 +1323,10 @@ h1 {
   }
 }
 
-/* Tablet portrait — 768px */
 @media (max-width: 768px) {
   body {
     padding: 1rem;
-    margin-left: 0; /* navbar cachée ou overlay sur mobile */
+    margin-left: 0;
   }
 
   h1 { font-size: 1.5rem; margin-bottom: 1.2rem; }
@@ -1340,7 +1371,6 @@ h1 {
   }
 }
 
-/* Mobile — 480px */
 @media (max-width: 480px) {
   body { padding: 0.8rem; }
 
@@ -1361,7 +1391,7 @@ h1 {
 
   .item-equipped-icon { width: 38px; height: 38px; }
   .item-equipped-name { font-size: 0.65rem; }
-  .item-equipped-stats { display: none; } /* trop petit, caché sur mobile */
+  .item-equipped-stats { display: none; }
 
   .pokemon-grid-wrapper { max-height: 160px; }
   .pokemon-grid { grid-template-columns: repeat(auto-fill, minmax(48px, 1fr)); }

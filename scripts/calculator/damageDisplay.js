@@ -22,7 +22,12 @@ import {
   applyMegaMewtwoAttacker,
   applyMegaMewtwoYAttacker,
   applyMimikyuAttacker,
-  applyRapidashAttacker
+  applyRapidashAttacker,
+  applySirfetchdAttacker,
+  applySylveonAttacker,
+  applyTinkatonAttacker,
+  applyTyranitarAttacker,
+  applyZeraoraAttacker
 } from './passiveEffectsAtk.js';
 
 import {
@@ -37,7 +42,12 @@ import {
   applyMamoswineDefender,
   applyMegaMewtwoDefender,
   applyMegaMewtwoYDefender,
-  applyMimeDefender
+  applyMimeDefender,
+  applySylveonDefender,
+  applyTyranitarDefender,
+  applyUmbreonDefender,
+  applyGarchompDefender,
+  applyFalinksDefender
 } from './passiveEffectsDef.js';
 
 
@@ -169,6 +179,16 @@ export function updateDamages() {
     )
   }
 
+  // Sylveon
+  if (state.currentDefender?.pokemonId === "sylveon") {
+    const isEevee = state.defenderLevel <= 3;
+    if (!isEevee) {
+      defStats.sp_def = Math.floor(
+        defStats.sp_def * (1 + state.defenderPassiveStacks * 0.025)
+      );
+    }
+  }
+
   // Machamp
   if (state.currentAttacker?.pokemonId === "machamp" && state.attackerMachampActive) {
     atkStats.atk = Math.floor(
@@ -183,6 +203,27 @@ export function updateDamages() {
     atkStats.atk = Math.floor(
       atkStats.atk * (1 + state.currentAttacker.passive.bonusPercentAtk / 100)
     );
+  }
+
+  if (state.currentAttacker?.pokemonId === "tyranitar") {
+    if (state.attackerLevel <= 5 && state.attackerTyranitarGutsActive) {
+      atkStats.atk = Math.floor(atkStats.atk * 1.30);
+    }
+  }
+
+  if (state.currentAttacker?.pokemonId === "sylveon") {
+    const isEevee = state.attackerLevel <= 3;
+    const percent = isEevee ? 0.05 : 0.025;
+    atkStats.sp_atk = Math.floor(atkStats.sp_atk * (1 + percent * state.attackerPassiveStacks));
+  }
+
+  if (state.currentAttacker?.pokemonId === "zeraora") {
+    const bonusAtk = Math.min(Math.floor(state.attackerZeraoraDamageReceived * 0.08), 200);
+    atkStats.atk += bonusAtk;
+  }
+
+  if (state.currentAttacker?.pokemonId === "tinkaton") {
+    atkStats.atk = Math.floor(atkStats.atk * (1 + 0.005 * state.attackerPassiveStacks));
   }
 
   const currentDefHP = Math.floor(defStats.hp * (state.defenderHPPercent / 100));
@@ -228,6 +269,10 @@ export function updateDamages() {
     totalCritChance += state.currentAttacker.passive.bonusCrit;
   }
 
+  if (["sirfetchd"].includes(state.currentAttacker?.pokemonId)) {
+    totalCritChance += state.attackerPassiveStacks * 5;
+  }
+
   document.getElementById('attackerCritChance').textContent = `${totalCritChance}%`;
 
   document.querySelectorAll('.global-bonus-line').forEach(el => el.remove());
@@ -267,6 +312,21 @@ export function updateDamages() {
         : 0,
     defenderDamageMult
   };
+
+  if (state.currentDefender?.pokemonId === "garchomp") {
+    const aaPreview = getAutoAttackResults(atkStats, defStats, currentDefHP, 1.0);
+    const reflectDamage = Math.floor(aaPreview.normal * 0.30);
+
+    const defenderCard = document.querySelector('.defender-stats');
+    const line = document.createElement("div");
+    line.className = "global-bonus-line";
+    line.innerHTML = `
+      <div style="margin:12px 0;padding:8px 12px;background:#2a1f0f;border-radius:8px;border-left:4px solid #ff9d00;font-size:0.9rem;">
+        <strong style="color:#ff9d00;">Rough Skin</strong> — Reflects ~<strong>${reflectDamage.toLocaleString()}</strong> dmg on AA contact
+      </div>
+    `;
+    defenderCard.appendChild(line);
+  }
 
   displayMoves(atkStats, defStats, finalEffects, currentDefHP);
   updateHPDisplays();
@@ -401,7 +461,12 @@ function applyAttackerPassive(pokemonId, atkStats, defStats, card) {
     "mewtwo_x": applyMegaMewtwoAttacker,
     "mewtwo_y": applyMegaMewtwoYAttacker,
     mimikyu: applyMimikyuAttacker,
-    rapidash: applyRapidashAttacker
+    rapidash: applyRapidashAttacker,
+    sirfetchd: applySirfetchdAttacker,
+    sylveon: applySylveonAttacker,
+    tinkaton: applyTinkatonAttacker,
+    tyranitar: applyTyranitarAttacker,
+    zeraora: applyZeraoraAttacker
   };
 
   handlers[pokemonId]?.(atkStats, defStats, card);
@@ -420,7 +485,12 @@ function applyDefenderPassive(pokemonId, atkStats, defStats, card) {
     mamoswine: applyMamoswineDefender,
     "mewtwo_x": applyMegaMewtwoDefender,
     "mewtwo_y": applyMegaMewtwoYDefender,
-    "mr_mime": applyMimeDefender
+    "mr_mime": applyMimeDefender,
+    sylveon: applySylveonDefender,
+    tyranitar: applyTyranitarDefender,
+    umbreon: applyUmbreonDefender,
+    garchomp: applyGarchompDefender,
+    falinks: applyFalinksDefender
 
   };
 
@@ -582,7 +652,6 @@ function displayMoves(atkStats, defStats, effects, currentDefHP) {
       normal = Math.floor(normal * muscleMult);
       crit = Math.floor(crit * muscleMult);
 
-      // Pokemon Mult Damage
       const woundMult = getAttackerWoundMultiplier();
       normal = Math.floor(normal * woundMult);
       crit = Math.floor(crit * woundMult);
@@ -630,6 +699,24 @@ function displayMoves(atkStats, defStats, effects, currentDefHP) {
       }
 
       card.appendChild(line);
+
+      // Cap 110% Falinks multi-hit
+      if (
+        state.currentDefender?.pokemonId === "falinks" &&
+        state.defenderFalinksMultiHit
+      ) {
+        const capValue = Math.floor(displayedNormal * 1.10);
+        const capLine = document.createElement("div");
+        capLine.className = "damage-line";
+        capLine.innerHTML = `
+          <span class="dmg-name" style="color:#cc99ff;font-size:0.85em;">⚠️ Cap multi-hit Falinks (110%)</span>
+          <div class="dmg-values">
+            <span class="dmg-normal" style="color:#cc99ff;">${capValue.toLocaleString()}</span>
+          </div>
+        `;
+        card.appendChild(capLine);
+      }
+
       firstHit = false;
     });
 

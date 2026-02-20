@@ -868,5 +868,35 @@
     "file": "sirfetchd_all.png",
     "role": "all",
     "dex": 865
+  },
+  {
+    "name": "Articuno",
+    "name_fr": "Artikodin",
+    "name_es": "Articuno",
+    "name_de": "Arktos",
+    "name_it": "Articuno",
+    "file": "articuno_def.png",
+    "role": "def",
+    "dex": 144
+  },
+  {
+    "name": "Zapdos",
+    "name_fr": "Électhor",
+    "name_es": "Zapdos",
+    "name_de": "Zapdos",
+    "name_it": "Zapdos",
+    "file": "zapdos_all.png",
+    "role": "all",
+    "dex": 145
+  },
+  {
+    "name": "Moltres",
+    "name_fr": "Sulfura",
+    "name_es": "Moltres",
+    "name_de": "Lavados",
+    "name_it": "Moltres",
+    "file": "moltres_atk.png",
+    "role": "atk",
+    "dex": 146
   }
 ]

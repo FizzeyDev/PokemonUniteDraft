@@ -214,4 +214,10 @@ function resetDefenderDebuffs() {
   state.defenderLatiasDragonBreath = false;
   state.defenderEmpoleonAquaJetTorrent = false;
   state.defenderDhelmiseAnchorShotPlus = false;
+
+  state.gardevoirPsychicStacks = 0;
+  state.mimePsychicStacks = 0;
+  state.slowbroObliviousStacks = 0;
+  state.sylveonHypervoiceStacks = 0;
+  state.raichuStoredpowerStacks = 0;
 }

@@ -23,7 +23,7 @@
     ],
     "passive": {
       "name": "Super Luck",
-      "image": "assets/moves/aegislash/super.png",
+      "image": "assets/moves/absol/super_luck.png",
       "description": "This Pokémon's critical-hit rate is increased by an additional 15%.",
       "critBonus": "15%"
     },
@@ -1254,6 +1254,14 @@
             ]
         },
         {
+            "name": "Tough Claws (Passive)",
+            "can_crit": "false",
+            "image": "assets/moves/mega_charizard_x/tough_claws.png",
+            "damages": [
+                {"name": "Added to Move (Mega)", "multiplier": 212, "levelCoef": 8, "constant": 240, "dealDamage": true}
+            ]
+        },
+        {
             "name": "Flame Burst",
             "can_crit": "false",
             "image": "assets/moves/mega_charizard_x/flame_burst.png",
@@ -1302,14 +1310,6 @@
             "image": "assets/moves/mega_charizard_x/solar_power.png",
             "damages": [
                 {"name": "Added to Move (Pre-Mega)", "multiplier": 106, "levelCoef": 4, "constant": 120, "dealDamage": true}
-            ]
-        },
-        {
-            "name": "Tough Claws Additional Damage",
-            "can_crit": "false",
-            "image": "assets/moves/mega_charizard_x/tough_claws.png",
-            "damages": [
-                {"name": "Added to Move (Mega)", "multiplier": 212, "levelCoef": 8, "constant": 240, "dealDamage": true}
             ]
         }
     ]
@@ -1434,6 +1434,14 @@
             ]
         },
         {
+            "name": "Blaze (Passive)",
+            "can_crit": "false",
+            "image": "assets/moves/cinderace/blaze.png",
+            "damages": [
+                {"name": "Flare Damage", "multiplier": 0, "levelCoef": 0, "constant": 0, "dealDamage": true, "notes": "90% Atk + 0.6% Enemy Max HP x (Level - 1) + 25"}
+            ]
+        },
+        {
             "name": "Ember",
             "can_crit": "false",
             "image": "assets/moves/cinderace/ember.png",
@@ -1490,14 +1498,6 @@
                 {"name": "Damage", "multiplier": 247, "levelCoef": 14, "constant": 670, "dealDamage": true},
                 {"name": "Execute", "multiplier": 0, "levelCoef": 0, "constant": 0, "dealDamage": true, "notes": "14% of enemy missing HP"},
                 {"name": "Shield (Buff)", "multiplier": 0, "levelCoef": 0, "constant": 0, "shield": true, "notes": "20% max HP for 6s"}
-            ]
-        },
-        {
-            "name": "Blaze (Passive)",
-            "can_crit": "false",
-            "image": "assets/moves/cinderace/blaze.png",
-            "damages": [
-                {"name": "Flare Damage", "multiplier": 0, "levelCoef": 0, "constant": 0, "dealDamage": true, "notes": "90% Atk + 0.6% Enemy Max HP x (Level - 1) + 25"}
             ]
         }
     ]

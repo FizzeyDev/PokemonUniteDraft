@@ -65,6 +65,12 @@ export const state = {
   attackerMeowscaradaActive: false,
   attackerMimikyuActive: false,
   defenderMimeActive: false,
+  attackerTyranitarGutsActive: false,
+  defenderTyranitarSandStreamActive: false,
+  defenderUmbreonInnerFocusActive: false,
+  attackerZeraoraDamageReceived: 0,
+  defenderFalinksTarget: "brass",
+  defenderFalinksMultiHit: false,
 
   // Buffs attaquant
   attackerRegisteelBuff: false,

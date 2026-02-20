@@ -2,8 +2,8 @@ import { state, fearlessTeamA, fearlessTeamB } from "./state.js";
 import { highlightCurrentSlot, updateTurn } from "./ui.js";
 import { endDraft } from "./draft.js";
 
-let currentRole = null;       // null = tous les rôles visibles
-let searchTerm = "";          // terme de recherche actuel
+let currentRole = null;
+let searchTerm = "";
 
 function applyFiltersAndSearch() {
   const query = searchTerm.toLowerCase();
@@ -11,7 +11,6 @@ function applyFiltersAndSearch() {
   state.allImages.forEach(img => {
     let visible = true;
 
-    // Filtre par rôle
     if (currentRole !== null) {
       const roleMatch = currentRole === "unknown"
         ? !["def", "atk", "sup", "spe", "all"].includes(img.dataset.role)
@@ -19,7 +18,6 @@ function applyFiltersAndSearch() {
       visible = roleMatch;
     }
 
-    // Filtre par recherche
     if (query) {
       const name = (img.alt || "").toLowerCase();
       visible = visible && name.includes(query);
@@ -42,8 +40,8 @@ export function renderGallery() {
 
   sorted.forEach(mon => {
     const img = document.createElement("img");
-    img.src          = `assets/pokemon/${mon.file}`;
-    img.alt          = mon[`name_${currentLang}`] || mon.name;
+    img.src = `assets/pokemon/${mon.file}`;
+    img.alt = mon[`name_${currentLang}`] || mon.name;
     img.dataset.file = mon.file;
     img.dataset.role = mon.role;
     img.addEventListener("click", () => onPokemonClick(img));
@@ -52,7 +50,6 @@ export function renderGallery() {
     state.allImages.push(img);
   });
 
-  // Réapplique les filtres/recherche après re-render
   applyFiltersAndSearch();
 }
 
@@ -95,7 +92,7 @@ export function initSortSelect() {
   if (!sortSelect) return;
   sortSelect.addEventListener("change", e => {
     state.currentSort = e.target.value;
-    renderGallery(); // renderGallery appliquera automatiquement les filtres/recherche
+    renderGallery();
   });
 }
 
@@ -105,14 +102,12 @@ export function initFilters() {
       const role = btn.dataset.role;
 
       if (btn.classList.contains("active")) {
-        // Désactive le filtre actuel → tout afficher
         btn.classList.remove("active");
-        currentRole = null;
+        currentRole = role === "unknown" ? null : role;
       } else {
-        // Active celui-ci, désactive les autres
         document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
-        currentRole = role;
+        currentRole = role === "unknown" ? null : role;
       }
 
       applyFiltersAndSearch();
@@ -128,7 +123,4 @@ export function initSearch() {
     searchTerm = e.target.value.trim();
     applyFiltersAndSearch();
   });
-
-  // Optionnel : vider la recherche au début d’un nouveau draft complet
-  // (pas nécessaire en mode Fearless car on veut garder les filtres)
 }

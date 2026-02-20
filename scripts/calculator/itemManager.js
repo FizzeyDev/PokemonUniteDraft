@@ -72,9 +72,9 @@ export function setupItemSearch() {
   search.addEventListener('input', () => {
     const term = search.value.toLowerCase();
     document.querySelectorAll('#itemGrid .item-grid-item').forEach(el => {
-      if (el.classList.contains('equipped-elsewhere')) return; // déjà caché
+      if (el.classList.contains('equipped-elsewhere')) return; // déjà hidden par CSS
       const name = (el.querySelector('span')?.textContent || '').toLowerCase();
-      el.style.display = name.includes(term) ? 'block' : 'none';
+      el.style.display = name.includes(term) ? '' : 'none';
     });
   });
 }
@@ -110,8 +110,14 @@ function filterItemGridForSide(side) {
 
   document.querySelectorAll('#itemGrid .item-grid-item').forEach(el => {
     const spanText = el.querySelector('span')?.textContent;
-    const item = state.allItems.find(i => (i.display_name || i.name) === spanText);
-    el.classList.toggle('equipped-elsewhere', !!(item && equippedNames.has(item.name)));
+    const item = state.allItems.find(i =>
+      (i.display_name || i.name) === spanText || i.name === spanText
+    );
+    const isEquipped = !!(item && equippedNames.has(item.name));
+    el.classList.toggle('equipped-elsewhere', isEquipped);
+    if (!isEquipped) {
+      el.style.display = '';
+    }
   });
 }
 
