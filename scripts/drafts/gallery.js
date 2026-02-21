@@ -1,5 +1,5 @@
 import { state, fearlessTeamA, fearlessTeamB } from "./state.js";
-import { highlightCurrentSlot, updateTurn } from "./ui.js";
+import { highlightCurrentSlot, updateTurn, findNextBanSlot, findNextPickSlot } from "./ui.js";
 import { endDraft } from "./draft.js";
 
 let currentRole = null;
@@ -8,22 +8,17 @@ let currentLang = localStorage.getItem('lang') || 'fr';
 
 function applyFiltersAndSearch() {
   const query = searchTerm.toLowerCase();
-
   state.allImages.forEach(img => {
     let visible = true;
-
     if (currentRole !== null) {
       const roleMatch = currentRole === "unknown"
         ? !["def", "atk", "sup", "spe", "all"].includes(img.dataset.role)
         : img.dataset.role === currentRole;
       visible = roleMatch;
     }
-
     if (query) {
-      const name = (img.alt || "").toLowerCase();
-      visible = visible && name.includes(query);
+      visible = visible && (img.alt || "").toLowerCase().includes(query);
     }
-
     img.style.display = visible ? "block" : "none";
   });
 }
@@ -41,12 +36,11 @@ export function renderGallery() {
 
   sorted.forEach(mon => {
     const img = document.createElement("img");
-    img.src = `assets/pokemon/${mon.file}`;
-    img.alt = mon[`name_${currentLang}`] || mon.name;
+    img.src          = `assets/pokemon/${mon.file}`;
+    img.alt          = mon[`name_${currentLang}`] || mon.name;
     img.dataset.file = mon.file;
     img.dataset.role = mon.role;
     img.addEventListener("click", () => onPokemonClick(img));
-
     gallery.appendChild(img);
     state.allImages.push(img);
   });
@@ -55,7 +49,7 @@ export function renderGallery() {
 }
 
 function onPokemonClick(img) {
-  // ── Blocage multijoueur : vérifie que c'est bien ton tour ──
+  // Multiplayer turn check
   const isMyTurn = window._mpIsMyTurn ? window._mpIsMyTurn() : true;
   if (!isMyTurn) {
     _showNotYourTurn();
@@ -69,13 +63,23 @@ function onPokemonClick(img) {
   ) return;
 
   const step = state.currentDraftOrder[state.currentStep];
-  const team = document.getElementById(step.team);
-  const slot = Array.from(team.querySelectorAll(`.slots.${step.type}s .slot`))
-                    .find(s => !s.querySelector("img"));
+
+  // Find the right slot
+  let slot;
+  if (step.type === "ban") {
+    slot = findNextBanSlot(step.team);
+  } else {
+    slot = findNextPickSlot(step.team);
+  }
   if (!slot) return;
 
+  // Place image in slot
+  const clone = img.cloneNode(true);
+  clone.style.cssText = ""; // reset any inline styles from gallery
   slot.innerHTML = "";
-  slot.appendChild(img.cloneNode(true));
+  slot.appendChild(clone);
+  if (step.type === "ban") slot.classList.add("filled");
+
   img.classList.add("used");
 
   if (state.fearlessMode && step.type === "pick") {
@@ -83,10 +87,8 @@ function onPokemonClick(img) {
     teamSet.add(img.dataset.file);
   }
 
-  // ── Publie le pick en multijoueur ──
-  if (window._mpPublishPick) {
-    window._mpPublishPick(state.currentStep, img.dataset.file);
-  }
+  // Publish in multiplayer
+  if (window._mpPublishPick) window._mpPublishPick(state.currentStep, img.dataset.file);
 
   state.currentStep++;
   updateTurn();
@@ -100,7 +102,6 @@ function onPokemonClick(img) {
   }
 }
 
-// ── Feedback visuel "Pas ton tour" ──────────────────
 function _showNotYourTurn() {
   const el = document.getElementById("not-your-turn-toast");
   if (!el) return;
@@ -121,16 +122,14 @@ export function initFilters() {
   document.querySelectorAll(".filter-btn").forEach(btn => {
     btn.addEventListener("click", () => {
       const role = btn.dataset.role;
-
       if (btn.classList.contains("active")) {
         btn.classList.remove("active");
-        currentRole = role === "unknown" ? null : role;
+        currentRole = null;
       } else {
         document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
-        currentRole = role === "unknown" ? null : role;
+        currentRole = role === "unknown" ? "unknown" : role;
       }
-
       applyFiltersAndSearch();
     });
   });
@@ -139,7 +138,6 @@ export function initFilters() {
 export function initSearch() {
   const searchInput = document.getElementById("search-input");
   if (!searchInput) return;
-
   searchInput.addEventListener("input", e => {
     searchTerm = e.target.value.trim();
     applyFiltersAndSearch();

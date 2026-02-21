@@ -15,29 +15,45 @@ export function updateTurn() {
     _hideMpTurnIndicator();
     return;
   }
-  const step  = state.currentDraftOrder[state.currentStep];
-  const label = step.team === "teamA" ? "Purple Team" : "Orange Team";
-  const color = step.team === "teamA" ? "#9f53ec" : "#ffa500";
+  const step   = state.currentDraftOrder[state.currentStep];
+  const label  = step.team === "teamA" ? "Purple Team" : "Orange Team";
+  const color  = step.team === "teamA" ? "var(--violet, #9f53ec)" : "var(--orange, #ff9d00)";
   const action = step.type === "ban" ? "to Ban" : "to Pick";
-  turnDisplay.innerHTML = `<span style="color:${color};">${label}</span> ${action}`;
+  turnDisplay.innerHTML = `<span style="color:${color};">${label}</span><br>${action}`;
   turnDisplay.style.display = "block";
 
-  // Met à jour l'indicateur MP si actif
   if (mpState.enabled) {
     import("./draft.js").then(({ _updateMpTurnIndicator }) => _updateMpTurnIndicator());
   }
 }
 
 export function highlightCurrentSlot() {
-  document.querySelectorAll(".slot").forEach(s => s.classList.remove("current-pick"));
+  document.querySelectorAll(".slot.current-pick, .ban-slot.current-pick")
+    .forEach(s => s.classList.remove("current-pick"));
 
-  if (state.currentStep < state.currentDraftOrder.length) {
-    const step = state.currentDraftOrder[state.currentStep];
-    const team = document.getElementById(step.team);
-    const slot = Array.from(team.querySelectorAll(`.slots.${step.type}s .slot`))
-      .find(s => !s.querySelector("img"));
-    if (slot) slot.classList.add("current-pick");
+  if (state.currentStep >= state.currentDraftOrder.length) {
+    updateFearlessRestrictions();
+    return;
   }
+
+  const step = state.currentDraftOrder[state.currentStep];
+
+  if (step.type === "ban") {
+    const bansContainer = document.getElementById(`bans-${step.team}`);
+    if (bansContainer) {
+      const slot = Array.from(bansContainer.querySelectorAll(".ban-slot"))
+                        .find(s => !s.querySelector("img"));
+      if (slot) slot.classList.add("current-pick");
+    }
+  } else {
+    const picksContainer = document.getElementById(`picks-${step.team}`);
+    if (picksContainer) {
+      const slot = Array.from(picksContainer.querySelectorAll(".slot"))
+                        .find(s => !s.querySelector("img"));
+      if (slot) slot.classList.add("current-pick");
+    }
+  }
+
   updateFearlessRestrictions();
 }
 
@@ -58,12 +74,20 @@ export function updateFearlessRestrictions() {
 
 export function resetDraftSlots() {
   ["teamA", "teamB"].forEach(teamId => {
-    const team = document.getElementById(teamId);
-    if (!team) return;
-    team.querySelectorAll(".slots .slot").forEach(slot => {
-      slot.innerHTML = slot.closest(".picks") ? (state.langData.pick || "Pick") : "";
-      slot.classList.remove("current-pick");
-    });
+    const col = document.getElementById(`picks-${teamId}`);
+    if (col) {
+      col.querySelectorAll(".slot").forEach(slot => {
+        slot.innerHTML = state.langData.pick || "Pick";
+        slot.classList.remove("current-pick");
+      });
+    }
+    const bans = document.getElementById(`bans-${teamId}`);
+    if (bans) {
+      bans.querySelectorAll(".ban-slot").forEach(slot => {
+        slot.innerHTML = "";
+        slot.classList.remove("current-pick", "filled");
+      });
+    }
   });
 }
 
@@ -73,22 +97,44 @@ export function createRecapSlots(originalSlots, isBan = false) {
 
   originalSlots.forEach(oldSlot => {
     const newSlot = document.createElement("div");
-    newSlot.className = "slot" + (isBan ? " ban" : "");
+    newSlot.className = isBan ? "ban-slot filled" : "slot";
 
     const oldImg = oldSlot.querySelector("img");
     if (oldImg) {
-      const img      = document.createElement("img");
-      img.src         = oldImg.src;
-      img.alt         = oldImg.alt;
+      const img = document.createElement("img");
+      img.src = oldImg.src;
+      img.alt = oldImg.alt;
       img.style.cssText = "width:100%;height:100%;border-radius:6px;object-fit:cover;";
-      if (isBan) img.style.opacity = "0.6";
+      if (isBan) img.style.opacity = "0.55";
       newSlot.appendChild(img);
     } else {
-      newSlot.textContent = isBan ? "" : (state.langData.pick || "Pick");
+      if (!isBan) newSlot.textContent = state.langData.pick || "Pick";
     }
     wrap.appendChild(newSlot);
   });
   return wrap;
+}
+
+export function findNextBanSlot(team) {
+  const container = document.getElementById(`bans-${team}`);
+  if (!container) return null;
+  return Array.from(container.querySelectorAll(".ban-slot")).find(s => !s.querySelector("img"));
+}
+
+export function findNextPickSlot(team) {
+  const container = document.getElementById(`picks-${team}`);
+  if (!container) return null;
+  return Array.from(container.querySelectorAll(".slot")).find(s => !s.querySelector("img"));
+}
+
+export function getAllBanSlots(team) {
+  const container = document.getElementById(`bans-${team}`);
+  return container ? Array.from(container.querySelectorAll(".ban-slot")) : [];
+}
+
+export function getAllPickSlots(team) {
+  const container = document.getElementById(`picks-${team}`);
+  return container ? Array.from(container.querySelectorAll(".slot")) : [];
 }
 
 function _hideMpTurnIndicator() {
