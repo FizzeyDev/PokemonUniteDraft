@@ -223,10 +223,18 @@ function _onRoomUpdate(data) {
 
   if (data.status === "drafting" && !_isDraftStarted()) {
     window.dispatchEvent(new CustomEvent("mp:draftStart", { detail: data }));
+    // Après le start, sync les picks déjà joués si on rejoint en cours
+    const remoteStep = data.currentStep || 0;
+    if (remoteStep > 0) {
+      // Petit délai pour laisser le DOM se construire via startDraft()
+      setTimeout(() => _syncPicks(data, remoteStep), 400);
+    }
+    return;
   }
 
   if (data.status === "done" && _isDraftStarted()) {
     window.dispatchEvent(new CustomEvent("mp:draftEnd"));
+    return;
   }
 
   const remoteStep = data.currentStep || 0;
@@ -299,8 +307,8 @@ function _updateOnlineIndicators(data) {
 }
 
 function _isDraftStarted() {
-  const g = document.getElementById("gallery");
-  return g && g.style.display !== "none";
+  const gw = document.getElementById("gallery-wrapper");
+  return gw && gw.style.display === "flex";
 }
 
 // ─── Cleanup ──────────────────────────────────────

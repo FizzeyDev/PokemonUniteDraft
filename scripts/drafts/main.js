@@ -135,17 +135,25 @@ document.getElementById("join-room-btn").addEventListener("click", async () => {
 // ─── Listener : start déclenché par l'hôte ────────
 window.addEventListener("mp:draftStart", (e) => {
   const data = e.detail;
-  state.selectedMap       = data.map;
+
+  // S'assure que tout l'état est set avant de lancer
   state.selectedMode      = data.mode;
+  state.selectedMap       = data.map;
   state.fearlessMode      = data.fearlessMode || false;
   state.currentDraftOrder = [...draftOrders[data.mode]];
 
+  // Sync le bouton de mode visuellement
+  document.querySelectorAll(".mode-btn").forEach(b => {
+    b.classList.toggle("active", b.dataset.mode === data.mode);
+  });
+
   startDraft();
 
-  // Force l'affichage de la gallery côté joueur B
-  document.getElementById("gallery").style.display      = "grid";
-  document.getElementById("filters").style.display      = "flex";
-  document.getElementById("sort-options").style.display = "block";
+  // Force l'affichage de la gallery (sécurité si startDraft rate)
+  document.getElementById("gallery-wrapper").style.display      = "flex";
+  document.getElementById("gallery-wrapper").style.flexDirection = "column";
+  document.getElementById("filters").style.display              = "flex";
+  document.getElementById("sort-options").style.display         = "flex";
 });
 
 window.addEventListener("mp:draftEnd", () => {
