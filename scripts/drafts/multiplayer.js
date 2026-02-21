@@ -16,7 +16,7 @@ import { draftOrders } from "./constants.js";
 // ──────────────────────────────────────────────────
 // 🔧 REMPLACE ICI par l'URL de ta Realtime Database
 // ──────────────────────────────────────────────────
-const DATABASE_URL = "https://unite-draft-default-rtdb.europe-west1.firebasedatabase.app";
+const DATABASE_URL = "https://TON-PROJET-default-rtdb.europe-west1.firebasedatabase.app";
 // ──────────────────────────────────────────────────
 
 // ─── Helpers REST ─────────────────────────────────
@@ -203,34 +203,6 @@ export async function publishDraftStart(fearlessMode, map) {
   });
 }
 
-// ─── Polling de rattrapage ─────────────────────────
-let _catchupInterval = null;
-
-function _startCatchupPolling(roomId) {
-  _stopCatchupPolling();
-  _catchupInterval = setInterval(async () => {
-    if (!mpState.enabled || !roomId) return;
-    try {
-      const data = await dbGet(`rooms/${roomId}`);
-      if (!data) return;
-      const remoteStep = data.currentStep || 0;
-      if (remoteStep > state.currentStep) {
-        console.log(`[MP] Rattrapage : local=${state.currentStep} remote=${remoteStep}`);
-        _syncPicks(data, remoteStep);
-      }
-    } catch (e) {
-      console.warn("[MP] Catchup poll error", e);
-    }
-  }, 3000);
-}
-
-function _stopCatchupPolling() {
-  if (_catchupInterval) {
-    clearInterval(_catchupInterval);
-    _catchupInterval = null;
-  }
-}
-
 // ─── Écoute SSE en temps réel ─────────────────────
 function _subscribeToRoom(roomId) {
   if (mpState.sseConnection) mpState.sseConnection.close();
@@ -238,8 +210,6 @@ function _subscribeToRoom(roomId) {
   mpState.sseConnection = dbListen(`rooms/${roomId}`, (data) => {
     if (data && typeof data === "object") _onRoomUpdate(data);
   });
-
-  _startCatchupPolling(roomId); // 👈 ajoute cette ligne
 }
 
 // ─── Handler principal de mise à jour ─────────────
@@ -276,17 +246,28 @@ function _syncPicks(data, remoteStep) {
     const step = state.currentDraftOrder[i];
     if (!step) continue;
 
-    const teamElem = document.getElementById(step.team);
-    if (!teamElem) continue;
-
-    const slot = Array.from(teamElem.querySelectorAll(`.slots.${step.type}s .slot`))
-                      .find(s => !s.querySelector("img"));
+    // Utilise les nouveaux sélecteurs DOM (bans-teamA / picks-teamA)
+    let slot;
+    if (step.type === "ban") {
+      const container = document.getElementById(`bans-${step.team}`);
+      if (!container) continue;
+      slot = Array.from(container.querySelectorAll(".ban-slot"))
+                  .find(s => !s.querySelector("img"));
+      if (slot) slot.classList.add("filled");
+    } else {
+      const container = document.getElementById(`picks-${step.team}`);
+      if (!container) continue;
+      slot = Array.from(container.querySelectorAll(".slot"))
+                  .find(s => !s.querySelector("img"));
+    }
     if (!slot) continue;
 
     const galleryImg = state.allImages.find(img => img.dataset.file === pick.file);
     if (galleryImg) {
       slot.innerHTML = "";
-      slot.appendChild(galleryImg.cloneNode(true));
+      const clone = galleryImg.cloneNode(true);
+      clone.style.cssText = "";
+      slot.appendChild(clone);
       galleryImg.classList.add("used");
     }
 
@@ -319,7 +300,7 @@ function _updateOnlineIndicators(data) {
 
 function _isDraftStarted() {
   const g = document.getElementById("gallery");
-  return g && g.style.display === "grid";
+  return g && g.style.display !== "none";
 }
 
 // ─── Cleanup ──────────────────────────────────────
@@ -328,7 +309,6 @@ export function disconnectRoom() {
     mpState.sseConnection.close();
     mpState.sseConnection = null;
   }
-  _stopCatchupPolling(); // 👈 ajoute cette ligne
   mpState.enabled    = false;
   mpState.roomId     = null;
   mpState.playerRole = null;
