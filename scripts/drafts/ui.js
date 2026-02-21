@@ -10,9 +10,11 @@ export function updateDynamicContent() {
 
 export function updateTurn() {
   const turnDisplay = document.getElementById("turn-display");
+  if (!turnDisplay) return;
   if (state.currentStep >= state.currentDraftOrder.length) {
     turnDisplay.style.display = "none";
-    _hideMpTurnIndicator();
+    const ind = document.getElementById("mp-turn-indicator");
+    if (ind) ind.style.display = "none";
     return;
   }
   const step   = state.currentDraftOrder[state.currentStep];
@@ -22,6 +24,7 @@ export function updateTurn() {
   turnDisplay.innerHTML = `<span style="color:${color};">${label}</span><br>${action}`;
   turnDisplay.style.display = "block";
 
+  // Met à jour l'indicateur MP
   if (mpState.enabled) {
     import("./draft.js").then(({ _updateMpTurnIndicator }) => _updateMpTurnIndicator());
   }
@@ -30,85 +33,65 @@ export function updateTurn() {
 export function highlightCurrentSlot() {
   document.querySelectorAll(".slot.current-pick, .ban-slot.current-pick")
     .forEach(s => s.classList.remove("current-pick"));
-
   if (state.currentStep >= state.currentDraftOrder.length) {
-    updateFearlessRestrictions();
-    return;
+    updateFearlessRestrictions(); return;
   }
-
   const step = state.currentDraftOrder[state.currentStep];
-
   if (step.type === "ban") {
-    const bansContainer = document.getElementById(`bans-${step.team}`);
-    if (bansContainer) {
-      const slot = Array.from(bansContainer.querySelectorAll(".ban-slot"))
-                        .find(s => !s.querySelector("img"));
+    const c = document.getElementById(`bans-${step.team}`);
+    if (c) {
+      const slot = Array.from(c.querySelectorAll(".ban-slot")).find(s => !s.querySelector("img"));
       if (slot) slot.classList.add("current-pick");
     }
   } else {
-    const picksContainer = document.getElementById(`picks-${step.team}`);
-    if (picksContainer) {
-      const slot = Array.from(picksContainer.querySelectorAll(".slot"))
-                        .find(s => !s.querySelector("img"));
+    const c = document.getElementById(`picks-${step.team}`);
+    if (c) {
+      const slot = Array.from(c.querySelectorAll(".slot")).find(s => !s.querySelector("img"));
       if (slot) slot.classList.add("current-pick");
     }
   }
-
   updateFearlessRestrictions();
 }
 
 export function updateFearlessRestrictions() {
   state.allImages.forEach(img => img.classList.remove("fearless-blocked"));
   if (!state.fearlessMode || state.currentStep >= state.currentDraftOrder.length) return;
-
   const step = state.currentDraftOrder[state.currentStep];
   if (step.type !== "pick") return;
-
   const teamSet = step.team === "teamA" ? fearlessTeamA : fearlessTeamB;
   state.allImages.forEach(img => {
-    if (teamSet.has(img.dataset.file) && !img.classList.contains("used")) {
+    if (teamSet.has(img.dataset.file) && !img.classList.contains("used"))
       img.classList.add("fearless-blocked");
-    }
   });
 }
 
 export function resetDraftSlots() {
   ["teamA", "teamB"].forEach(teamId => {
     const col = document.getElementById(`picks-${teamId}`);
-    if (col) {
-      col.querySelectorAll(".slot").forEach(slot => {
-        slot.innerHTML = state.langData.pick || "Pick";
-        slot.classList.remove("current-pick");
-      });
-    }
+    if (col) col.querySelectorAll(".slot").forEach(s => {
+      s.innerHTML = state.langData.pick || "Pick";
+      s.classList.remove("current-pick");
+    });
     const bans = document.getElementById(`bans-${teamId}`);
-    if (bans) {
-      bans.querySelectorAll(".ban-slot").forEach(slot => {
-        slot.innerHTML = "";
-        slot.classList.remove("current-pick", "filled");
-      });
-    }
+    if (bans) bans.querySelectorAll(".ban-slot").forEach(s => {
+      s.innerHTML = ""; s.classList.remove("current-pick", "filled");
+    });
   });
 }
 
-export function createRecapSlots(originalSlots, isBan = false) {
+export function createRecapSlots(slots, isBan = false) {
   const wrap = document.createElement("div");
   wrap.className = "slots " + (isBan ? "bans" : "picks");
-
-  originalSlots.forEach(oldSlot => {
+  wrap.style.cssText = "display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin:5px 0;";
+  slots.forEach(oldSlot => {
     const newSlot = document.createElement("div");
     newSlot.className = isBan ? "ban-slot filled" : "slot";
-
-    const oldImg = oldSlot.querySelector("img");
-    if (oldImg) {
-      const img = document.createElement("img");
-      img.src = oldImg.src;
-      img.alt = oldImg.alt;
-      img.style.cssText = "width:100%;height:100%;border-radius:6px;object-fit:cover;";
-      if (isBan) img.style.opacity = "0.55";
-      newSlot.appendChild(img);
-    } else {
-      if (!isBan) newSlot.textContent = state.langData.pick || "Pick";
+    newSlot.style.cssText = "width:46px;height:46px;";
+    const img = oldSlot.querySelector("img");
+    if (img) {
+      const i = img.cloneNode();
+      i.style.cssText = "width:100%;height:100%;object-fit:cover;border-radius:5px;" + (isBan ? "opacity:0.5;" : "");
+      newSlot.appendChild(i);
     }
     wrap.appendChild(newSlot);
   });
@@ -116,28 +99,18 @@ export function createRecapSlots(originalSlots, isBan = false) {
 }
 
 export function findNextBanSlot(team) {
-  const container = document.getElementById(`bans-${team}`);
-  if (!container) return null;
-  return Array.from(container.querySelectorAll(".ban-slot")).find(s => !s.querySelector("img"));
+  const c = document.getElementById(`bans-${team}`);
+  return c ? Array.from(c.querySelectorAll(".ban-slot")).find(s => !s.querySelector("img")) : null;
 }
-
 export function findNextPickSlot(team) {
-  const container = document.getElementById(`picks-${team}`);
-  if (!container) return null;
-  return Array.from(container.querySelectorAll(".slot")).find(s => !s.querySelector("img"));
+  const c = document.getElementById(`picks-${team}`);
+  return c ? Array.from(c.querySelectorAll(".slot")).find(s => !s.querySelector("img")) : null;
 }
-
 export function getAllBanSlots(team) {
-  const container = document.getElementById(`bans-${team}`);
-  return container ? Array.from(container.querySelectorAll(".ban-slot")) : [];
+  const c = document.getElementById(`bans-${team}`);
+  return c ? Array.from(c.querySelectorAll(".ban-slot")) : [];
 }
-
 export function getAllPickSlots(team) {
-  const container = document.getElementById(`picks-${team}`);
-  return container ? Array.from(container.querySelectorAll(".slot")) : [];
-}
-
-function _hideMpTurnIndicator() {
-  const el = document.getElementById("mp-turn-indicator");
-  if (el) el.style.display = "none";
+  const c = document.getElementById(`picks-${team}`);
+  return c ? Array.from(c.querySelectorAll(".slot")) : [];
 }

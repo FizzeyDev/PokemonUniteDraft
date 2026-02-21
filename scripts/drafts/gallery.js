@@ -4,21 +4,18 @@ import { endDraft } from "./draft.js";
 
 let currentRole = null;
 let searchTerm  = "";
-let currentLang = localStorage.getItem('lang') || 'fr';
+const currentLang = localStorage.getItem("lang") || "fr";
 
 function applyFiltersAndSearch() {
   const query = searchTerm.toLowerCase();
   state.allImages.forEach(img => {
     let visible = true;
     if (currentRole !== null) {
-      const roleMatch = currentRole === "unknown"
-        ? !["def", "atk", "sup", "spe", "all"].includes(img.dataset.role)
+      visible = currentRole === "unknown"
+        ? !["def","atk","sup","spe","all"].includes(img.dataset.role)
         : img.dataset.role === currentRole;
-      visible = roleMatch;
     }
-    if (query) {
-      visible = visible && (img.alt || "").toLowerCase().includes(query);
-    }
+    if (query) visible = visible && (img.alt || "").toLowerCase().includes(query);
     img.style.display = visible ? "block" : "none";
   });
 }
@@ -49,12 +46,9 @@ export function renderGallery() {
 }
 
 function onPokemonClick(img) {
-  // Multiplayer turn check
-  const isMyTurn = window._mpIsMyTurn ? window._mpIsMyTurn() : true;
-  if (!isMyTurn) {
-    _showNotYourTurn();
-    return;
-  }
+  // Vérification du tour en MP
+  const myTurn = window._mpIsMyTurn ? window._mpIsMyTurn() : true;
+  if (!myTurn) { _showToast(); return; }
 
   if (
     state.currentStep >= state.currentDraftOrder.length ||
@@ -64,30 +58,29 @@ function onPokemonClick(img) {
 
   const step = state.currentDraftOrder[state.currentStep];
 
-  // Find the right slot
+  // Trouve le slot
   let slot;
   if (step.type === "ban") {
     slot = findNextBanSlot(step.team);
+    if (slot) slot.classList.add("filled");
   } else {
     slot = findNextPickSlot(step.team);
   }
   if (!slot) return;
 
-  // Place image in slot
-  const clone = img.cloneNode(true);
-  clone.style.cssText = ""; // reset any inline styles from gallery
+  // Place l'image
   slot.innerHTML = "";
+  const clone = img.cloneNode(true);
+  clone.style.cssText = "";
   slot.appendChild(clone);
-  if (step.type === "ban") slot.classList.add("filled");
-
   img.classList.add("used");
 
+  // Fearless tracking
   if (state.fearlessMode && step.type === "pick") {
-    const teamSet = step.team === "teamA" ? fearlessTeamA : fearlessTeamB;
-    teamSet.add(img.dataset.file);
+    (step.team === "teamA" ? fearlessTeamA : fearlessTeamB).add(img.dataset.file);
   }
 
-  // Publish in multiplayer
+  // Publie en MP
   if (window._mpPublishPick) window._mpPublishPick(state.currentStep, img.dataset.file);
 
   state.currentStep++;
@@ -102,7 +95,7 @@ function onPokemonClick(img) {
   }
 }
 
-function _showNotYourTurn() {
+function _showToast() {
   const el = document.getElementById("not-your-turn-toast");
   if (!el) return;
   el.classList.add("visible");
@@ -110,25 +103,19 @@ function _showNotYourTurn() {
 }
 
 export function initSortSelect() {
-  const sortSelect = document.getElementById("sort-select");
-  if (!sortSelect) return;
-  sortSelect.addEventListener("change", e => {
-    state.currentSort = e.target.value;
-    renderGallery();
-  });
+  const sel = document.getElementById("sort-select");
+  if (sel) sel.addEventListener("change", e => { state.currentSort = e.target.value; renderGallery(); });
 }
 
 export function initFilters() {
   document.querySelectorAll(".filter-btn").forEach(btn => {
     btn.addEventListener("click", () => {
-      const role = btn.dataset.role;
       if (btn.classList.contains("active")) {
-        btn.classList.remove("active");
-        currentRole = null;
+        btn.classList.remove("active"); currentRole = null;
       } else {
         document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
-        currentRole = role === "unknown" ? "unknown" : role;
+        currentRole = btn.dataset.role === "unknown" ? "unknown" : btn.dataset.role;
       }
       applyFiltersAndSearch();
     });
@@ -136,10 +123,6 @@ export function initFilters() {
 }
 
 export function initSearch() {
-  const searchInput = document.getElementById("search-input");
-  if (!searchInput) return;
-  searchInput.addEventListener("input", e => {
-    searchTerm = e.target.value.trim();
-    applyFiltersAndSearch();
-  });
+  const inp = document.getElementById("search-input");
+  if (inp) inp.addEventListener("input", e => { searchTerm = e.target.value.trim(); applyFiltersAndSearch(); });
 }
