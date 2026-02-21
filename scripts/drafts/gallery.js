@@ -33,8 +33,8 @@ export function renderGallery() {
 
   sorted.forEach(mon => {
     const img = document.createElement("img");
-    img.src          = `assets/pokemon/${mon.file}`;
-    img.alt          = mon[`name_${currentLang}`] || mon.name;
+    img.src = `assets/pokemon/${mon.file}`;
+    img.alt = mon[`name_${currentLang}`] || mon.name;
     img.dataset.file = mon.file;
     img.dataset.role = mon.role;
     img.addEventListener("click", () => onPokemonClick(img));
@@ -46,7 +46,6 @@ export function renderGallery() {
 }
 
 function onPokemonClick(img) {
-  // Vérification du tour en MP
   const myTurn = window._mpIsMyTurn ? window._mpIsMyTurn() : true;
   if (!myTurn) { _showToast(); return; }
 
@@ -58,7 +57,6 @@ function onPokemonClick(img) {
 
   const step = state.currentDraftOrder[state.currentStep];
 
-  // Trouve le slot
   let slot;
   if (step.type === "ban") {
     slot = findNextBanSlot(step.team);
@@ -68,19 +66,16 @@ function onPokemonClick(img) {
   }
   if (!slot) return;
 
-  // Place l'image
   slot.innerHTML = "";
   const clone = img.cloneNode(true);
   clone.style.cssText = "";
   slot.appendChild(clone);
   img.classList.add("used");
 
-  // Fearless tracking
   if (state.fearlessMode && step.type === "pick") {
     (step.team === "teamA" ? fearlessTeamA : fearlessTeamB).add(img.dataset.file);
   }
 
-  // Publie en MP
   if (window._mpPublishPick) window._mpPublishPick(state.currentStep, img.dataset.file);
 
   state.currentStep++;

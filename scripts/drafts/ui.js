@@ -24,7 +24,6 @@ export function updateTurn() {
   turnDisplay.innerHTML = `<span style="color:${color};">${label}</span><br>${action}`;
   turnDisplay.style.display = "block";
 
-  // Met à jour l'indicateur MP
   if (mpState.enabled) {
     import("./draft.js").then(({ _updateMpTurnIndicator }) => _updateMpTurnIndicator());
   }

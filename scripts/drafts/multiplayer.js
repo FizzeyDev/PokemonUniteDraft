@@ -1,10 +1,9 @@
-// multiplayer.js — Firebase REST API + SSE, sans SDK
 import { state } from "./state.js";
 import { draftOrders } from "./constants.js";
 
 const DATABASE_URL = "https://unite-draft-default-rtdb.europe-west1.firebasedatabase.app";
 
-// ─── REST helpers ─────────────────────────────────
+
 async function dbGet(path) {
   const res = await fetch(`${DATABASE_URL}/${path}.json`);
   if (!res.ok) throw new Error(`Firebase GET failed: ${res.status}`);
@@ -39,8 +38,6 @@ function dbListen(path, callback) {
   return es;
 }
 
-// ─── État local MP ────────────────────────────────
-// localStatus : "idle" | "drafting" | "recap"
 export const mpState = {
   enabled: false, roomId: null, playerRole: null,
   isHost: false, sseConnection: null, spectatorCount: 0,
@@ -52,7 +49,6 @@ function generateRoomCode() {
   return Array.from({ length: 6 }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
 }
 
-// ─── Créer une room ───────────────────────────────
 export async function createRoom(mode, map) {
   const roomId = generateRoomCode();
   await dbSet(`rooms/${roomId}`, {
@@ -69,7 +65,6 @@ export async function createRoom(mode, map) {
   return roomId;
 }
 
-// ─── Rejoindre une room ───────────────────────────
 export async function joinRoom(roomId, asSpectator = false) {
   const data = await dbGet(`rooms/${roomId}`);
   if (!data) throw new Error("Room introuvable. Vérifie le code.");
@@ -98,7 +93,6 @@ export async function joinRoom(roomId, asSpectator = false) {
   return { role, data };
 }
 
-// ─── Publier un pick ──────────────────────────────
 export async function publishPick(stepIndex, monFile) {
   if (!mpState.enabled || !mpState.roomId) return;
   const step = state.currentDraftOrder[stepIndex];
@@ -108,7 +102,6 @@ export async function publishPick(stepIndex, monFile) {
   });
 }
 
-// ─── Publier le démarrage (hôte) ─────────────────
 export async function publishDraftStart(fearlessMode, map) {
   if (!mpState.enabled || !mpState.roomId) return;
   mpState.localStatus = "drafting";
@@ -118,14 +111,12 @@ export async function publishDraftStart(fearlessMode, map) {
   });
 }
 
-// ─── Publier la fin de draft ──────────────────────
 export async function publishDraftEnd() {
   if (!mpState.enabled || !mpState.roomId) return;
   mpState.localStatus = "recap";
   await dbUpdate(`rooms/${mpState.roomId}`, { status: "recap" });
 }
 
-// ─── Publier la draft suivante (fearless, hôte) ───
 export async function publishNextDraft(map) {
   if (!mpState.enabled || !mpState.roomId) return;
   const data = await dbGet(`rooms/${mpState.roomId}`);
@@ -137,7 +128,6 @@ export async function publishNextDraft(map) {
   });
 }
 
-// ─── SSE + polling ────────────────────────────────
 function _subscribeToRoom(roomId) {
   if (mpState.sseConnection) mpState.sseConnection.close();
   mpState.sseConnection = dbListen(`rooms/${roomId}`, (data) => {
@@ -153,19 +143,16 @@ function _subscribeToRoom(roomId) {
   }, 3000);
 }
 
-// ─── Handler principal de mise à jour ─────────────
 function _onRoomUpdate(data) {
-  // Indicateurs online
   _updateOnlineIndicators(data);
   const count = data.spectators ? Object.keys(data.spectators).length : 0;
   mpState.spectatorCount = count;
   const specEl = document.getElementById("mp-spectator-count");
   if (specEl) specEl.textContent = count > 0 ? `👁 ${count} spectateur${count > 1 ? "s" : ""}` : "";
 
-  const rs = data.status; // remote status
-  const ls = mpState.localStatus; // local status
+  const rs = data.status;
+  const ls = mpState.localStatus;
 
-  // CAS 1 : Draft démarre côté joueur B (on est idle ou recap)
   if (rs === "drafting" && (ls === "idle" || ls === "recap")) {
     mpState.localStatus = "drafting";
     state.selectedMode      = data.mode;
@@ -174,7 +161,6 @@ function _onRoomUpdate(data) {
     state.currentDraftOrder = [...draftOrders[data.mode]];
     state.currentStep       = 0;
 
-    // Si c'est une nouvelle draft fearless (draftCount > 1) vs première draft
     const isNextFearless = (data.draftCount || 1) > 1;
     if (isNextFearless) {
       window.dispatchEvent(new CustomEvent("mp:nextDraft", { detail: data }));
@@ -182,20 +168,17 @@ function _onRoomUpdate(data) {
       window.dispatchEvent(new CustomEvent("mp:draftStart", { detail: data }));
     }
 
-    // Sync picks si rejoindre en cours de partie
     const remoteStep = data.currentStep || 0;
     if (remoteStep > 0) setTimeout(() => _syncPicks(data, remoteStep), 500);
     return;
   }
 
-  // CAS 2 : Picks pendant la draft
   if (rs === "drafting" && ls === "drafting") {
     const remoteStep = data.currentStep || 0;
     if (remoteStep > state.currentStep) _syncPicks(data, remoteStep);
     return;
   }
 
-  // CAS 3 : Fin de draft
   if (rs === "recap" && ls === "drafting") {
     mpState.localStatus = "recap";
     window.dispatchEvent(new CustomEvent("mp:draftEnd"));
@@ -203,7 +186,6 @@ function _onRoomUpdate(data) {
   }
 }
 
-// ─── Sync picks adversaire ────────────────────────
 function _syncPicks(data, remoteStep) {
   const picks = data.picks || {};
   for (let i = state.currentStep; i < remoteStep; i++) {
@@ -240,7 +222,6 @@ function _syncPicks(data, remoteStep) {
   });
 }
 
-// ─── Helpers ──────────────────────────────────────
 function _registerOfflineHook(roomId, role) {
   window.addEventListener("beforeunload", () =>
     navigator.sendBeacon(`${DATABASE_URL}/rooms/${roomId}/players/${role}/online.json`, JSON.stringify(false)));

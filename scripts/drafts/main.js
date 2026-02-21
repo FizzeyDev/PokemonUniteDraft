@@ -5,12 +5,10 @@ import { renderGallery, initSortSelect, initFilters, initSearch } from "./galler
 import { startDraft, endFearlessSeries, softResetDraft, undoLastPick, startNextDraft } from "./draft.js";
 import { mpState, createRoom, joinRoom, disconnectRoom, isMyTurn, publishDraftStart, publishNextDraft } from "./multiplayer.js";
 
-// ─── Init données ─────────────────────────────────
 const currentLang = localStorage.getItem("lang") || "fr";
 fetch(`lang/${currentLang}.json`).then(r => r.json()).then(d => { state.langData = d; updateDynamicContent(); });
 fetch("data/pokemons.json").then(r => r.json()).then(d => { state.monsData = d; renderGallery(); });
 
-// ─── Mode buttons ─────────────────────────────────
 document.querySelectorAll(".mode-btn").forEach(btn => {
   btn.addEventListener("click", () => {
     document.querySelectorAll(".mode-btn").forEach(b => b.classList.remove("active"));
@@ -32,12 +30,11 @@ document.querySelectorAll(".map-btn").forEach(btn => {
   });
 });
 
-// ─── Draft controls ───────────────────────────────
 document.getElementById("start-draft").addEventListener("click", async () => {
-  startDraft(); // génère la map random AVANT publishDraftStart
+  startDraft();
   if (mpState.enabled && mpState.isHost) {
     const fearless = document.getElementById("fearless-checkbox").checked;
-    await publishDraftStart(fearless, state.selectedMap); // state.selectedMap est maintenant set
+    await publishDraftStart(fearless, state.selectedMap);
   }
 });
 
@@ -50,7 +47,7 @@ document.getElementById("reset-draft").addEventListener("click", () => {
 document.getElementById("backBtn").addEventListener("click", undoLastPick);
 
 document.getElementById("next-draft-btn").addEventListener("click", async () => {
-  startNextDraft(); // set state.selectedMap depuis le re-select fearless
+  startNextDraft();
   if (mpState.enabled && mpState.isHost) {
     await publishNextDraft(state.selectedMap);
   }
@@ -58,7 +55,6 @@ document.getElementById("next-draft-btn").addEventListener("click", async () => 
 
 document.getElementById("end-series-btn").addEventListener("click", endFearlessSeries);
 
-// ─── Multiplayer : créer une room ─────────────────
 document.getElementById("create-room-btn").addEventListener("click", async () => {
   if (!state.selectedMode) { _showMpError("Sélectionne un mode avant de créer une room."); return; }
   const btn = document.getElementById("create-room-btn");
@@ -73,7 +69,6 @@ document.getElementById("create-room-btn").addEventListener("click", async () =>
   }
 });
 
-// ─── Multiplayer : rejoindre une room ─────────────
 document.getElementById("join-room-btn").addEventListener("click", async () => {
   const code = document.getElementById("room-code-input").value.trim().toUpperCase();
   if (!code || code.length !== 6) { _showMpError("Entre un code de room valide (6 caractères)."); return; }
@@ -82,14 +77,14 @@ document.getElementById("join-room-btn").addEventListener("click", async () => {
   const asSpectator = document.getElementById("join-as-spectator").checked;
   try {
     const { role, data } = await joinRoom(code, asSpectator);
-    // Sync visuel du mode
+
     document.querySelectorAll(".mode-btn").forEach(b => b.classList.toggle("active", b.dataset.mode === data.mode));
     state.selectedMode      = data.mode;
     state.selectedMap       = data.map;
     state.currentDraftOrder = [...draftOrders[data.mode]];
     _showRoomBanner(code, role);
     document.getElementById("start-draft").disabled = role !== "teamA";
-    // Si la draft est déjà en cours quand on rejoint
+
     if (data.status === "drafting") {
       _launchDraftForPlayer(data);
     }
@@ -100,39 +95,29 @@ document.getElementById("join-room-btn").addEventListener("click", async () => {
   }
 });
 
-// ─── Events MP reçus depuis multiplayer.js ────────
-
-// Première draft démarrée par l'hôte
 window.addEventListener("mp:draftStart", (e) => {
   _launchDraftForPlayer(e.detail);
 });
 
-// Draft suivante fearless démarrée par l'hôte
 window.addEventListener("mp:nextDraft", (e) => {
   const data = e.detail;
   state.selectedMap = data.map;
   state.currentStep = 0;
-  // startNextDraft s'occupe du reset DOM + gallery
   startNextDraft();
-  // Force affichage gallery (sécurité)
   _forceShowGallery();
 });
 
-// Fin de draft (tous joueurs)
 window.addEventListener("mp:draftEnd", () => {
   import("./draft.js").then(({ endDraft }) => endDraft());
 });
 
-// ─── Helper : lancer la draft côté joueur B ───────
 function _launchDraftForPlayer(data) {
-  // Set tout l'état depuis Firebase avant d'appeler startDraft
-  state.selectedMode      = data.mode;
-  state.selectedMap       = data.map;
-  state.fearlessMode      = data.fearlessMode || false;
+  state.selectedMode = data.mode;
+  state.selectedMap = data.map;
+  state.fearlessMode = data.fearlessMode || false;
   state.currentDraftOrder = [...draftOrders[data.mode]];
-  state.currentStep       = 0;
+  state.currentStep = 0;
 
-  // Sync visuel mode button
   document.querySelectorAll(".mode-btn").forEach(b => b.classList.toggle("active", b.dataset.mode === data.mode));
 
   startDraft();
@@ -148,7 +133,6 @@ function _forceShowGallery() {
   if (s) s.style.display = "flex";
 }
 
-// ─── UI helpers ───────────────────────────────────
 function _showRoomBanner(roomId, role) {
   document.getElementById("mp-room-code").textContent = roomId;
   document.getElementById("mp-player-role").textContent =
@@ -169,7 +153,6 @@ function _showMpError(msg) {
   setTimeout(() => { el.style.display = "none"; }, 5000);
 }
 
-// ─── Expose isMyTurn pour gallery.js ─────────────
 window._mpIsMyTurn = isMyTurn;
 
 initSortSelect();
