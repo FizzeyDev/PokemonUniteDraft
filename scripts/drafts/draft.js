@@ -5,6 +5,14 @@ import {
   resetDraftSlots, createRecapSlots,
 } from "./ui.js";
 import { setupTimer } from "./timer.js";
+import { publishPick, publishDraftEnd, mpState } from "./multiplayer.js";
+
+// Expose publishPick pour gallery.js (via window pour éviter les imports circulaires)
+window._mpPublishPick = async (stepIndex, monFile) => {
+  if (mpState.enabled) {
+    await publishPick(stepIndex, monFile);
+  }
+};
 
 export function startDraft() {
   if (!state.selectedMode) return;
@@ -31,6 +39,12 @@ export function startDraft() {
   document.querySelectorAll(".mode-btn").forEach(b => b.classList.add("disabled"));
   document.querySelectorAll(".switch").forEach(s => s.closest("label").style.display = "none");
 
+  // En multijoueur, masque les contrôles multijoueur pendant la draft
+  if (mpState.enabled) {
+    document.getElementById("mp-controls").style.display = "none";
+    _updateMpTurnIndicator();
+  }
+
   setupTimer();
   resetDraftSlots();
   state.allImages.forEach(img => img.classList.remove("used", "fearless-blocked"));
@@ -38,13 +52,17 @@ export function startDraft() {
   highlightCurrentSlot();
 }
 
-export function endDraft() {
+export async function endDraft() {
   clearInterval(state.timerInterval);
   document.querySelectorAll(".slot").forEach(s => s.classList.remove("current-pick"));
   document.getElementById("filters").style.display      = "none";
   document.getElementById("gallery").style.display      = "none";
   document.getElementById("sort-options").style.display = "none";
   updateTurn();
+
+  if (mpState.enabled) {
+    await publishDraftEnd();
+  }
 
   if (state.fearlessMode) {
     _showFearlessRecap();
@@ -109,6 +127,9 @@ function _buildTeamRecap(teamId, useH3 = false) {
 }
 
 export function undoLastPick() {
+  // L'undo est désactivé en multijoueur
+  if (mpState.enabled) return;
+
   if (state.currentStep <= 0) return;
 
   const lastIndex = state.currentStep - 1;
@@ -159,6 +180,11 @@ export function softResetDraft() {
   document.getElementById("turn-display").style.display  = "none";
   document.querySelectorAll(".switch").forEach(s => s.closest("label").style.display = "block");
 
+  // Réaffiche les contrôles MP
+  if (document.getElementById("mp-controls")) {
+    document.getElementById("mp-controls").style.display = "block";
+  }
+
   resetDraftSlots();
   state.allImages.forEach(img => img.classList.remove("used", "fearless-blocked"));
 }
@@ -186,4 +212,24 @@ export function endFearlessSeries() {
   state.draftCount = 0;
   document.getElementById("series-recaps").innerHTML    = "";
   document.getElementById("fearless-series").style.display = "none";
+}
+
+// ─── Indicateur de tour MP dans le turn-display ──
+export function _updateMpTurnIndicator() {
+  if (!mpState.enabled) return;
+  const isMyTurn = window._mpIsMyTurn ? window._mpIsMyTurn() : true;
+  const indicator = document.getElementById("mp-turn-indicator");
+  if (!indicator) return;
+
+  if (mpState.playerRole === "spectator") {
+    indicator.textContent = "👁 Vous êtes spectateur";
+    indicator.className   = "mp-turn-indicator spectator";
+  } else if (isMyTurn) {
+    indicator.textContent = "✅ C'est votre tour !";
+    indicator.className   = "mp-turn-indicator your-turn";
+  } else {
+    indicator.textContent = "⏳ En attente de l'adversaire…";
+    indicator.className   = "mp-turn-indicator waiting";
+  }
+  indicator.style.display = "block";
 }

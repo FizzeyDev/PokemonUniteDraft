@@ -12,7 +12,7 @@ export const state = {
   monsData: [],
   currentSort: "dex",
   currentFilter: "all",
-  currentSearch: "", 
+  currentSearch: "",
 };
 
 export const fearlessTeamA = new Set();

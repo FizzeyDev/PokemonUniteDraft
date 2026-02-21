@@ -27,6 +27,81 @@
     <div id="mode-text" data-lang="select_mode_text"></div>
   </div>
 
+  <!-- ═══════════════════════════════════════════════════════════════
+     SECTION MULTIJOUEUR — à coller dans index.html
+     Juste après le bloc <div id="mode-description"> et avant <div id="map-selection">
+     ═══════════════════════════════════════════════════════════════ -->
+
+<!-- Panneau Multijoueur -->
+<div id="mp-controls" class="mp-panel">
+
+  <div class="mp-panel-header">
+    <span class="mp-icon">🌐</span>
+    <h3>Multiplayer Mode</h3>
+  </div>
+
+  <!-- Créer une room -->
+  <div class="mp-section">
+    <button id="create-room-btn" class="draft-btn mp-btn" disabled>
+      🎮 Create a room
+    </button>
+    <p class="mp-hint">First select a draft mode, create room after.</p>
+  </div>
+
+  <div class="mp-divider">OR</div>
+
+  <!-- Rejoindre une room -->
+  <div class="mp-section">
+    <div class="mp-join-row">
+      <input
+        type="text"
+        id="room-code-input"
+        placeholder="Code room (ex: ABC123)"
+        maxlength="6"
+        class="mp-code-input"
+      />
+      <button id="join-room-btn" class="draft-btn mp-btn">
+        🔗 Join
+      </button>
+    </div>
+    <label class="mp-spectator-label">
+      <input type="checkbox" id="join-as-spectator" />
+      <span>Join as spectator</span>
+    </label>
+  </div>
+
+  <!-- Message d'erreur -->
+  <div id="mp-error" class="mp-error" style="display:none;"></div>
+
+  </div>
+
+  <!-- Bannière room active -->
+  <div id="mp-room-banner" class="mp-room-banner" style="display:none;">
+    <div class="mp-room-left">
+      <span class="mp-room-label">Room :</span>
+      <span id="mp-room-code" class="mp-room-code-display">------</span>
+      <button id="mp-copy-code" class="mp-copy-btn">📋 Copy</button>
+    </div>
+    <div class="mp-room-right">
+      <span id="mp-player-role" class="mp-player-role"></span>
+      <span id="mp-spectator-count" class="mp-spec-count"></span>
+    </div>
+    <div class="mp-online-indicators">
+      <span class="mp-ind-label">🟣</span>
+      <span id="mp-indicator-teamA" class="mp-indicator offline" title="Purple Team"></span>
+      <span class="mp-ind-label">🟠</span>
+      <span id="mp-indicator-teamB" class="mp-indicator offline" title="Orange Team"></span>
+    </div>
+  </div>
+
+  <!-- Indicateur de tour MP (dans le middle-bubble, à ajouter après #turn-display) -->
+  <div id="mp-turn-indicator" class="mp-turn-indicator" style="display:none;"></div>
+
+  <!-- Toast "Pas ton tour" -->
+  <div id="not-your-turn-toast" class="not-your-turn-toast">
+    🚫 It's not your turn!
+  </div>
+
   <!-- Map selection -->
   <div id="map-selection" class="map-selection">
     <p data-lang="tooltip_maps"></p>

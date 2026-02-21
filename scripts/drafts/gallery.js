@@ -3,7 +3,8 @@ import { highlightCurrentSlot, updateTurn } from "./ui.js";
 import { endDraft } from "./draft.js";
 
 let currentRole = null;
-let searchTerm = "";
+let searchTerm  = "";
+let currentLang = localStorage.getItem('lang') || 'fr';
 
 function applyFiltersAndSearch() {
   const query = searchTerm.toLowerCase();
@@ -54,6 +55,13 @@ export function renderGallery() {
 }
 
 function onPokemonClick(img) {
+  // ── Blocage multijoueur : vérifie que c'est bien ton tour ──
+  const isMyTurn = window._mpIsMyTurn ? window._mpIsMyTurn() : true;
+  if (!isMyTurn) {
+    _showNotYourTurn();
+    return;
+  }
+
   if (
     state.currentStep >= state.currentDraftOrder.length ||
     img.classList.contains("used") ||
@@ -75,6 +83,11 @@ function onPokemonClick(img) {
     teamSet.add(img.dataset.file);
   }
 
+  // ── Publie le pick en multijoueur ──
+  if (window._mpPublishPick) {
+    window._mpPublishPick(state.currentStep, img.dataset.file);
+  }
+
   state.currentStep++;
   updateTurn();
   highlightCurrentSlot();
@@ -85,6 +98,14 @@ function onPokemonClick(img) {
     state.timeLeft = parseInt(document.getElementById("timer-value").value) || 20;
     document.getElementById("bubble-timer").textContent = `${state.timeLeft}s`;
   }
+}
+
+// ── Feedback visuel "Pas ton tour" ──────────────────
+function _showNotYourTurn() {
+  const el = document.getElementById("not-your-turn-toast");
+  if (!el) return;
+  el.classList.add("visible");
+  setTimeout(() => el.classList.remove("visible"), 2000);
 }
 
 export function initSortSelect() {

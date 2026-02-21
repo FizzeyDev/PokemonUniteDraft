@@ -1,4 +1,5 @@
 import { state, fearlessTeamA, fearlessTeamB } from "./state.js";
+import { mpState } from "./multiplayer.js";
 
 export function updateDynamicContent() {
   document.querySelectorAll("[data-lang]").forEach(el => {
@@ -11,6 +12,7 @@ export function updateTurn() {
   const turnDisplay = document.getElementById("turn-display");
   if (state.currentStep >= state.currentDraftOrder.length) {
     turnDisplay.style.display = "none";
+    _hideMpTurnIndicator();
     return;
   }
   const step  = state.currentDraftOrder[state.currentStep];
@@ -19,6 +21,11 @@ export function updateTurn() {
   const action = step.type === "ban" ? "to Ban" : "to Pick";
   turnDisplay.innerHTML = `<span style="color:${color};">${label}</span> ${action}`;
   turnDisplay.style.display = "block";
+
+  // Met à jour l'indicateur MP si actif
+  if (mpState.enabled) {
+    import("./draft.js").then(({ _updateMpTurnIndicator }) => _updateMpTurnIndicator());
+  }
 }
 
 export function highlightCurrentSlot() {
@@ -82,4 +89,9 @@ export function createRecapSlots(originalSlots, isBan = false) {
     wrap.appendChild(newSlot);
   });
   return wrap;
+}
+
+function _hideMpTurnIndicator() {
+  const el = document.getElementById("mp-turn-indicator");
+  if (el) el.style.display = "none";
 }
