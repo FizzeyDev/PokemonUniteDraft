@@ -203,6 +203,34 @@ export async function publishDraftStart(fearlessMode, map) {
   });
 }
 
+// ─── Polling de rattrapage ─────────────────────────
+let _catchupInterval = null;
+
+function _startCatchupPolling(roomId) {
+  _stopCatchupPolling();
+  _catchupInterval = setInterval(async () => {
+    if (!mpState.enabled || !roomId) return;
+    try {
+      const data = await dbGet(`rooms/${roomId}`);
+      if (!data) return;
+      const remoteStep = data.currentStep || 0;
+      if (remoteStep > state.currentStep) {
+        console.log(`[MP] Rattrapage : local=${state.currentStep} remote=${remoteStep}`);
+        _syncPicks(data, remoteStep);
+      }
+    } catch (e) {
+      console.warn("[MP] Catchup poll error", e);
+    }
+  }, 3000);
+}
+
+function _stopCatchupPolling() {
+  if (_catchupInterval) {
+    clearInterval(_catchupInterval);
+    _catchupInterval = null;
+  }
+}
+
 // ─── Écoute SSE en temps réel ─────────────────────
 function _subscribeToRoom(roomId) {
   if (mpState.sseConnection) mpState.sseConnection.close();
@@ -210,6 +238,8 @@ function _subscribeToRoom(roomId) {
   mpState.sseConnection = dbListen(`rooms/${roomId}`, (data) => {
     if (data && typeof data === "object") _onRoomUpdate(data);
   });
+
+  _startCatchupPolling(roomId); // 👈 ajoute cette ligne
 }
 
 // ─── Handler principal de mise à jour ─────────────
@@ -298,6 +328,7 @@ export function disconnectRoom() {
     mpState.sseConnection.close();
     mpState.sseConnection = null;
   }
+  _stopCatchupPolling(); // 👈 ajoute cette ligne
   mpState.enabled    = false;
   mpState.roomId     = null;
   mpState.playerRole = null;
