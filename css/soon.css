@@ -1,13 +1,47 @@
-body {
-  font-family: 'Roboto', sans-serif;
-  background: #1c2526;
-  color: #d9e6e8;
-  margin: 0;
-  overflow-x: hidden;
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;900&family=Rajdhani:wght@400;500;600;700&display=swap');
+
+:root {
+  --bg:           #0e1a1b;
+  --surface:      #141f20;
+  --surface-2:    #1a2a2b;
+  --surface-3:    #243536;
+  --border:       rgba(255,255,255,0.07);
+  --violet:       #9f53ec;
+  --violet-dim:   rgba(159, 83, 236, 0.18);
+  --orange:       #ff9d00;
+  --orange-dim:   rgba(255, 157, 0, 0.18);
+  --blue:         #4fc3f7;
+  --blue-dim:     rgba(79, 195, 247, 0.12);
+  --green:        #4caf82;
+  --red:          #ef5350;
+  --yellow:       #ffd740;
+  --text:         #cfe0e2;
+  --text-dim:     #6a8587;
+  --radius:       14px;
+  --radius-sm:    8px;
 }
 
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Rajdhani', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding: 1.5rem 1.5rem 3rem;
+  margin-left: 250px;
+  transition: margin-left 0.3s ease;
+}
+body.sidebar-collapsed { margin-left: 0; }
+
 h1 {
+  font-family: 'Exo 2', sans-serif;
   text-align: center;
-  color: #fff;
   font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fff;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 0 40px rgba(159,83,236,0.4);
 }

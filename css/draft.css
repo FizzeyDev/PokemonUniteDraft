@@ -413,9 +413,9 @@ input:checked + .slider::before { transform: translateX(18px); }
 
 #gallery {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 64px);
-  gap: 7px;
-  padding: 8px;
+  grid-template-columns: repeat(auto-fill, 94px);
+  gap: 8px;
+  padding: 6px;
   overflow-y: auto;
   flex: 1;
   justify-content: center;
@@ -423,8 +423,8 @@ input:checked + .slider::before { transform: translateX(18px); }
 }
 
 #gallery img {
-  width: 60px;
-  height: 60px;
+  width: 90px;
+  height: 90px;
   object-fit: contain;
   border-radius: 7px;
   cursor: pointer;
@@ -637,7 +637,7 @@ input:checked + .slider::before { transform: translateX(18px); }
   background: rgba(79,195,247,0.05);
   border: 1px solid rgba(79,195,247,0.18);
   border-radius: 10px; padding: 9px 14px;
-  margin: 0 auto 12px; max-width: 620px;
+  margin: 0 auto 12px; max-width: 700px;
 }
 .mp-room-label { font-size: 0.73rem; color: var(--text-dim); margin-right: 4px; }
 .mp-room-code-display {
@@ -658,6 +658,47 @@ input:checked + .slider::before { transform: translateX(18px); }
   display: inline-block; transition: background 0.3s;
 }
 .mp-indicator.online  { background: var(--green); box-shadow: 0 0 5px var(--green); }
+.mp-indicator.offline { background: #444; }
+
+/* Role selector inside room banner */
+.mp-role-selector {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  flex-wrap: wrap;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+  margin-top: 4px;
+}
+.mp-role-label {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-right: 2px;
+}
+.mp-role-btn {
+  font-family: 'Exo 2', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface-3);
+  color: var(--text-dim);
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  transition: all 0.2s;
+}
+.mp-role-btn:hover:not(:disabled) { background: var(--surface-2); color: var(--text); transform: none; }
+.mp-role-btn[data-role="teamA"].active { background: var(--violet-dim); border-color: var(--violet); color: var(--violet); }
+.mp-role-btn[data-role="teamB"].active { background: var(--orange-dim); border-color: var(--orange); color: var(--orange); }
+.mp-role-btn[data-role="spectator"].active { background: var(--blue-dim); border-color: var(--blue); color: var(--blue); }
+.mp-role-btn.taken { opacity: 0.35; cursor: not-allowed; }
+.mp-role-btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
 .mp-indicator.offline { background: #444; }
 
 /* MP turn indicator */

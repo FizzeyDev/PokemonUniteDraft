@@ -3,7 +3,6 @@ import { draftOrders } from "./constants.js";
 
 const DATABASE_URL = "https://unite-draft-default-rtdb.europe-west1.firebasedatabase.app";
 
-
 async function dbGet(path) {
   const res = await fetch(`${DATABASE_URL}/${path}.json`);
   if (!res.ok) throw new Error(`Firebase GET failed: ${res.status}`);
@@ -32,16 +31,26 @@ async function dbPush(path, data) {
 }
 function dbListen(path, callback) {
   const es = new EventSource(`${DATABASE_URL}/${path}.json`);
-  es.addEventListener("put",   (e) => { try { const p = JSON.parse(e.data); if (p.data) callback(p.data); } catch {} });
-  es.addEventListener("patch", (e) => { try { dbGet(path).then(d => { if (d) callback(d); }); } catch {} });
+  es.addEventListener("put", (e) => {
+    try { const p = JSON.parse(e.data); if (p.data) callback(p.data); } catch {}
+  });
+  es.addEventListener("patch", (e) => {
+    try { dbGet(path).then(d => { if (d) callback(d); }); } catch {}
+  });
   es.onerror = () => console.warn("[MP] SSE reconnecting...");
   return es;
 }
 
 export const mpState = {
-  enabled: false, roomId: null, playerRole: null,
-  isHost: false, sseConnection: null, spectatorCount: 0,
-  localStatus: "idle", _catchupInterval: null,
+  enabled: false,
+  roomId: null,
+  playerRole: null,     // "teamA" | "teamB" | "spectator"
+  isHost: false,        // first player to create the room
+  sseConnection: null,
+  spectatorCount: 0,
+  localStatus: "idle",  // "idle" | "drafting" | "recap" | "lobby"
+  spectatorKey: null,   // Firebase key for spectator cleanup
+  _catchupInterval: null,
 };
 
 function generateRoomCode() {
@@ -49,40 +58,61 @@ function generateRoomCode() {
   return Array.from({ length: 6 }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
 }
 
+// ─── Room creation ────────────────────────────────────────────────────────────
+
 export async function createRoom(mode, map) {
   const roomId = generateRoomCode();
   await dbSet(`rooms/${roomId}`, {
-    mode, map: map || null, createdAt: Date.now(),
-    status: "waiting", currentStep: 0, picks: {},
-    fearlessMode: false, draftCount: 0,
-    players: { teamA: { joined: true, online: true }, teamB: { joined: false, online: false } },
+    mode, map: map || null,
+    createdAt: Date.now(),
+    status: "waiting",
+    currentStep: 0,
+    picks: {},
+    fearlessMode: false,
+    draftCount: 0,
+    // roles: which player occupies which slot (null = free)
+    roles: { teamA: true, teamB: false },
     spectators: {},
   });
-  mpState.enabled = true; mpState.roomId = roomId;
-  mpState.playerRole = "teamA"; mpState.isHost = true; mpState.localStatus = "idle";
+  mpState.enabled = true;
+  mpState.roomId = roomId;
+  mpState.playerRole = "teamA";
+  mpState.isHost = true;
+  mpState.localStatus = "idle";
   _subscribeToRoom(roomId);
   _registerOfflineHook(roomId, "teamA");
   return roomId;
 }
 
+// ─── Room join ────────────────────────────────────────────────────────────────
+
 export async function joinRoom(roomId, asSpectator = false) {
   const data = await dbGet(`rooms/${roomId}`);
-  if (!data) throw new Error("Room introuvable. Vérifie le code.");
+  if (!data) throw new Error("Room not found. Check the code.");
 
   let role;
-  if (asSpectator || data.players?.teamB?.joined) {
+  const teamBFree = !data.roles?.teamB;
+
+  if (asSpectator || !teamBFree) {
+    // Join as spectator
     const key = await dbPush(`rooms/${roomId}/spectators`, { online: true });
-    role = "spectator"; mpState.playerRole = "spectator";
+    mpState.spectatorKey = key;
+    role = "spectator";
+    mpState.playerRole = "spectator";
     window.addEventListener("beforeunload", () =>
       navigator.sendBeacon(`${DATABASE_URL}/rooms/${roomId}/spectators/${key}/online.json`, "false"));
   } else {
-    await dbUpdate(`rooms/${roomId}/players/teamB`, { joined: true, online: true });
-    role = "teamB"; mpState.playerRole = "teamB";
+    // Join as teamB
+    await dbUpdate(`rooms/${roomId}/roles`, { teamB: true });
+    role = "teamB";
+    mpState.playerRole = "teamB";
     _registerOfflineHook(roomId, "teamB");
   }
 
-  mpState.enabled = true; mpState.roomId = roomId;
-  mpState.isHost = false; mpState.localStatus = "idle";
+  mpState.enabled = true;
+  mpState.roomId = roomId;
+  mpState.isHost = false;
+  mpState.localStatus = "idle";
   state.selectedMode      = data.mode;
   state.selectedMap       = data.map;
   state.currentDraftOrder = [...draftOrders[data.mode]];
@@ -92,6 +122,65 @@ export async function joinRoom(roomId, asSpectator = false) {
   _subscribeToRoom(roomId);
   return { role, data };
 }
+
+// ─── Role switching ───────────────────────────────────────────────────────────
+
+/**
+ * Switch the current player's role in the room.
+ * @param {"teamA"|"teamB"|"spectator"} newRole
+ */
+export async function switchRole(newRole) {
+  if (!mpState.enabled || !mpState.roomId) return;
+  const data = await dbGet(`rooms/${mpState.roomId}`);
+  if (!data) return;
+
+  const oldRole = mpState.playerRole;
+
+  // Validate availability
+  if (newRole === "teamA" && data.roles?.teamA && oldRole !== "teamA") {
+    throw new Error("Purple Team is already taken.");
+  }
+  if (newRole === "teamB" && data.roles?.teamB && oldRole !== "teamB") {
+    throw new Error("Orange Team is already taken.");
+  }
+  if (newRole === "spectator") {
+    const count = data.spectators ? Object.keys(data.spectators).length : 0;
+    if (count >= 5 && oldRole !== "spectator") throw new Error("Spectator slots are full (max 5).");
+  }
+
+  // Free old slot
+  if (oldRole === "teamA") {
+    await dbUpdate(`rooms/${mpState.roomId}/roles`, { teamA: false });
+  } else if (oldRole === "teamB") {
+    await dbUpdate(`rooms/${mpState.roomId}/roles`, { teamB: false });
+  } else if (oldRole === "spectator" && mpState.spectatorKey) {
+    await fetch(`${DATABASE_URL}/rooms/${mpState.roomId}/spectators/${mpState.spectatorKey}.json`, { method: "DELETE" });
+    mpState.spectatorKey = null;
+  }
+
+  // Claim new slot
+  if (newRole === "teamA") {
+    await dbUpdate(`rooms/${mpState.roomId}/roles`, { teamA: true });
+    _registerOfflineHook(mpState.roomId, "teamA");
+  } else if (newRole === "teamB") {
+    await dbUpdate(`rooms/${mpState.roomId}/roles`, { teamB: true });
+    _registerOfflineHook(mpState.roomId, "teamB");
+  } else {
+    const key = await dbPush(`rooms/${mpState.roomId}/spectators`, { online: true });
+    mpState.spectatorKey = key;
+    window.addEventListener("beforeunload", () =>
+      navigator.sendBeacon(`${DATABASE_URL}/rooms/${mpState.roomId}/spectators/${key}/online.json`, "false"));
+  }
+
+  mpState.playerRole = newRole;
+  // Update the host flag: host = whoever is in teamA
+  mpState.isHost = newRole === "teamA";
+
+  // Notify UI
+  window.dispatchEvent(new CustomEvent("mp:roleChanged", { detail: { role: newRole } }));
+}
+
+// ─── Draft lifecycle ──────────────────────────────────────────────────────────
 
 export async function publishPick(stepIndex, monFile) {
   if (!mpState.enabled || !mpState.roomId) return;
@@ -106,8 +195,12 @@ export async function publishDraftStart(fearlessMode, map) {
   if (!mpState.enabled || !mpState.roomId) return;
   mpState.localStatus = "drafting";
   await dbUpdate(`rooms/${mpState.roomId}`, {
-    status: "drafting", fearlessMode: fearlessMode || false,
-    map: map || null, currentStep: 0, picks: {}, draftCount: 1,
+    status: "drafting",
+    fearlessMode: fearlessMode || false,
+    map: map || null,
+    currentStep: 0,
+    picks: {},
+    draftCount: 1,
   });
 }
 
@@ -117,22 +210,44 @@ export async function publishDraftEnd() {
   await dbUpdate(`rooms/${mpState.roomId}`, { status: "recap" });
 }
 
-export async function publishNextDraft(map) {
+/**
+ * Return everyone to the lobby (waiting) screen so they can change map/role
+ * before launching the next draft.
+ */
+export async function publishReturnToLobby() {
+  if (!mpState.enabled || !mpState.roomId) return;
+  mpState.localStatus = "idle";
+  await dbUpdate(`rooms/${mpState.roomId}`, {
+    status: "waiting",
+    currentStep: 0,
+    picks: {},
+  });
+}
+
+export async function publishNextDraft(map, fearlessMode) {
   if (!mpState.enabled || !mpState.roomId) return;
   const data = await dbGet(`rooms/${mpState.roomId}`);
   const nextCount = (data?.draftCount || 1) + 1;
   mpState.localStatus = "drafting";
   await dbUpdate(`rooms/${mpState.roomId}`, {
-    status: "drafting", currentStep: 0, picks: {},
-    map: map || null, draftCount: nextCount,
+    status: "drafting",
+    currentStep: 0,
+    picks: {},
+    map: map || null,
+    fearlessMode: fearlessMode || false,
+    draftCount: nextCount,
   });
 }
+
+// ─── SSE subscription ─────────────────────────────────────────────────────────
 
 function _subscribeToRoom(roomId) {
   if (mpState.sseConnection) mpState.sseConnection.close();
   mpState.sseConnection = dbListen(`rooms/${roomId}`, (data) => {
     if (data && typeof data === "object") _onRoomUpdate(data);
   });
+
+  // Catchup polling every 3s during drafting
   if (mpState._catchupInterval) clearInterval(mpState._catchupInterval);
   mpState._catchupInterval = setInterval(async () => {
     if (!mpState.enabled || mpState.localStatus !== "drafting") return;
@@ -143,16 +258,30 @@ function _subscribeToRoom(roomId) {
   }, 3000);
 }
 
+// ─── Room update handler ──────────────────────────────────────────────────────
+
 function _onRoomUpdate(data) {
   _updateOnlineIndicators(data);
+  _updateRoleIndicators(data);
+
+  // Spectator count
   const count = data.spectators ? Object.keys(data.spectators).length : 0;
   mpState.spectatorCount = count;
   const specEl = document.getElementById("mp-spectator-count");
-  if (specEl) specEl.textContent = count > 0 ? `👁 ${count} spectateur${count > 1 ? "s" : ""}` : "";
+  if (specEl) specEl.textContent = count > 0 ? `👁 ${count} spectator${count > 1 ? "s" : ""}` : "";
 
   const rs = data.status;
   const ls = mpState.localStatus;
 
+  // ── Waiting/lobby ──────────────────────────────────────────────────────────
+  if (rs === "waiting" && (ls === "drafting" || ls === "recap")) {
+    // Host published return-to-lobby
+    mpState.localStatus = "idle";
+    window.dispatchEvent(new CustomEvent("mp:returnToLobby", { detail: data }));
+    return;
+  }
+
+  // ── Draft starting ─────────────────────────────────────────────────────────
   if (rs === "drafting" && (ls === "idle" || ls === "recap")) {
     mpState.localStatus = "drafting";
     state.selectedMode      = data.mode;
@@ -161,8 +290,8 @@ function _onRoomUpdate(data) {
     state.currentDraftOrder = [...draftOrders[data.mode]];
     state.currentStep       = 0;
 
-    const isNextFearless = (data.draftCount || 1) > 1;
-    if (isNextFearless) {
+    const isFearlessContinuation = (data.draftCount || 1) > 1;
+    if (isFearlessContinuation) {
       window.dispatchEvent(new CustomEvent("mp:nextDraft", { detail: data }));
     } else {
       window.dispatchEvent(new CustomEvent("mp:draftStart", { detail: data }));
@@ -173,18 +302,22 @@ function _onRoomUpdate(data) {
     return;
   }
 
+  // ── Pick sync during draft ─────────────────────────────────────────────────
   if (rs === "drafting" && ls === "drafting") {
     const remoteStep = data.currentStep || 0;
     if (remoteStep > state.currentStep) _syncPicks(data, remoteStep);
     return;
   }
 
+  // ── Draft ending ───────────────────────────────────────────────────────────
   if (rs === "recap" && ls === "drafting") {
     mpState.localStatus = "recap";
     window.dispatchEvent(new CustomEvent("mp:draftEnd"));
     return;
   }
 }
+
+// ─── Pick synchronisation ─────────────────────────────────────────────────────
 
 function _syncPicks(data, remoteStep) {
   const picks = data.picks || {};
@@ -218,20 +351,42 @@ function _syncPicks(data, remoteStep) {
     state.currentStep = i + 1;
   }
   import("./ui.js").then(({ updateTurn, highlightCurrentSlot }) => {
-    updateTurn(); highlightCurrentSlot();
+    updateTurn();
+    highlightCurrentSlot();
   });
 }
 
+// ─── UI helpers ───────────────────────────────────────────────────────────────
+
 function _registerOfflineHook(roomId, role) {
+  // Use a named function so we don't stack duplicate listeners
   window.addEventListener("beforeunload", () =>
-    navigator.sendBeacon(`${DATABASE_URL}/rooms/${roomId}/players/${role}/online.json`, JSON.stringify(false)));
+    navigator.sendBeacon(`${DATABASE_URL}/rooms/${roomId}/roles/${role}.json`, JSON.stringify(false)));
 }
+
 function _updateOnlineIndicators(data) {
   const indA = document.getElementById("mp-indicator-teamA");
   const indB = document.getElementById("mp-indicator-teamB");
-  if (indA) indA.className = `mp-indicator ${data.players?.teamA?.online ? "online" : "offline"}`;
-  if (indB) indB.className = `mp-indicator ${data.players?.teamB?.online ? "online" : "offline"}`;
+  if (indA) indA.className = `mp-indicator ${data.roles?.teamA ? "online" : "offline"}`;
+  if (indB) indB.className = `mp-indicator ${data.roles?.teamB ? "online" : "offline"}`;
 }
+
+function _updateRoleIndicators(data) {
+  // Update role selector buttons to reflect current server state
+  const roles = data.roles || {};
+  const btns = document.querySelectorAll(".mp-role-btn");
+  btns.forEach(btn => {
+    const r = btn.dataset.role;
+    const isMine = r === mpState.playerRole;
+    const isTaken = (r === "teamA" && roles.teamA && !isMine) ||
+                    (r === "teamB" && roles.teamB && !isMine);
+    btn.classList.toggle("active", isMine);
+    btn.classList.toggle("taken", isTaken && !isMine);
+    btn.disabled = isTaken;
+  });
+}
+
+// ─── Exports ──────────────────────────────────────────────────────────────────
 
 export function isMyTurn() {
   if (!mpState.enabled) return true;
@@ -243,6 +398,10 @@ export function isMyTurn() {
 export function disconnectRoom() {
   if (mpState.sseConnection) { mpState.sseConnection.close(); mpState.sseConnection = null; }
   if (mpState._catchupInterval) { clearInterval(mpState._catchupInterval); mpState._catchupInterval = null; }
-  mpState.enabled = false; mpState.roomId = null; mpState.playerRole = null;
-  mpState.isHost = false; mpState.localStatus = "idle";
+  mpState.enabled = false;
+  mpState.roomId = null;
+  mpState.playerRole = null;
+  mpState.isHost = false;
+  mpState.localStatus = "idle";
+  mpState.spectatorKey = null;
 }

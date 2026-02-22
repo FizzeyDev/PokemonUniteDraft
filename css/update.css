@@ -1,110 +1,113 @@
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;900&family=Rajdhani:wght@400;500;600;700&display=swap');
+
 :root {
-  --bg-dark: #0d1117;
-  --panel-dark: #161b22;
-  --text-light: #c9d1d9;
-  --text-white: #ffffff;
-  --violet: #bb86fc;
-  --violet-glow: rgba(187, 134, 252, 0.5);
-  --orange: #ff9d00;
-  --orange-glow: rgba(255, 157, 0, 0.5);
-  --blue: #58a6ff;
-  --green: #3fb950;
-  --red: #f85149;
-  --yellow: #f1c40f;
-  --card-bg: rgba(22, 27, 34, 0.8);
+  --bg:         #0e1a1b;
+  --surface:    #141f20;
+  --surface-2:  #1a2a2b;
+  --surface-3:  #243536;
+  --border:     rgba(255,255,255,0.07);
+  --violet:     #9f53ec;
+  --orange:     #ff9d00;
+  --blue:       #4fc3f7;
+  --green:      #4caf82;
+  --red:        #ef5350;
+  --yellow:     #ffd740;
+  --text:       #cfe0e2;
+  --text-dim:   #6a8587;
+  --radius:     14px;
+  --radius-sm:  8px;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  font-family: 'Roboto', sans-serif;
-  background: #1c2526;
-  color: #d9e6e8;
+  font-family: 'Rajdhani', sans-serif;
+  background: var(--bg);
+  color: var(--text);
   min-height: 100vh;
-  margin: auto;
-  padding: 2rem;
+  padding: 1.5rem 1.5rem 3rem;
   margin-left: 250px;
   transition: margin-left 0.3s ease;
 }
-
-body.sidebar-collapsed {
-  margin-left: 0;
-}
-
-/* 🧱 WRAPPER PRINCIPAL */
-.page-wrapper {
-  margin-left: 460px;
-  padding: 3rem 2rem;
-}
-
-/* 🧠 MOBILE */
-@media (max-width: 768px) {
-  .page-wrapper {
-    margin-left: 0;
-    padding-top: 5rem;
-  }
-}
+body.sidebar-collapsed { margin-left: 0; }
 
 h1 {
+  font-family: 'Exo 2', sans-serif;
   text-align: center;
-  font-size: 3rem;
-  color: var(--text-white);
-  margin-bottom: 3rem;
-  text-shadow: 0 0 25px var(--violet-glow);
-  letter-spacing: 2px;
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fff;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 0 40px rgba(159,83,236,0.4);
 }
 
-/* 📦 CONTAINER */
+/* ── Container ── */
 .updates-container {
   max-width: 1200px;
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr;
-  gap: 2.5rem;
-}
-    
-@media (max-width: 1000px) {
-  .updates-container {
-    grid-template-columns: 1fr;
-  }
+  gap: 1.8rem;
 }
 
-/* 🔮 MAIN UPDATE */
+/* ── Main Update Card ── */
 .update-main {
-  background: var(--panel-dark);
-  border-radius: 24px;
-  padding: 2.5rem;
-  border: 3px solid var(--violet);
-  box-shadow: 0 0 40px var(--violet-glow);
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 2rem;
+  border: 1px solid rgba(159,83,236,0.35);
+  box-shadow: 0 0 32px rgba(159,83,236,0.1), 0 8px 32px rgba(0,0,0,0.4);
 }
 
 .update-main h2 {
+  font-family: 'Exo 2', sans-serif;
   text-align: center;
-  color: var(--text-white);
-  font-size: 2rem;
-  margin-bottom: 2rem;
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 1.4rem;
 }
 
+/* ── Update Content ── */
 .update-content {
-  background: var(--card-bg);
-  border-radius: 20px;
-  padding: 2rem;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  background: var(--surface-2);
+  border-radius: var(--radius-sm);
+  padding: 1.5rem;
+  border: 1px solid var(--border);
 }
 
 .update-content h3 {
+  font-family: 'Exo 2', sans-serif;
   color: var(--yellow);
-  font-size: 1.8rem;
-  margin-bottom: 1rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.8rem;
 }
 
 .update-content p {
-  font-size: 1.1rem;
-  line-height: 1.7;
-  margin-bottom: 1.5rem;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--text);
+  margin-bottom: 1rem;
 }
 
 .update-date {
-  font-size: 0.95rem;
-  opacity: 0.8;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  font-family: 'Exo 2', sans-serif;
+  letter-spacing: 0.04em;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  body { margin-left: 0; padding: 1rem 0.75rem 2rem; }
+  h1 { font-size: 1.4rem; }
+  .update-main { padding: 1.2rem; }
+  .update-content { padding: 1rem; }
 }

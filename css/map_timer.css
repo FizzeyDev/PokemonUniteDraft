@@ -1,94 +1,167 @@
-body {
-  font-family: 'Roboto', sans-serif;
-  background: #1c2526;
-  color: #d9e6e8;
-  max-width: 1400px;
-  margin: auto;
-  padding: 2rem;
-  margin-left: 460px;
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;900&family=Rajdhani:wght@400;500;600;700&display=swap');
+
+:root {
+  --bg:         #0e1a1b;
+  --surface:    #141f20;
+  --surface-2:  #1a2a2b;
+  --surface-3:  #243536;
+  --border:     rgba(255,255,255,0.07);
+  --violet:     #9f53ec;
+  --orange:     #ff9d00;
+  --blue:       #4fc3f7;
+  --blue-dim:   rgba(79,195,247,0.12);
+  --green:      #4caf82;
+  --red:        #ef5350;
+  --yellow:     #ffd740;
+  --text:       #cfe0e2;
+  --text-dim:   #6a8587;
+  --radius:     14px;
+  --radius-sm:  8px;
 }
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Rajdhani', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding: 1.5rem 1.5rem 3rem;
+  margin-left: 250px;
+  transition: margin-left 0.3s ease;
+}
+body.sidebar-collapsed { margin-left: 0; }
 
 h1 {
+  font-family: 'Exo 2', sans-serif;
   text-align: center;
-  color: white;
-  margin-bottom: 2rem;
-  font-size: 2.5rem;
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fff;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 0 40px rgba(159,83,236,0.4);
 }
 
+/* ── Map Switch ── */
+.map-switch {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.map-switch button {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 9px 20px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-dim);
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.2s ease;
+}
+.map-switch button:hover {
+  background: var(--surface-3);
+  color: var(--text);
+  transform: translateY(-2px);
+}
+.map-switch button.active {
+  background: var(--blue-dim);
+  border-color: var(--blue);
+  color: var(--blue);
+  box-shadow: 0 0 14px rgba(79,195,247,0.2);
+}
+
+/* ── Timer bubble ── */
 .timer-section {
   display: flex;
   justify-content: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1.25rem;
 }
 
 .middle-bubble {
-  background: #2a3435;
-  border: 2px solid #000;
-  border-radius: 12px;
-  padding: 20px 25px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 24px;
   text-align: center;
-  box-shadow: 0 0 15px rgba(0,0,0,0.3);
-  color: #fff;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.5);
   width: 100%;
-  max-width: 2000px;
+  max-width: 520px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 10px;
 }
 
 .timer-top {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 10px;
 }
 
 #play-btn {
-  padding: 8px 15px;
-  border-radius: 8px;
-  border: 2px solid #000;
-  cursor: pointer;
-  font-weight: 600;
+  font-family: 'Exo 2', sans-serif;
+  font-weight: 700;
   font-size: 1rem;
-  transition: all 0.2s ease-in-out;
-  background: #1c2526;
-  color: #fff;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  padding: 9px 22px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(79,195,247,0.3);
+  background: var(--blue-dim);
+  color: var(--blue);
+  cursor: pointer;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
 }
-
 #play-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 12px rgba(0,0,0,0.4);
-  background: #4a90e2;
+  background: rgba(79,195,247,0.22);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(79,195,247,0.2);
 }
 
 #timer-display {
-  font-size: 3rem;
-  font-weight: bold;
-  color: #f1c40f;
-  text-shadow: 0 0 10px rgba(241,196,15,0.5);
+  font-family: 'Exo 2', sans-serif;
+  font-size: 2.8rem;
+  font-weight: 900;
+  color: var(--yellow);
+  text-shadow: 0 0 20px rgba(255,215,64,0.4);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 5px;
-  margin-bottom: 10px;
+  gap: 4px;
+  letter-spacing: 0.04em;
 }
 
 #timer-display input {
-  width: 70px;
+  width: 72px;
   text-align: center;
-  font-size: 2.5rem;
-  font-weight: bold;
-  color: #f1c40f;
+  font-family: 'Exo 2', sans-serif;
+  font-size: 2.6rem;
+  font-weight: 900;
+  color: var(--yellow);
   background: transparent;
   border: none;
+  border-bottom: 2px solid rgba(255,215,64,0.3);
   outline: none;
-  border-bottom: 2px solid rgba(241,196,15,0.5);
-  transition: border 0.2s;
+  transition: border-color 0.2s;
+  -moz-appearance: textfield;
 }
+#timer-display input:focus { border-color: var(--yellow); }
+#timer-display input::-webkit-outer-spin-button,
+#timer-display input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
-#timer-display input:focus {
-  border-color: #f1c40f;
+.timer-sep {
+  color: rgba(255,215,64,0.6);
+  font-weight: 900;
+  user-select: none;
 }
 
 #time-slider {
@@ -96,202 +169,190 @@ h1 {
   direction: rtl;
   -webkit-appearance: none;
   background: transparent;
+  cursor: pointer;
 }
-
 #time-slider::-webkit-slider-runnable-track {
-  height: 8px;
-  background: linear-gradient(to right, #4a90e2, #f1c40f);
-  border-radius: 4px;
+  height: 6px;
+  background: linear-gradient(to right, var(--blue), var(--yellow));
+  border-radius: 3px;
 }
-
 #time-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
-  height: 20px;
-  width: 20px;
+  height: 18px;
+  width: 18px;
   border-radius: 50%;
   background: #fff;
-  border: 2px solid #000;
+  border: 2px solid var(--surface);
   cursor: pointer;
   margin-top: -6px;
-  transition: transform 0.2s;
+  transition: transform 0.15s;
+  box-shadow: 0 0 6px rgba(79,195,247,0.4);
+}
+#time-slider::-webkit-slider-thumb:hover { transform: scale(1.2); }
+#time-slider::-moz-range-track {
+  height: 6px;
+  background: linear-gradient(to right, var(--blue), var(--yellow));
+  border-radius: 3px;
+}
+#time-slider::-moz-range-thumb {
+  height: 18px;
+  width: 18px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--surface);
+  cursor: pointer;
 }
 
-#time-slider::-webkit-slider-thumb:hover {
-  transform: scale(1.2);
+/* ── Map Container ── */
+.map-wrapper {
+  display: flex;
+  justify-content: center;
 }
 
 .map-container {
-  display: flex;
-  justify-content: center;
-  position: relative; /* nécessaire pour les spawns absolus */
-}
-
-.map-container img {
-  max-width: 2000px;
-  border-radius: 12px;
-  box-shadow: 0 0 25px rgba(0,0,0,0.4);
-  display: block; /* évite les décalages liés aux inline */
-}
-
-#spawns-container {
-  position: absolute;
-  top: 0;
-  left: 0;
+  position: relative;
   width: 100%;
-  height: 100%;
-  pointer-events: none; /* pour que la map reste cliquable si besoin */
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+  border: 1px solid var(--border);
+  flex-shrink: 0;
 }
 
-.spawn {
-  position: absolute;
-  width: 90px;   /* largeur de l'image de spawn */
-  height: 90px;  /* hauteur de l'image de spawn */
-  cursor: pointer;
-  pointer-events: auto;
-  transition: transform 0.3s;
-  transform: translate(-50%, -50%);
+.map-container img#map-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  user-select: none;
+  pointer-events: none;
 }
 
-.spawn:hover {
-  transform: translate(-50%, -50%) scale(1.2);
-}
-
-#timer-display input::-webkit-outer-spin-button,
-#timer-display input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-#timer-display input[type=number] {
-  -moz-appearance: textfield; /* Firefox */
-}
-
+#spawns-container,
 #towers-container {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
   pointer-events: none;
 }
 
+.spawn,
 .tower {
   position: absolute;
-  width: 50px;
-  height: 50px;
   cursor: pointer;
   pointer-events: auto;
-  transition: transform 0.3s, opacity 0.3s;
   transform: translate(-50%, -50%);
+  transition: transform 0.2s, opacity 0.2s;
+  /* size driven by inline style from JS */
 }
 
-.tower:hover {
-  transform: translate(-50%, -50%) scale(1.2);
-}
+.spawn:hover  { transform: translate(-50%, -50%) scale(1.18); }
+.tower:hover  { transform: translate(-50%, -50%) scale(1.15); }
 
-.tower.destroyed {
-  opacity: 0.8;
-}
+.tower.destroyed { opacity: 0.75; }
+.tower.disabled  { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
 
-.tower.disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
-/* === TOOLTIP INFO POKÉMON === */
+/* ── Fixed Tooltip ── */
 .pokemon-tooltip {
-  position: absolute;
-  background: rgba(30, 35, 40, 0.95);
-  border: 2px solid #4a90e2;
-  border-radius: 12px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 9000;
+  background: linear-gradient(160deg, var(--surface-2) 0%, var(--surface) 100%);
+  border: 1px solid rgba(79,195,247,0.3);
+  border-radius: var(--radius);
+  box-shadow: 0 12px 48px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.04);
   display: flex;
   align-items: stretch;
   overflow: hidden;
-  z-index: 1000;
   pointer-events: none;
+  width: 520px;
+  max-width: 560px;
   opacity: 0;
-  transform: scale(0.8);
-  transition: opacity 0.2s ease, transform 0.2s ease;
-  max-width: 400px;
-  font-family: 'Roboto', sans-serif;
+  transform: translateY(12px) scale(0.96);
+  transition: opacity 0.22s ease, transform 0.22s ease;
 }
-
 .pokemon-tooltip.show {
   opacity: 1;
-  transform: scale(1);
+  transform: translateY(0) scale(1);
 }
 
 .pokemon-tooltip .gif-container {
-  width: 120px;
-  height: 120px;
+  width: 160px;
+  min-height: 160px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.3);
-  padding: 10px;
+  background: rgba(0,0,0,0.3);
+  padding: 14px;
+  flex-shrink: 0;
 }
-
 .pokemon-tooltip .gif-container img {
   max-width: 100%;
-  max-height: 100%;
+  max-height: 130px;
   object-fit: contain;
 }
 
 .pokemon-tooltip .separator {
-  width: 2px;
-  background: #4a90e2;
-  box-shadow: 0 0 8px rgba(74, 144, 226, 0.6);
+  width: 1px;
+  background: rgba(79,195,247,0.25);
+  flex-shrink: 0;
 }
 
 .pokemon-tooltip .info-content {
-  padding: 16px;
-  color: #e0e0e0;
+  padding: 18px 20px;
+  color: var(--text-dim);
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 8px;
-  min-width: 200px;
+  min-width: 0;
 }
-
 .pokemon-tooltip .info-content h3 {
+  font-family: 'Exo 2', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--yellow);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   margin: 0;
-  font-size: 1.4rem;
-  color: #f1c40f;
-  text-shadow: 0 0 5px rgba(241, 196, 15, 0.4);
 }
-
 .pokemon-tooltip .info-content p {
-  margin: 4px 0;
   font-size: 0.95rem;
-  line-height: 1.4;
-  color: #ccc;
+  line-height: 1.55;
+  color: var(--text-dim);
+  margin: 0;
+}
+.pokemon-tooltip .info-content strong {
+  color: var(--text);
+  font-weight: 700;
 }
 
-.map-switch {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 20px;
+/* ── Footer ── */
+footer {
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 0.78rem;
+  color: var(--text-dim);
 }
 
-.map-switch button {
-  padding: 10px 20px;
-  background: #2a3435;
-  border: 2px solid #000;
-  border-radius: 8px;
-  color: white;
-  cursor: pointer;
-  font-weight: 600;
+/* ── Responsive ── */
+@media (max-width: 860px) {
+  body { margin-left: 0; padding: 1rem 0.75rem 2rem; }
+
+  .middle-bubble { max-width: 100%; }
+
+  .pokemon-tooltip {
+    bottom: 1rem;
+    right: 1rem;
+    width: calc(100vw - 2rem);
+    max-width: 340px;
+  }
 }
 
-.map-switch button:hover {
-  background: #4a90e2;
-}
-
-.map-switch button.active {
-  background: #4a90e2;
-  border-color: #fff;
+@media (max-width: 480px) {
+  h1 { font-size: 1.3rem; }
+  #timer-display { font-size: 2rem; }
+  #timer-display input { font-size: 1.8rem; width: 56px; }
+  .map-switch button { font-size: 0.75rem; padding: 7px 12px; }
 }
